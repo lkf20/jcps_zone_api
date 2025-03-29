@@ -1,0 +1,11 @@
+{
+    "ATHERTON": ["Bloom Elementary", "Camp Taylor Elementary", "Shelby Academy"],
+    "BALLARD": ["Chancey Elementary", "Dunn Elementary", "Norton Commons Elementary", "Norton Elementary", "Portland Elementary", "Zachary Taylor Elementary", "Wilder Elementary"],
+    "DOSS": ["Crums Lane Elementary", "Kenwood Elementary", "Layne Elementary", "Maupin Elementary", "Stonestreet Elementary", "Trunnell Elementary"],
+    "EASTERN": ["Atkinson Academy", "Bowen Elementary", "Byck Elementary", "Hite Elementary", "Lowe Elementary", "Middletown Elementary", "Stopher Elementary"],
+    "FAIRDALE": ["Auburndale Elementary", "Coral Ridge Elementary", "Fairdale Elementary", "Minors Lane Elementary"],
+    "FERN CREEK": ["Bates Elementary", "Fern Creek Elementary", "Price Elementary", "Wheeler Elementary", "Wilt Elementary"],
+    "IROQUOIS": ["Cane Run Elementary", "Frayser Elementary", "Gutermuth Elementary", "Hazelwood Elementary", "Jacob Elementary", "Mill Creek Elementary", "Rutherford Elementary", "Semple Elementary"],
+    "JEFFERSONTOWN": ["Cochrane Elementary", "Farmer Elementary", "Jeffersontown Elementary", "Dr. William H. Perry Elementary School", "Tully Elementary", "Watterson Elementary"]
+  }
+  
