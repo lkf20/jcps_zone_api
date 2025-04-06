@@ -1,19 +1,38 @@
+
+"""
+Flask API to find JCPS school zones and distances based on a user's address.
+
+Endpoints:
+  /school-zone (POST): Returns assigned schools based on zones.
+                       Body: {"address": "Street, City, ST ZIP"}
+  /school-distances (POST): Returns assigned schools with distances, sorted.
+                            Body: {"address": "Street, City, ST ZIP"}
+"""
+
+import os
+import json
+import time # For request timing
+
 from flask import Flask, request, jsonify
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic # Import geodesic directly
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError
 import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
-import os
-import json
-import time # For potential rate limiting if needed
+import pprint # For potentially debugging dicts later if needed
 
+# --- Configuration & Data Loading ---
 
-
-# --- Load Data (Paths remain the same) ---
+# Path Definitions
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "..", "data_alt") # Adjust if needed
+# Assumes 'data' directory is one level up from the 'app' directory where api.py resides
+DATA_DIR = os.path.join(BASE_DIR, "..", "data")
 
+print(f"Base Directory: {BASE_DIR}")
+print(f"Data Directory: {DATA_DIR}")
+
+# Shapefile paths
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
 high_path = os.path.join(DATA_DIR, "High", "Resides_HS_Boundaries.shp")
 middle_path = os.path.join(DATA_DIR, "Middle", "Resides_MS_Boundaries.shp")
@@ -22,7 +41,21 @@ traditional_middle_path = os.path.join(DATA_DIR, "TraditionalMiddle", "Tradition
 traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_HS_Bnds.shp")
 traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditional_ES_Bnds.shp")
 
-# --- Display Names (Remain the same) ---
+# School Locations CSV Path (Prioritized for coordinates)
+# *** Verify this path is correct relative to your api.py location ***
+CSV_LOCATIONS_PATH = os.path.join(DATA_DIR, "school_locations.csv")
+# Or if it's next to api.py:
+# CSV_LOCATIONS_PATH = os.path.join(BASE_DIR, "school_locations.csv")
+
+# JSON Data Paths (relative to this script)
+FEEDERS_PATH = os.path.join(BASE_DIR, "elementary_feeders.json")
+REPORT_LINKS_PATH = os.path.join(BASE_DIR, "school_report_links.json")
+
+
+# --- Display Name Mappings (Single Source of Truth) ---
+# Keys should match the (UPPERCASE) identifiers found in the relevant GIS columns
+# Values are the desired final display names
+
 DISPLAY_NAMES_HIGH = {
     "ATHERTON": "Atherton High",
     "BALLARD": "Ballard High",
@@ -39,11 +72,12 @@ DISPLAY_NAMES_HIGH = {
     "VALLEY":"Valley High",
     "WAGGENER":"Waggener High",
     "BUTLER": "Butler Traditional High",
-    "MALE": "Louisville Male High"
+    "MALE": "Louisville Male High",
+    # Add other keys identified by diagnostics.py if needed
 }
 
 DISPLAY_NAMES_MIDDLE = {
-    "BARRETT": "Barret Traditional Middle", # Note: Typo 'Barret' vs 'Barrett' common, check data/keys
+    "BARRETT": "Barret Traditional Middle", # KEY = GIS spelling, VALUE = Correct spelling
     "JCTMS": "Jefferson County Traditional Middle",
     "JOHNSON": "Johnson Traditional Middle",
     "CARRITHERS":"Carrithers Middle",
@@ -60,662 +94,546 @@ DISPLAY_NAMES_MIDDLE = {
     "NEWBURG":"Newburg Middle",
     "NOE":"Noe Middle",
     "OLMSTED ACADEMY N/S":"Frederick Law Olmsted Academy North",
+    # Add "OLMSTED ACADEMY NORTH" if that's also a key in GIS
     "RAMSEY":"Ramsey Middle",
     "STUART":"Stuart Academy",
     "THOMAS JEFFERSON":"Thomas Jefferson Middle",
-    "WESTPORT":"Westport Middle"
+    "WESTPORT":"Westport Middle",
+    # Add other keys identified by diagnostics.py if needed
 }
 
 DISPLAY_NAMES_ELEMENTARY = {
+    # Primarily for Traditional Elementary zones (check GIS 'Traditiona' column)
     "AUDUBON": "Audubon Traditional Elementary",
     "CARTER": "Carter Traditional Elementary",
     "FOSTER": "Foster Traditional Academy",
     "GREATHOUSE": "Greathouse/Shryock Traditional",
     "SCHAFFNER": "Schaffner Traditional Elementary",
+    # Add other keys identified by diagnostics.py if needed
 }
 
+# --- Universal Schools List ---
+# Assumes names listed here ARE the desired final display names
+# Ensure these names match entries in school_locations.csv and school_report_links.json
 UNIVERSAL_SCHOOLS = {
-    "Elementary": ["Brandeis Elementary", "Coleridge-Taylor Montessori Elementary", "Hawthorne Elementary", "J. Graham Brown School", "Lincoln Elementary Performing Arts", "Young Elementary"],
-    "Middle": ["Grace M. James Academy of Excellence", "J. Graham Brown School", "W.E.B. DuBois Academy", "Western Middle School for the Arts"],
-    "High": ["Central High Magnet Career Academy", "duPont Manual High", "J. Graham Brown School", "W.E.B. DuBois Academy", "Western High"]
+    "Elementary": [
+        "Brandeis Elementary", "Coleridge-Taylor Montessori Elementary",
+        "Hawthorne Elementary", "J. Graham Brown School",
+        "Lincoln Elementary Performing Arts", "Young Elementary"
+    ],
+    "Middle": [
+        "Grace M. James Academy of Excellence", "J. Graham Brown School",
+        "W.E.B. DuBois Academy", "Western Middle School for the Arts"
+    ],
+    "High": [
+        "Central High Magnet Career Academy", "duPont Manual High",
+        "J. Graham Brown School", "W.E.B. DuBois Academy", "Western High"
+    ]
 }
 
-# Combine all display names for easier lookup later, handling potential overlaps carefully
-ALL_DISPLAY_NAMES = {**DISPLAY_NAMES_HIGH, **DISPLAY_NAMES_MIDDLE, **DISPLAY_NAMES_ELEMENTARY}
-# Add universal schools to the lookup if they aren't already covered by specific keys
-for level, schools in UNIVERSAL_SCHOOLS.items():
-    for school in schools:
-        # If the raw school name isn't already a key, add it mapping to itself
-        if school.upper() not in ALL_DISPLAY_NAMES and school not in ALL_DISPLAY_NAMES.values():
-             # Basic heuristic: If it ends in Elementary/Middle/High, use that, else add level
-             if not any(school.endswith(s) for s in [" Elementary", " Middle", " High", " School", " Academy"]):
-                 ALL_DISPLAY_NAMES[school.upper()] = f"{school} {level}" # e.g. "J. Graham Brown School High" - adjust as needed
-             else:
-                 ALL_DISPLAY_NAMES[school.upper()] = school
-
-
-# --- Load Feeders and Links (Remain the same) ---
-feeders_path = os.path.join(BASE_DIR, "elementary_feeders.json")
-with open(feeders_path, "r") as f:
-    ELEMENTARY_FEEDERS = json.load(f)
-
-report_links_path = os.path.join(BASE_DIR, "school_report_links.json")
-with open(report_links_path, "r") as f:
-    SCHOOL_REPORT_LINKS = json.load(f)
-
-
-# --- Load Shapefiles (Remain the same) ---
-print("🔄 Loading Shapefiles...")
+# --- Load JSON Data ---
 try:
-    choice_gdf = gpd.read_file(choice_path)
-    choice_gdf["zone_type"] = "Choice"
+    with open(FEEDERS_PATH, "r", encoding="utf-8") as f:
+        ELEMENTARY_FEEDERS = json.load(f)
+except Exception as e:
+    print(f"❌ ERROR loading elementary feeders from {FEEDERS_PATH}: {e}")
+    ELEMENTARY_FEEDERS = {}
 
-    high_gdf = gpd.read_file(high_path)
-    high_gdf["zone_type"] = "High"
+try:
+    with open(REPORT_LINKS_PATH, "r", encoding="utf-8") as f:
+        # Keys here MUST match the final display names (lowercase)
+        SCHOOL_REPORT_LINKS = json.load(f)
+except Exception as e:
+     print(f"❌ ERROR loading school report links from {REPORT_LINKS_PATH}: {e}")
+     SCHOOL_REPORT_LINKS = {}
 
-    middle_gdf = gpd.read_file(middle_path)
-    middle_gdf["zone_type"] = "Middle"
+# --- Load and Prepare Shapefiles ---
+print("🔄 Loading Shapefiles...")
+all_zones_gdf = None
+try:
+    shapefile_configs = [
+        (choice_path, "Choice"),
+        (high_path, "High"),
+        (middle_path, "Middle"),
+        (elementary_path, "Elementary"),
+        (traditional_middle_path, "Traditional/Magnet Middle"),
+        (traditional_high_path, "Traditional/Magnet High"),
+        (traditional_elem_path, "Traditional/Magnet Elementary"),
+    ]
+    gdfs = []
+    loaded_files_count = 0
+    for path, zone_type in shapefile_configs:
+        if os.path.exists(path):
+            try:
+                gdf = gpd.read_file(path)
+                gdf["zone_type"] = zone_type
+                gdfs.append(gdf)
+                print(f"  Loaded: {os.path.basename(path)}")
+                loaded_files_count += 1
+            except Exception as load_err:
+                 print(f"  ❌ Error loading {os.path.basename(path)}: {load_err}")
+        else:
+            print(f"  ⚠️ Warning: Shapefile not found at {path}")
 
-    elementary_gdf = gpd.read_file(elementary_path)
-    elementary_gdf["zone_type"] = "Elementary" # Represents clusters
-
-    traditional_middle_gdf = gpd.read_file(traditional_middle_path)
-    # *** Check the actual column name in your shapefile for Traditional zones ***
-    # It might be 'School', 'Name', 'Traditiona', etc. Adjust .get() below accordingly.
-    traditional_middle_gdf["zone_type"] = "Traditional/Magnet Middle"
-
-    traditional_high_gdf = gpd.read_file(traditional_high_path)
-    traditional_high_gdf["zone_type"] = "Traditional/Magnet High"
-
-    traditional_elem_gdf = gpd.read_file(traditional_elem_path)
-    traditional_elem_gdf["zone_type"] = "Traditional/Magnet Elementary"
-
+    if not gdfs:
+        raise FileNotFoundError(f"No valid shapefiles were loaded from configured paths in {DATA_DIR}.")
 
     all_zones_gdf = gpd.GeoDataFrame(
-        pd.concat([
-            choice_gdf,
-            high_gdf,
-            middle_gdf,
-            elementary_gdf,
-            traditional_middle_gdf,
-            traditional_high_gdf,
-            traditional_elem_gdf
-        ], ignore_index=True, sort=False) # Added sort=False for potential future pandas versions
+        pd.concat(gdfs, ignore_index=True, sort=False)
     ).to_crs(epsg=4326) # Convert to WGS84 (lat/lon)
-    print("✅ Shapefiles loaded and merged.")
-    # print("Columns:", all_zones_gdf.columns) # Useful for debugging column names
-    # print("Sample Data:\n", all_zones_gdf.head())
+    print(f"✅ Successfully loaded and merged {loaded_files_count} shapefiles.")
 
+    # Optional: Attempt to fix invalid geometries which might corrupt the index
+    print("🛠️ Attempting to clean geometries (buffer(0))...")
+    try:
+        # Track original types to check for unexpected changes
+        original_types = all_zones_gdf.geometry.type.copy()
+        # buffer(0) can sometimes fix minor geometry issues like self-intersections
+        all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0)
+        # Check if types changed (buffer(0) shouldn't change valid simple types)
+        if not all(original_types == all_zones_gdf.geometry.type):
+            print("  ⚠️ Warning: Geometry types may have changed during buffer(0). Review data if issues arise.")
+        print("✅ Geometries cleaning process completed.")
+    except Exception as geom_err:
+        print(f"  ❌ Error during geometry cleaning: {geom_err}. Proceeding without cleaning.")
+
+    # Explicitly delete and rebuild the spatial index
+    print("🛠️ Building spatial index...")
+    if hasattr(all_zones_gdf, '_sindex'):
+        delattr(all_zones_gdf, '_sindex')
+    if hasattr(all_zones_gdf, '_sindex_generated'):
+        delattr(all_zones_gdf, '_sindex_generated')
+    all_zones_gdf.sindex # Force regeneration
+    print("✅ Spatial index built/rebuilt.")
+
+except FileNotFoundError as fnf:
+    print(f"❌❌ FATAL ERROR: {fnf}. Cannot proceed without shapefiles.")
+    exit()
 except Exception as e:
-    print(f"❌ Error loading shapefiles: {e}")
-    # Exit or handle error appropriately if shapefiles are critical
+    print(f"❌❌ FATAL ERROR loading or processing shapefiles: {e}")
     exit()
 
 
-    # ... (previous code loading shapefiles and creating all_zones_gdf) ...
-
-
-
-# --- START: Diagnostic Logging for Raw School Names ---
-# print("\n" + "="*50)
-# print("🔍 DIAGNOSTIC: Logging Unique Raw School Identifiers from Shapefiles")
-# print("="*50)
-
-# raw_identifiers = {}
-
-# def log_unique_values(gdf, gdf_name, column_name, category_key):
-#     """Helper function to extract and store unique, non-null string values."""
-#     if gdf is not None and column_name in gdf.columns:
-#         try:
-#             # Drop nulls, convert to string, get unique, filter out empty strings
-#             unique_vals = gdf[column_name].dropna().astype(str).unique()
-#             unique_vals = {val.strip() for val in unique_vals if val.strip()} # Use set for auto-uniqueness and strip whitespace
-
-#             if unique_vals:
-#                 if category_key not in raw_identifiers:
-#                         raw_identifiers[category_key] = set()
-#                 raw_identifiers[category_key].update(unique_vals)
-#                 print(f"  ✅ Found {len(unique_vals)} unique non-empty values in '{gdf_name}' -> '{column_name}' column.")
-#             else:
-#                     print(f"  ℹ️ No non-empty values found in '{gdf_name}' -> '{column_name}' column.")
-#         except Exception as e:
-#                 print(f"  ❌ Error processing '{gdf_name}' -> '{column_name}': {e}")
-#     else:
-#             print(f"  ⚠️ Column '{column_name}' not found or GDF '{gdf_name}' is None.")
-
-# # Define which columns to check in which GDFs and map to a category
-# # (Using descriptive category keys for clarity)
-# files_and_columns = [
-#     (high_gdf, "High.shp", "High", "High School Names (from 'High' column)"),
-#     (middle_gdf, "Resides_MS_Boundaries.shp", "Middle", "Middle School Names (from 'Middle' column)"),
-#     (middle_gdf, "Resides_MS_Boundaries.shp", "Name", "Middle School Names (from 'Name' column)"), # Log 'Name' column from Middle separately
-#     (elementary_gdf, "Resides_ES_Clusters_Boundaries.shp", "High", "High School Refs in Elem Zones (from 'High' column)"),
-#     (choice_gdf, "ChoiceZone.shp", "Name", "Choice Zone Names (from 'Name' column)"),
-#     (traditional_high_gdf, "Traditional_HS_Bnds.shp", "Traditiona", "Traditional High Names (from 'Traditiona' column)"),
-#     (traditional_middle_gdf, "Traditional_MS_Bnds.shp", "Traditiona", "Traditional Middle Names (from 'Traditiona' column)"),
-#     (traditional_elem_gdf, "Traditional_ES_Bnds.shp", "Traditiona", "Traditional Elem Names (from 'Traditiona' column)"),
-# ]
-
-# # Process each file and column
-# for gdf, gdf_name, col_name, cat_key in files_and_columns:
-#     log_unique_values(gdf, gdf_name, col_name, cat_key)
-
-# # Print the consolidated results
-# print("\n" + "-"*50)
-# print("📊 Consolidated Unique Raw Identifiers Found:")
-# print("-"*50)
-# if raw_identifiers:
-#     for category, names_set in raw_identifiers.items():
-#         print(f"\n{category}:")
-#         if names_set:
-#             sorted_names = sorted(list(names_set))
-#             for name in sorted_names:
-#                 print(f"  - \"{name}\"") # Print in quotes to see exact whitespace/casing
-#         else:
-#             print("  (None found)")
-# else:
-#     print("  No identifiers found in specified columns.")
-
-# print("\n" + "="*50)
-# print("🔍 END DIAGNOSTIC LOGGING")
-# print("="*50 + "\n")
-# # --- END: Diagnostic Logging ---
-
-# # ... (Previous diagnostic block ends here) ...
-# print("\n" + "="*50)
-# print("🔍 END DIAGNOSTIC LOGGING")
-# print("="*50 + "\n")
-
-# # --- START: Cross-Check GIS Identifiers with Display Name Dictionaries ---
-# print("\n" + "="*60)
-# print("🔍 DIAGNOSTIC: Cross-Checking GIS Identifiers vs. Display Name Dicts")
-# print("="*60)
-
-# # Define which raw_identifier categories map to which display name dictionary
-# # Format: { 'Category Key from Log': (target_dict_variable, 'target_dict_name_str') }
-# category_to_dict_map = {
-#     "High School Names (from 'High' column)": (DISPLAY_NAMES_HIGH, 'DISPLAY_NAMES_HIGH'),
-#     "Middle School Names (from 'Middle' column)": (DISPLAY_NAMES_MIDDLE, 'DISPLAY_NAMES_MIDDLE'),
-#     "Middle School Names (from 'Name' column)": (DISPLAY_NAMES_MIDDLE, 'DISPLAY_NAMES_MIDDLE'), # Also check against Middle dict
-#     "Traditional High Names (from 'Traditiona' column)": (DISPLAY_NAMES_HIGH, 'DISPLAY_NAMES_HIGH'),
-#     "Traditional Middle Names (from 'Traditiona' column)": (DISPLAY_NAMES_MIDDLE, 'DISPLAY_NAMES_MIDDLE'),
-#     "Traditional Elem Names (from 'Traditiona' column)": (DISPLAY_NAMES_ELEMENTARY, 'DISPLAY_NAMES_ELEMENTARY'),
-#     # We EXCLUDE "High School Refs in Elem Zones" because those aren't direct school names for display keys
-#     # We EXCLUDE "Choice Zone Names" as they might be programs or full names not matching simple keys
-# }
-
-# missing_mappings = []
-# processed_normalized_gis_keys = set() # Keep track of normalized keys checked
-
-# # 1. Check if GIS identifiers are present in the corresponding Display Name dicts
-# print("\n--- Checking GIS Identifiers against Display Name Dictionaries ---")
-# for category, source_set in raw_identifiers.items():
-#     if category in category_to_dict_map:
-#         target_dict, target_dict_name = category_to_dict_map[category]
-#         print(f" -> Processing category: '{category}' against '{target_dict_name}'")
-#         for raw_name in source_set:
-#             # Normalize the raw name EXACTLY as the main code does for lookup
-#             normalized_key = raw_name.strip().upper()
-#             processed_normalized_gis_keys.add(normalized_key) # Add for reverse check later
-
-#             if normalized_key not in target_dict:
-#                 # Found a raw name in GIS data that's not a key in the expected dict
-#                 missing_mappings.append({
-#                     'raw_name': raw_name,
-#                     'normalized_key': normalized_key,
-#                     'source_category': category,
-#                     'expected_dict': target_dict_name
-#                 })
-#                 print(f"    ⚠️ MISSING: Raw='{raw_name}' (Normalized='{normalized_key}') not found as key in {target_dict_name}")
-#             # else:
-#                 # print(f"    ✅ OK: Raw='{raw_name}' (Normalized='{normalized_key}') found in {target_dict_name}") # Optional success log
-
-# if not missing_mappings:
-#     print("\n✅ SUCCESS: All relevant identifiers found in GIS data have corresponding keys in the Display Name dictionaries.")
-# else:
-#     print("\n❌ WARNING: The following identifiers from GIS files are MISSING keys in the corresponding Display Name dictionaries:")
-#     for item in sorted(missing_mappings, key=lambda x: (x['expected_dict'], x['normalized_key'])):
-#         print(f"  - Raw Name: \"{item['raw_name']}\" (Normalized Key: \"{item['normalized_key']}\")")
-#         print(f"    Source: {item['source_category']}")
-#         print(f"    Expected Dictionary: {item['expected_dict']}")
-#         print("-" * 10)
-
-
-# # 2. Check if Display Name Dict keys correspond to found GIS identifiers
-# print("\n--- Checking Display Name Dictionary Keys against GIS Identifiers ---")
-# unused_display_keys = []
-# all_display_dicts = {
-#     'DISPLAY_NAMES_HIGH': DISPLAY_NAMES_HIGH,
-#     'DISPLAY_NAMES_MIDDLE': DISPLAY_NAMES_MIDDLE,
-#     'DISPLAY_NAMES_ELEMENTARY': DISPLAY_NAMES_ELEMENTARY,
-# }
-
-# for dict_name, display_dict in all_display_dicts.items():
-#     print(f" -> Checking keys in '{dict_name}'...")
-#     for key in display_dict.keys():
-#             # Normalize the key from the display dict
-#             normalized_display_key = key.strip().upper()
-#             if normalized_display_key not in processed_normalized_gis_keys:
-#                 # Found a key in a display dict that wasn't encountered (in normalized form)
-#                 # in the relevant GIS columns we checked earlier.
-#                 unused_display_keys.append({
-#                     'dict_name': dict_name,
-#                     'key': key,
-#                     'normalized_key': normalized_display_key
-#                 })
-#                 print(f"    ❓ UNUSED?: Key='{key}' (Normalized='{normalized_display_key}') not found among processed GIS identifiers.")
-#             # else:
-#                 # print(f"    ✅ Found: Key='{key}' (Normalized='{normalized_display_key}') corresponds to a GIS identifier.") # Optional
-
-# if not unused_display_keys:
-#     print("\n✅ SUCCESS: All keys in the Display Name dictionaries seem to correspond to identifiers found in the relevant GIS columns.")
-# else:
-#     print("\n❓ INFO: The following keys in Display Name dictionaries were NOT found among the processed identifiers from relevant GIS columns.")
-#     print("   (These could be typos, obsolete entries, or identifiers from GIS columns not checked above like Choice/Feeder refs)")
-#     for item in sorted(unused_display_keys, key=lambda x: (x['dict_name'], x['key'])):
-#         print(f"  - Dictionary: {item['dict_name']}, Key: \"{item['key']}\" (Normalized: \"{item['normalized_key']}\")")
-
-
-# print("\n" + "="*60)
-# print("🔍 END DIAGNOSTIC CROSS-CHECK")
-# print("="*60 + "\n")
-# --- END: Cross-Check GIS Identifiers ---
-
-
-
-
 # --- Load School Locations from CSV ---
-# ... (rest of your script starts here) ...
-school_locations_dict = {}
-# ...
-
-
-# --- Load School Locations from CSV ---
-school_locations_dict = {} # Initialize empty dictionary
+school_locations_dict = {} # Stores { lower_school_name: (lat, lon) }
+print(f"🔄 Attempting to load School Locations from: {CSV_LOCATIONS_PATH}")
 try:
-    # Adjust the path if you placed school_locations.csv elsewhere
-    csv_path = os.path.join(DATA_DIR, "school_locations.csv")
-    print(f"🔄 Loading School Locations from: {csv_path}")
-    schools_df = pd.read_csv(csv_path)
+    if not os.path.exists(CSV_LOCATIONS_PATH):
+         raise FileNotFoundError(f"File not found at {CSV_LOCATIONS_PATH}")
 
-    # *** IMPORTANT: Adjust column names 'SchoolName', 'Latitude', 'Longitude'
-    #     if they are different in your CSV file! ***
+    schools_df = pd.read_csv(CSV_LOCATIONS_PATH)
     required_cols = ['SchoolName', 'Latitude', 'Longitude']
     if not all(col in schools_df.columns for col in required_cols):
         raise ValueError(f"CSV missing one or more required columns: {required_cols}")
 
-    for index, row in schools_df.iterrows():
-        # Normalize the school name from the CSV for consistent key lookup
-        # Match the normalization you'll use when looking up later
-        school_name_key = str(row['SchoolName']).strip().lower()
+    loaded_count = 0
+    warning_count = 0
+    for _, row in schools_df.iterrows():
+        school_name = str(row['SchoolName']).strip()
         latitude = row['Latitude']
         longitude = row['Longitude']
+        if not school_name: continue # Skip rows with empty names
+        school_name_key = school_name.lower() # Use lowercase name as key
 
-        # Store coordinates if they are valid numbers
         if pd.notna(latitude) and pd.notna(longitude):
-            school_locations_dict[school_name_key] = (float(latitude), float(longitude))
-            # print(f"  Loaded: {school_name_key} -> ({latitude}, {longitude})") # Optional: Verify loading
+            try:
+                school_locations_dict[school_name_key] = (float(latitude), float(longitude))
+                loaded_count += 1
+            except ValueError:
+                 print(f"⚠️ Warning: Invalid lat/lon format for '{school_name}' in CSV. Skipping.")
+                 warning_count += 1
+                 school_locations_dict[school_name_key] = None
         else:
-            print(f"⚠️ Warning: Missing lat/lon for '{row['SchoolName']}' in CSV.")
-            school_locations_dict[school_name_key] = None # Store None if coordinates are missing
+            # Log only if name is present but coords are missing
+            if school_name:
+                print(f"⚠️ Warning: Missing lat/lon for '{school_name}' in CSV.")
+                warning_count += 1
+            school_locations_dict[school_name_key] = None
 
-    print(f"✅ Successfully loaded coordinates for {len(school_locations_dict)} schools from CSV.")
+    print(f"✅ Successfully processed CSV. Loaded coordinates for {loaded_count} schools.")
+    if warning_count > 0:
+        print(f"  Encountered {warning_count} warnings (missing/invalid data).")
 
 except FileNotFoundError:
-    print(f"❌ ERROR: School locations CSV file not found at {csv_path}. Geocoding will be used as fallback.")
-    # Keep school_locations_dict empty, the app will rely on geocoding
+    print(f"ℹ️ Info: School locations CSV file not found. Will rely solely on geocoding for distances.")
 except ValueError as ve:
-     print(f"❌ ERROR: Issue with CSV columns: {ve}. Geocoding will be used as fallback.")
+     print(f"❌ ERROR: Issue with CSV columns: {ve}. Will rely solely on geocoding.")
 except Exception as e:
-    print(f"❌ ERROR: Failed to load or process school locations CSV: {e}")
-    # Keep school_locations_dict empty
+    print(f"❌ ERROR: Failed to load or process school locations CSV: {e}. Will rely solely on geocoding.")
 
 
+# --- Flask App Initialization ---
 app = Flask(__name__)
-# Increase timeout for Nominatim requests if needed
-geolocator = Nominatim(user_agent="jcps_school_bot", timeout=10)
+# IMPORTANT: Provide a unique user agent with contact info (replace email) per Nominatim policy
+geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (your_email@example.com)", timeout=15)
+
 
 # --- Helper Functions ---
 
 # Cache for geocoded user addresses
 address_cache = {}
-school_location_cache = {} # Can still keep this for geocoding fallbacks
-
-
+# Cache for school coordinates obtained via live geocoding (fallback only)
+school_geocoding_cache = {}
 
 def geocode_address(address):
-    """Geocodes a user address with caching."""
+    """Geocodes a user address string with caching. Returns (lat, lon) or (None, None)."""
+    address = str(address).strip()
+    if not address:
+        return None, None
+
     if address in address_cache:
         return address_cache[address]
 
+    print(f"  -> Geocoding user address: '{address}'")
     try:
+        # time.sleep(1) # Consider adding delay if making many requests rapidly
         location = geolocator.geocode(address)
         if location:
             coords = (location.latitude, location.longitude)
             address_cache[address] = coords
+            print(f"  ✅ Geocode success: {address} -> ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords
         else:
+            print(f"  ⚠️ Geocoding failed (no result): '{address}'")
             address_cache[address] = (None, None)
             return None, None
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
+         print(f"  ❌ Geocoding Service ERROR for address '{address}': {geo_err}")
+         address_cache[address] = (None, None)
+         return None, None
     except Exception as e:
-        print(f"⚠️ Geocoding error for address '{address}': {e}")
-        address_cache[address] = (None, None) # Cache failure
+        print(f"  ❌ Geocoding UNEXPECTED EXCEPTION for address '{address}': {e}")
+        address_cache[address] = (None, None)
         return None, None
 
+def get_school_coords(final_display_name):
+    """
+    Gets school coordinates (lat, lon) tuple.
+    Priority: 1. Pre-loaded CSV data. 2. Runtime geocoding cache. 3. Live geocoding.
+    Returns (lat, lon) or None if coordinates cannot be determined.
+    """
+    if not final_display_name:
+        return None
 
-# --- MODIFIED get_school_coords Function ---
-def get_school_coords(school_display_name):
-    """
-    Gets school coordinates:
-    1. From the pre-loaded CSV data (school_locations_dict).
-    2. Falls back to checking the runtime cache (school_location_cache).
-    3. Falls back to live geocoding if not found in CSV or cache.
-    """
-    # Normalize the input name to match the keys in school_locations_dict
-    clean_name_only = school_display_name.split('](')[0].replace('[', '').strip()
+    clean_name_only = final_display_name.split('](')[0].replace('[', '').strip()
     normalized_key = clean_name_only.lower()
 
-    # 1. Check Pre-loaded CSV data FIRST
+    # 1. Check Pre-loaded CSV data
     if normalized_key in school_locations_dict:
-        coords = school_locations_dict[normalized_key]
-        if coords: # Check if coords are not None
-            # print(f"✅ Found in CSV: {school_display_name} -> {coords}") # Optional debug log
-            return coords
-        else:
-            # print(f"⚠️ Found in CSV but no coords: {school_display_name}") # Optional debug log
-            # Known from CSV that coordinates are missing, don't try geocoding
-            return None
+        return school_locations_dict[normalized_key] # Return coords or None if listed as None in CSV
 
-    # 2. Check Runtime Cache (for results from previous geocoding attempts)
-    if normalized_key in school_location_cache:
-        # print(f"CACHE HIT: {school_display_name} -> {school_location_cache[normalized_key]}")
-        return school_location_cache[normalized_key]
+    # 2. Check Runtime Geocoding Cache
+    if normalized_key in school_geocoding_cache:
+        return school_geocoding_cache[normalized_key]
 
-    # 3. Fallback to Live Geocoding (if not in CSV and not in runtime cache)
-    print(f"🤷 School '{school_display_name}' not found in CSV data. Attempting geocode...")
+    # 3. Fallback to Live Geocoding
+    print(f"  -> Geocoding school (not in CSV/cache): '{final_display_name}'")
     full_address_guess = f"{clean_name_only}, Louisville, KY"
-    print(f"⏳ ATTEMPTING GEOCODE for: '{full_address_guess}'")
 
     try:
-        # time.sleep(1) # Optional delay
+        # time.sleep(1) # Consider adding delay
         location = geolocator.geocode(full_address_guess)
         if location:
             coords = (location.latitude, location.longitude)
-            school_location_cache[normalized_key] = coords # Cache success
-            print(f"✅ SUCCESS Geocoding '{full_address_guess}' to {coords}")
+            school_geocoding_cache[normalized_key] = coords # Cache success
+            print(f"  ✅ Geocode success: {full_address_guess} -> ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords
         else:
-            print(f"⚠️ FAILED Geocoding '{full_address_guess}' - Nominatim returned None")
-            school_location_cache[normalized_key] = None # Cache failure
+            print(f"  ⚠️ Geocoding failed (no result): '{full_address_guess}'")
+            school_geocoding_cache[normalized_key] = None # Cache failure
             return None
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
+         print(f"  ❌ Geocoding Service ERROR for school '{full_address_guess}': {geo_err}")
+         school_geocoding_cache[normalized_key] = None
+         return None
     except Exception as e:
-        print(f"❌ ERROR Geocoding '{full_address_guess}': {e}")
-        school_location_cache[normalized_key] = None # Cache error
+        print(f"  ❌ Geocoding UNEXPECTED EXCEPTION for school '{full_address_guess}': {e}")
+        school_geocoding_cache[normalized_key] = None
         return None
 
 
 def find_school_zones(lat, lon, gdf, sort_by_distance=False):
     """
     Finds school zones containing the point and identifies associated schools.
-    Calculates distances by geocoding school names if sort_by_distance is True.
+    Uses STRICT lookups in DISPLAY_NAMES_* dictionaries. Skips schools with missing mappings.
     """
     if lat is None or lon is None:
-        return {"error": "Invalid coordinates provided."}
+        print("Error: Invalid user coordinates provided to find_school_zones.")
+        return []
 
     point = Point(lon, lat)
-    # Ensure the GDF has a valid spatial index for performance
-    if not gdf.sindex:
-        print("🛠️ Building spatial index...")
-        gdf.sindex # Build it if it doesn't exist
+    if gdf is None or not hasattr(gdf, 'sindex') or gdf.empty:
+         print("Error: GeoDataFrame not available, empty, or spatial index missing.")
+         return []
 
+    matches = gpd.GeoDataFrame() # Initialize empty
     try:
-        # Use spatial index for faster lookup
-        possible_matches_index = list(gdf.sindex.intersection(point.bounds))
-        possible_matches = gdf.iloc[possible_matches_index]
-        # Precise check
-        matches = possible_matches[possible_matches.geometry.contains(point)]
+        # Attempt spatial index query first
+        possible_matches_index = list(gdf.sindex.query(point, predicate='contains'))
+        if possible_matches_index:
+            matches = gdf.iloc[possible_matches_index]
+            # Optional precise check if index might include boundary touches
+            contains_mask = matches.geometry.contains(point)
+            matches = matches[contains_mask]
+            if not matches.empty:
+                 print(f"  ℹ️ Spatial index query found {len(matches)} precise matches.")
+        else:
+             print("  ℹ️ Spatial index query found no containing polygons.")
+
+        # If index failed or returned nothing, try non-indexed fallback
+        if matches.empty:
+            print(f"  ℹ️ Falling back to non-indexed check (can be slow)...")
+            matches = gdf[gdf.geometry.contains(point)]
+            if not matches.empty:
+                 print(f"  ℹ️ Fallback non-indexed check found {len(matches)} matches.")
+
     except Exception as e:
-        print(f"❌ Error during spatial query: {e}")
-        # Fallback to non-indexed query if sindex fails (shouldn't happen often)
-        matches = gdf[gdf.geometry.contains(point)]
+        print(f"❌ Error during spatial query process: {e}. Attempting non-indexed check as final fallback.")
+        try:
+            # Final fallback attempt
+            matches = gdf[gdf.geometry.contains(point)]
+        except Exception as fallback_e:
+            print(f"❌ Error during final fallback non-indexed query: {fallback_e}")
+            matches = gpd.GeoDataFrame() # Ensure empty on error
 
 
     if matches.empty:
-        print("🤷 No matching zones found for the coordinates.")
-        # Optionally, could try finding the nearest zone if needed
-        return [] # Return empty list, the calling route handles jsonify
+        print("🤷 No matching school zones found for the provided coordinates.")
+        return []
 
-    results = []
-    # Use a dictionary where keys are tuples (zone_type, school_name_with_link)
-    # to easily manage unique schools and their distances.
-    # Value will be the distance.
-    school_dict = {}
+    print(f"✅ Found {len(matches)} matching zone(s). Processing...")
+    school_dict = {} # Stores {(zone_type, final_display_name_with_link): distance}
 
-    # Helper function for adding links
-    def make_linked_name(name):
-        normalized = name.strip().lower()
-        link = SCHOOL_REPORT_LINKS.get(normalized)
-        # Fallback: try matching without " High", " Middle", " Elementary" etc.
-        if not link:
-            base_name = normalized.replace(" high", "").replace(" middle", "").replace(" elementary", "").replace(" school", "").replace(" academy","").strip()
-            link = SCHOOL_REPORT_LINKS.get(base_name)
-
+    # --- Link generation ---
+    def make_linked_name(final_display_name):
+        """Adds markdown link if found in SCHOOL_REPORT_LINKS."""
+        if not final_display_name: return ""
+        cleaned_name = final_display_name.strip()
+        normalized_link_key = cleaned_name.lower()
+        link = SCHOOL_REPORT_LINKS.get(normalized_link_key)
+        # if not link: print(f"  Link Warning: No link for key: '{normalized_link_key}'") # Optional warning
         if link:
-            return f"[{name.strip()}]({link})"
-        return name.strip() # Return cleaned name if no link
+            return f"[{cleaned_name}]({link})"
+        return cleaned_name
 
-
-    def add_school(zone_type, display_name):
-        """Adds school to dict, calculating distance if needed."""
-        if not display_name or display_name == "Unknown":
-            return
-
-        name_with_link = make_linked_name(display_name)
+    # --- Add school (if display name is valid) ---
+    def add_school(zone_type, final_display_name):
+        """Adds school to dict if display name provided, calculating distance if needed."""
+        if not final_display_name or not final_display_name.strip(): return
+        cleaned_display_name = final_display_name.strip()
+        name_with_link = make_linked_name(cleaned_display_name)
         key = (zone_type, name_with_link)
-        distance = 0.0 # Default distance
+        key_exists = key in school_dict
 
         if sort_by_distance:
-            coords = get_school_coords(display_name) # Geocode using the display name
+            distance = float('inf')
+            coords = get_school_coords(cleaned_display_name)
             if coords:
-                user_coords = (lat, lon)
                 try:
-                    distance = geodesic(user_coords, coords).miles
+                    distance = geodesic((lat, lon), coords).miles
                 except ValueError as ve:
-                    print(f"⚠️ Distance calculation error for {display_name}: {ve}")
-                    distance = float('inf') # Mark as error distance
-            else:
-                distance = float('inf') # Indicate geocoding failed
-
-        # Add or update school in dict (prefer non-infinite distance if duplicate)
-        if key not in school_dict or school_dict[key] == float('inf'):
-             school_dict[key] = distance
-
+                    print(f"  ⚠️ Distance calculation error for {cleaned_display_name}: {ve}")
+                    distance = float('inf')
+            # Compare distances and update only if better
+            existing_distance = school_dict.get(key, float('inf'))
+            if distance < existing_distance:
+                school_dict[key] = distance
+        else: # Not sorting by distance
+             if not key_exists:
+                 school_dict[key] = 0.0 # Dummy value for non-distance mode
 
     # --- Process Matched Zones ---
-    print(f"Processing {len(matches)} matched zone(s)...")
+    print(f"Processing {len(matches)} matched zone polygon(s)...")
     for _, row in matches.iterrows():
-        zone_type = row["zone_type"]
-        display_name = "Unknown" # Default
+        zone_type = row.get("zone_type", "Unknown")
+        raw_name_str = None
+        display_name = None
 
         try:
+            # --- High School Zone ---
             if zone_type == "High":
-                # Assume 'High' column contains the key like "BALLARD"
-                raw_name = str(row.get("High", "Unknown"))
-                display_name = DISPLAY_NAMES_HIGH.get(raw_name.upper(), f"{raw_name} High" if raw_name != "Unknown" else "Unknown")
-                add_school(zone_type, display_name)
+                raw_name_str = str(row.get("High", "")).strip()
+                if raw_name_str:
+                    raw_name_key = raw_name_str.upper()
+                    display_name = DISPLAY_NAMES_HIGH.get(raw_name_key)
+                    if display_name: add_school(zone_type, display_name)
+                    else: print(f"  ⚠️ Mapping MISSING: Zone='High', Raw='{raw_name_str}' (Key='{raw_name_key}') not in DISPLAY_NAMES_HIGH.")
 
+            # --- Middle School Zone ---
             elif zone_type == "Middle":
-                 # Assume 'Middle' column contains the name like "Noe"
-                 # Or 'Name' might be used in some middle school shapefiles
-                 raw_name = row.get("Middle") if pd.notna(row.get("Middle")) else row.get("Name")
-                 if raw_name and pd.notna(raw_name):
-                     # Basic formatting, assumes raw_name doesn't already contain "Middle"
-                     display_name = f"{str(raw_name).strip()} Middle"
-                     add_school(zone_type, display_name)
+                 raw_name_from_middle = str(row.get("Middle", "")).strip()
+                 raw_name_from_name = str(row.get("Name", "")).strip()
+                 raw_name_str = raw_name_from_middle if raw_name_from_middle else raw_name_from_name
+                 if raw_name_str:
+                     raw_name_key = raw_name_str.upper()
+                     display_name = DISPLAY_NAMES_MIDDLE.get(raw_name_key)
+                     if display_name: add_school(zone_type, display_name)
+                     else: print(f"  ⚠️ Mapping MISSING: Zone='Middle', Raw='{raw_name_str}' (Key='{raw_name_key}') not in DISPLAY_NAMES_MIDDLE.")
 
+            # --- Choice Zone ---
             elif zone_type == "Choice":
-                 # Assume 'Name' column holds the choice program/school name
-                 raw_name = row.get("Name")
-                 if raw_name and pd.notna(raw_name):
-                      display_name = str(raw_name).strip()
-                      add_school(zone_type, display_name) # Add to 'Choice' category
+                 display_name = str(row.get("Name", "")).strip()
+                 if display_name: add_school(zone_type, display_name)
 
+            # --- Elementary Zone (Feeders) ---
             elif zone_type == "Elementary":
-                # This zone represents an Elementary *Cluster*. Find feeders based on the cluster's associated High School.
-                high_school_attr = str(row.get("High", "Unknown")) # Get HS key (e.g., "BALLARD") from the elementary zone row
-                feeder_list = ELEMENTARY_FEEDERS.get(high_school_attr.upper(), [])
-                print(f"Elementary Cluster (High: {high_school_attr}) -> Feeders: {feeder_list}")
-                if feeder_list:
-                    for school_name in feeder_list: # school_name is like "Audubon Traditional Elementary"
-                         # Feeders go into the main 'Elementary' category for simplicity here
-                         add_school("Elementary", school_name)
-                else:
-                    print(f"⚠️ No elementary feeders found for High School key: {high_school_attr.upper()}")
-                    # Optionally add a placeholder if needed:
-                    # add_school("Elementary", f"Unknown Feeders for Cluster (HS: {high_school_attr})")
-
+                high_school_attr = str(row.get("High", "")).strip().upper()
+                if high_school_attr:
+                    feeder_list = ELEMENTARY_FEEDERS.get(high_school_attr, [])
+                    if feeder_list:
+                        for school_name_from_feeder in feeder_list:
+                             feeder_name_clean = school_name_from_feeder.strip()
+                             if feeder_name_clean: add_school("Elementary", feeder_name_clean)
+                    # else: print(f"  Info: No elementary feeders for HS Key: '{high_school_attr}'") # Optional info
 
             # --- Traditional / Magnet Zones ---
-            # *** Double check the 'Traditiona' column name in your actual data ***
             elif zone_type == "Traditional/Magnet High":
-                raw_name = row.get("Traditiona") # Or 'Name', 'School'? Check your shapefile!
-                if raw_name and pd.notna(raw_name):
-                     display_name = DISPLAY_NAMES_HIGH.get(str(raw_name).upper(), f"{raw_name} High School")
-                     add_school(zone_type, display_name)
+                raw_name_str = str(row.get("Traditiona", "")).strip() # Check 'Traditiona' column name
+                if raw_name_str:
+                     raw_name_key = raw_name_str.upper()
+                     display_name = DISPLAY_NAMES_HIGH.get(raw_name_key)
+                     if display_name: add_school(zone_type, display_name)
+                     else: print(f"  ⚠️ Mapping MISSING: Zone='Trad/Mag High', Raw='{raw_name_str}' (Key='{raw_name_key}') not in DISPLAY_NAMES_HIGH.")
 
             elif zone_type == "Traditional/Magnet Middle":
-                raw_name = row.get("Traditiona") # Or 'Name', 'School'? Check your shapefile!
-                if raw_name and pd.notna(raw_name):
-                     display_name = DISPLAY_NAMES_MIDDLE.get(str(raw_name).upper(), f"{raw_name} Middle School")
-                     add_school(zone_type, display_name)
+                raw_name_str = str(row.get("Traditiona", "")).strip() # Check 'Traditiona' column name
+                if raw_name_str:
+                     raw_name_key = raw_name_str.upper()
+                     display_name = DISPLAY_NAMES_MIDDLE.get(raw_name_key)
+                     if display_name: add_school(zone_type, display_name)
+                     else: print(f"  ⚠️ Mapping MISSING: Zone='Trad/Mag Middle', Raw='{raw_name_str}' (Key='{raw_name_key}') not in DISPLAY_NAMES_MIDDLE.")
 
             elif zone_type == "Traditional/Magnet Elementary":
-                raw_name = row.get("Traditiona") # Or 'Name', 'School'? Check your shapefile!
-                if raw_name and pd.notna(raw_name):
-                     display_name = DISPLAY_NAMES_ELEMENTARY.get(str(raw_name).upper(), f"{raw_name} Elementary School")
-                     add_school(zone_type, display_name)
+                 raw_name_str = str(row.get("Traditiona", "")).strip() # Check 'Traditiona' column name
+                 if raw_name_str:
+                      raw_name_key = raw_name_str.upper()
+                      display_name = DISPLAY_NAMES_ELEMENTARY.get(raw_name_key)
+                      if display_name: add_school(zone_type, display_name)
+                      else: print(f"  ⚠️ Mapping MISSING: Zone='Trad/Mag Elem', Raw='{raw_name_str}' (Key='{raw_name_key}') not in DISPLAY_NAMES_ELEMENTARY.")
 
         except Exception as e:
-            print(f"❌ Error processing row for zone type {zone_type}: {e}\nRow data: {row.to_dict()}")
-
+            print(f"❌ Error processing matched row (Index: {row.name}, Zone Type: {zone_type}): {e}")
 
     # --- Add Universal Schools ---
-    print("Adding Universal Schools...")
-    for level, schools in UNIVERSAL_SCHOOLS.items():
-        # Assign to appropriate category (e.g., Trad/Magnet or a dedicated 'Universal' category)
-        target_zone_type = f"Traditional/Magnet {level}" # Or change to "Universal Schools"
-        for school_name in schools:
-            # Attempt to get a display name, otherwise use the name directly
-            # Use the combined ALL_DISPLAY_NAMES for broader lookup
-            display_name = ALL_DISPLAY_NAMES.get(school_name.upper(), school_name)
-            add_school(target_zone_type, display_name)
+    # print("Adding Universal Schools...") # Usually not needed unless debugging this section
+    for level, schools_list in UNIVERSAL_SCHOOLS.items():
+        target_zone_type = f"Traditional/Magnet {level}"
+        for school_name in schools_list:
+            clean_universal_name = school_name.strip()
+            if clean_universal_name: add_school(target_zone_type, clean_universal_name)
 
     # --- Format Final Results ---
-    # Group schools by zone type from the dictionary keys
     grouped_schools = {}
     for (zone_type, name_with_link), distance in school_dict.items():
-        if zone_type not in grouped_schools:
-            grouped_schools[zone_type] = []
-        grouped_schools[zone_type].append({"name": name_with_link, "distance": distance})
+        if zone_type not in grouped_schools: grouped_schools[zone_type] = []
+        display_name_no_link = name_with_link.split('](')[0].replace('[', '').strip()
+        grouped_schools[zone_type].append({
+            "name_linked": name_with_link,
+            "name_plain": display_name_no_link,
+            "distance": distance
+            })
 
-    # Sort and format each group
     final_results_list = []
-    # Define preferred order for categories
-    category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice", "Universal Schools"] # Add Universal if used
-
-    # Sort categories based on the preferred order
+    category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice"]
     sorted_zone_types = sorted(grouped_schools.keys(), key=lambda z: category_order.index(z) if z in category_order else len(category_order))
-
 
     for zone_type in sorted_zone_types:
         schools = grouped_schools[zone_type]
-        if not schools:
-            continue
-
-        # Sort schools: distance (inf last), then name
-        schools.sort(key=lambda x: (float('inf') if x['distance'] == float('inf') else x['distance'], x['name'].lower()))
-
+        if not schools: continue
+        schools.sort(key=lambda x: (float('inf') if x['distance'] == float('inf') else x['distance'], x['name_plain'].lower()))
         school_strings = []
         for school in schools:
-            name = school['name']
+            name = school['name_linked']
             dist = school['distance']
             if sort_by_distance:
-                if dist == float('inf'):
-                    school_strings.append(f"{name} (distance unavailable)")
-                else:
-                    school_strings.append(f"{name} ({dist:.1f} mi)")
+                if dist == float('inf'): school_strings.append(f"{name} (distance unavailable)")
+                else: school_strings.append(f"{name} ({dist:.1f} mi)")
             else:
-                 school_strings.append(name) # Just the name if not sorting by distance
-
+                 school_strings.append(name)
         if school_strings:
              final_results_list.append(f"{zone_type} Schools: {', '.join(school_strings)}")
 
-    print("✅ School zone processing complete.")
+    print(f"✅ School zone processing complete. Found {len(final_results_list)} categories with schools.")
     return final_results_list
 
 
 # --- Flask Routes ---
 @app.route("/test")
 def test():
+    """Simple endpoint to check if Flask is running."""
     return "🚀 Flask is working!"
 
 @app.route("/school-zone", methods=["POST"])
 def school_zone():
+    """Handles POST requests to find school zones (names only)."""
+    start_time = time.time()
     data = request.get_json()
     if not data:
+        print("❌ Error: Request body missing or not JSON.")
         return jsonify({"error": "Request body must be JSON"}), 400
-    print("🔍 Incoming data /school-zone:", data)
 
     address = data.get("address")
-    print("📬 Received address:", address) # This should be the full address from user
+    if not address or not isinstance(address, str) or not address.strip():
+        print("❌ Error: Address is missing or not a valid string.")
+        return jsonify({"error": "Address string is required"}), 400
 
-    if not address:
-        print("❌ No address provided.")
-        return jsonify({"error": "Address is required"}), 400
+    address = address.strip()
+    print(f"\n--- Request /school-zone --- Address: '{address}'")
 
-    # Use the address directly, assuming it's complete
-    print(f"🌍 Attempting to geocode: '{address}'") # Add log
     lat, lon = geocode_address(address)
 
     if lat is None or lon is None:
-        # Use the original address in the error message
         error_msg = f"Could not geocode address: '{address}'. Please check the address format (e.g., Street, City, State ZIP)."
-        print(f"❌ Geocoding failed for: {address}")
+        print(f"❌ Geocoding failed for request.")
         return jsonify({"error": error_msg}), 400
 
-    print(f"📍 Geocoded to: Lat={lat}, Lon={lon}")
+    print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
     zones = find_school_zones(lat, lon, all_zones_gdf, sort_by_distance=False)
 
+    end_time = time.time()
+    print(f"--- Request /school-zone completed in {end_time - start_time:.2f} seconds ---")
     return jsonify({"zones": zones}), 200
 
 @app.route("/school-distances", methods=["POST"])
 def school_distances():
+    """Handles POST requests to find school zones with distances."""
+    start_time = time.time()
     data = request.get_json()
     if not data:
+        print("❌ Error: Request body missing or not JSON.")
         return jsonify({"error": "Request body must be JSON"}), 400
-    print("🔍 Incoming data /school-distances:", data)
 
-    address = data.get("address") # This should be the full address from user
-    if not address:
-        return jsonify({"error": "Address is required"}), 400
+    address = data.get("address")
+    if not address or not isinstance(address, str) or not address.strip():
+        print("❌ Error: Address is missing or not a valid string.")
+        return jsonify({"error": "Address string is required"}), 400
 
-    # Use the address directly, assuming it's complete
-    print(f"🌍 Attempting to geocode: '{address}'") # Add log
+    address = address.strip()
+    print(f"\n--- Request /school-distances --- Address: '{address}'")
+
     lat, lon = geocode_address(address)
 
     if lat is None or lon is None:
-        # Use the original address in the error message
         error_msg = f"Could not geocode address: '{address}'. Please check the address format (e.g., Street, City, State ZIP)."
-        print(f"❌ Geocoding failed for: {address}")
+        print(f"❌ Geocoding failed for request.")
         return jsonify({"error": error_msg}), 400
 
-    print(f"📍 Geocoded to: Lat={lat}, Lon={lon}")
+    print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
     zones_with_distances = find_school_zones(lat, lon, all_zones_gdf, sort_by_distance=True)
 
+    end_time = time.time()
+    print(f"--- Request /school-distances completed in {end_time - start_time:.2f} seconds ---")
     return jsonify({"zones": zones_with_distances})
 
 
-# --- Run the app ---
+# --- Run App ---
 if __name__ == "__main__":
-    # Consider using a production-ready server like Gunicorn or Waitress instead of Flask's built-in server for deployment
-    app.run(host="0.0.0.0", port=5001, debug=True) # Turn off debug in production
+    print("\n" + "="*30)
+    print(" Starting Flask development server... ")
+    print(" Access via http://localhost:5001 or network IP ")
+    print(" Press CTRL+C to quit ")
+    print("="*30 + "\n")
+    # Turn off debug mode in production for security and performance!
+    # Use host="0.0.0.0" to make accessible on network, default is "127.0.0.1" (localhost only).
+    # Consider using a production WSGI server like Gunicorn or Waitress instead of Flask's built-in server.
+    app.run(host="0.0.0.0", port=5001, debug=True) # Set debug=False for production
