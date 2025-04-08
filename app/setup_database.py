@@ -4,49 +4,52 @@ import os
 import re
 
 # --- Configuration ---
-DATABASE_FILE = 'jcps_school_data.db'  # Database file name
+DATABASE_FILE = 'jcps_school_data.db'
 TABLE_NAME = 'schools'
 
-# --- Calculate the correct path to the CSV file ---
-# Get the directory where the script setup_database.py is located
+# --- File Paths ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Go up one level to the project root directory (parent of 'app')
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
-# Construct the full path to the CSV file inside the 'data' folder
-CSV_FILE = os.path.join(PROJECT_ROOT, 'data', 'JCPS_Merged_Data.csv')
-# --- End path calculation ---
+DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 
-# --- Column Mapping (Original CSV Header -> Sanitized DB Column) ---
-# *** CRITICAL: Verify these CSV headers exactly match your downloaded file ***
+MAIN_CSV_FILE = os.path.join(DATA_DIR, 'JCPS_Merged_Data.csv')
+# LINK_CSV_FILE = os.path.join(DATA_DIR, 'school_report_links.csv') # REMOVED
+
+# --- Column Mapping (Main CSV Header -> Sanitized DB Column) ---
+# *** Verify these CSV headers exactly match JCPS_Merged_Data.csv ***
+# *** Includes display_name, gis_name, universal_magnet, KYReportCard URL ***
 COLUMN_MAPPING = {
     'School Code': 'school_code',
     'School Code Adjusted': 'school_code_adjusted', # PRIMARY KEY
     'School Name': 'school_name',
     'School Name Alternate': 'school_name_alternate',
-    # 'Level' removed as requested
+    'Display Name': 'display_name', # Assumed header in CSV
+    'GIS Name': 'gis_name',         # Assumed header in CSV
+    'Universal Magnet Traditional': 'universal_magnet', # Assumed header in CSV
     'Type': 'type',
     'Zone': 'zone',
     'Feeder to High School': 'feeder_to_high_school',
     'Network': 'network',
-    'Great Schools Rating': 'great_schools_rating', # Changed to INTEGER
+    'Great Schools Rating': 'great_schools_rating', # INTEGER
     'Great Schools URL': 'great_schools_url',
+    'KYReportCard URL': 'ky_reportcard_URL', # <<< ADDED MAPPING FOR LINK
     'School Level': 'school_level',
     'Enrollment': 'enrollment',
     'All Grades Enrollment': 'all_grades_enrollment',
     'Preschool Enrollment': 'preschool_enrollment',
-    'All Grades Except Preschool Enrollment': 'all_grades_except_preschool_enrollment', # Changed to INTEGER
+    'All Grades Except Preschool Enrollment': 'all_grades_except_preschool_enrollment', # INTEGER
     'Elementary School Enrollment': 'elementary_school_enrollment',
     'Middle School Enrollment': 'middle_school_enrollment',
     'High School Enrollment': 'high_school_enrollment',
-    'Student Teacher Ratio': 'student_teacher_ratio', # Original TEXT format (e.g., '15:01')
-    # A new column 'student_teacher_ratio_value' (REAL) will be calculated
+    'Student Teacher Ratio': 'student_teacher_ratio', # TEXT format '15:01'
+    # 'student_teacher_ratio_value' (REAL) calculated below
     'Grade': 'grade',
     'Mathematics - All Students Proficient or Distinguished': 'math_all_proficient_distinguished',
     'Mathematics - Economically Disadvantaged Proficient or Distinguished': 'math_econ_disadv_proficient_distinguished',
     'Mathematics - Non Economically Disadvantaged Proficient or Distinguished': 'math_non_econ_disadv_proficient_distinguished',
     'Reading - All Students Proficient or Distinguished': 'reading_all_proficient_distinguished',
     'Reading - Economically Disadvantaged Proficient or Distinguished': 'reading_econ_disadv_proficient_distinguished',
-    'Reading - Non Economically Disadvantaged Proficient or Distinguished': 'reading_non_econ_disadv_proficient_distinguished', # Corrected typo
+    'Reading - Non Economically Disadvantaged Proficient or Distinguished': 'reading_non_econ_disadv_proficient_distinguished',
     'Total Ready': 'total_ready',
     'Teacher Average Years of Experience': 'teacher_avg_years_experience',
     'Percent of Teachers With 1-3 Years Experience': 'percent_teachers_1_3_years_experience',
@@ -83,14 +86,16 @@ COLUMN_MAPPING = {
     'Fax': 'fax',
     'Latitude': 'latitude',
     'Longitude': 'longitude'
+    # 'student_teacher_ratio_value' added dynamically
+    # 'ky_reportcard_URL' is now included via mapping above
 }
 
-# Define data types for cleaning/conversion (INTEGER or REAL)
-# Use the SANITIZED database column names here
+# --- Column Types for Cleaning ---
+# Use SANITIZED db column names
 INTEGER_COLUMNS = {
-    'great_schools_rating', # Moved to INTEGER
+    'great_schools_rating', # INTEGER
+    'all_grades_except_preschool_enrollment', # INTEGER
     'enrollment', 'all_grades_enrollment', 'preschool_enrollment',
-    'all_grades_except_preschool_enrollment', # Moved to INTEGER
     'elementary_school_enrollment', 'middle_school_enrollment',
     'high_school_enrollment', 'total_ready', 'total_behavior_events',
     'behavior_events_alcohol', 'behavior_events_assault_1st_degree',
@@ -108,203 +113,132 @@ REAL_COLUMNS = {
     'percent_teachers_1_3_years_experience', 'percent_teachers_less_than_1_year_experience',
     'percent_teachers_3_years_or_less_experience', 'attendance_rate', 'dropout_rate',
     'latitude', 'longitude',
-    'student_teacher_ratio_value' # Add the new calculated column here
+    # 'student_teacher_ratio_value' - Defined as REAL later
 }
+# TEXT_COLUMNS = Everything else in COLUMN_MAPPING + student_teacher_ratio + calculated columns
 
-# --- Helper Function for Cleaning ---
+# --- Helper Functions ---
 def clean_value(value, target_type):
-    """Cleans and converts string value to target type (INTEGER or REAL), returns None on failure."""
-    if value is None:
-        return None
-    # Standardize common non-numeric/placeholder values like '*' to empty string first
+    if value is None: return None
     value = str(value).strip()
-    if value in ['*', 'N/A', 'n/a', '#VALUE!']:
-        value = ''
-
-    if not value: # Handle empty strings after cleaning placeholders
-        return None
-
+    if value in ['*', 'N/A', 'n/a', '#VALUE!']: value = ''
+    if not value: return None
     try:
-        if target_type == 'INTEGER':
-            value = value.replace(',', '')
-            return int(float(value))
-        elif target_type == 'REAL':
-            value = value.replace(',', '').replace('%', '')
-            return float(value)
-        else: # Assume TEXT
-             return value
-    except (ValueError, TypeError):
-        # print(f"Warning: Could not convert '{value}' to {target_type}. Setting to NULL.")
-        return None
+        if target_type == 'INTEGER': return int(float(value.replace(',', '')))
+        elif target_type == 'REAL': return float(value.replace(',', '').replace('%', ''))
+        else: return value # TEXT
+    except (ValueError, TypeError): return None
 
-# --- Helper Function for Ratio Calculation ---
 def calculate_ratio_value(ratio_str):
-    """Calculates a decimal value from a ratio string like '15:01'."""
-    if not ratio_str or ':' not in ratio_str:
-        return None
+    if not ratio_str or ':' not in ratio_str: return None
     try:
-        students_str, teachers_str = ratio_str.split(':', 1)
-        students = float(students_str.strip())
-        teachers = float(teachers_str.strip())
-        if teachers == 0:
-            return None # Avoid division by zero
-        return students / teachers
-    except (ValueError, TypeError, IndexError):
-        # print(f"Warning: Could not parse ratio '{ratio_str}'. Setting value to NULL.")
-        return None
+        s, t = map(str.strip, ratio_str.split(':', 1))
+        return float(s) / float(t) if float(t) != 0 else None
+    except (ValueError, TypeError, IndexError): return None
 
-# --- Script Logic ---
+# --- Pre-load Report Links REMOVED ---
+# report_links_dict = {} # REMOVED
 
-# Ensure the CSV file exists
-if not os.path.exists(CSV_FILE):
-    print(f"Error: CSV file not found at '{CSV_FILE}'")
-    exit()
+# --- Database Setup ---
+print("\nSetting up database...")
+if not os.path.exists(MAIN_CSV_FILE): print(f"Error: Main CSV not found at '{MAIN_CSV_FILE}'"); exit()
+DB_FILE_PATH = os.path.join(SCRIPT_DIR, DATABASE_FILE) # DB next to script
 
-# Delete existing database file if it exists
-if os.path.exists(DATABASE_FILE):
-    print(f"Removing existing database file: {DATABASE_FILE}")
-    os.remove(DATABASE_FILE)
+if os.path.exists(DB_FILE_PATH): print(f"Removing existing database file: {DB_FILE_PATH}"); os.remove(DB_FILE_PATH)
 
-# Connect to the SQLite database
-conn = sqlite3.connect(DATABASE_FILE)
-cursor = conn.cursor()
-print(f"Database file '{DATABASE_FILE}' created/connected.")
+conn = sqlite3.connect(DB_FILE_PATH); cursor = conn.cursor()
+print(f"Database file '{DB_FILE_PATH}' created/connected.")
 
-# Build the CREATE TABLE statement dynamically
-columns_sql = []
-primary_key_db_col = 'school_code_adjusted' # Define the primary key column name
+# --- Build CREATE TABLE statement ---
+db_columns_final_set = set(COLUMN_MAPPING.values())
+db_columns_final_set.add('student_teacher_ratio_value') # Add calculated column
+# report_link_url is now included via COLUMN_MAPPING ('ky_reportcard_URL')
 
-# Add mapped columns first
-for db_col in COLUMN_MAPPING.values():
-    if db_col == primary_key_db_col:
-        col_type = 'TEXT PRIMARY KEY NOT NULL'
-    elif db_col in INTEGER_COLUMNS:
-        col_type = 'INTEGER'
-    elif db_col in REAL_COLUMNS and db_col != 'student_teacher_ratio_value': # Exclude calculated column for now
-        col_type = 'REAL'
-    else: # Includes TEXT columns like the original student_teacher_ratio
-        col_type = 'TEXT'
-    columns_sql.append(f'"{db_col}" {col_type}')
+columns_sql_defs = []
+primary_key_db_col = 'school_code_adjusted'
 
-# Manually add the calculated ratio column definition
-columns_sql.append(f'"student_teacher_ratio_value" REAL')
+for db_col in sorted(list(db_columns_final_set)): # Sort for consistent order
+    col_type = 'TEXT' # Default
+    if db_col == primary_key_db_col: col_type = 'TEXT PRIMARY KEY NOT NULL'
+    elif db_col == 'student_teacher_ratio_value': col_type = 'REAL'
+    # Removed specific check for report_link_url, handled by mapping
+    elif db_col in INTEGER_COLUMNS: col_type = 'INTEGER'
+    elif db_col in REAL_COLUMNS: col_type = 'REAL'
+    columns_sql_defs.append(f'"{db_col}" {col_type}')
 
-create_table_sql = f'CREATE TABLE IF NOT EXISTS "{TABLE_NAME}" ({", ".join(columns_sql)})'
+create_table_sql = f'CREATE TABLE IF NOT EXISTS "{TABLE_NAME}" ({", ".join(columns_sql_defs)})'
 
-# Execute CREATE TABLE
+try: cursor.execute(create_table_sql); print(f"Table '{TABLE_NAME}' created successfully.")
+except sqlite3.Error as e: print(f"Error creating table: {e}"); conn.close(); exit()
+
+# --- Create Indexes ---
+print("Creating database indexes...")
+index_commands = [
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_gis_name ON "{TABLE_NAME}" (gis_name);',
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_display_name ON "{TABLE_NAME}" (display_name);',
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_feeder_hs ON "{TABLE_NAME}" (feeder_to_high_school);',
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_school_level ON "{TABLE_NAME}" (school_level);',
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_universal ON "{TABLE_NAME}" (universal_magnet);',
+    f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_feeder_level ON "{TABLE_NAME}" (feeder_to_high_school, school_level);'
+]
+try: [cursor.execute(cmd) for cmd in index_commands]; conn.commit(); print("Database indexes created.")
+except sqlite3.Error as e: print(f"Error creating indexes: {e}")
+
+# --- Import Main Data ---
+inserted_count = 0; skipped_count = 0
+print(f"\nStarting data import from '{MAIN_CSV_FILE}'...")
 try:
-    cursor.execute(create_table_sql)
-    print(f"Table '{TABLE_NAME}' created successfully with '{primary_key_db_col}' as PRIMARY KEY.")
-    # print(create_table_sql) # Uncomment to see the exact SQL used
-except sqlite3.Error as e:
-    print(f"Error creating table: {e}")
-    conn.close()
-    exit()
-
-# Read data from CSV and insert
-inserted_count = 0
-skipped_count = 0
-print(f"Starting data import from '{CSV_FILE}'...")
-try:
-    with open(CSV_FILE, 'r', encoding='utf-8-sig') as file:
+    with open(MAIN_CSV_FILE, 'r', encoding='utf-8-sig') as file:
         csv_reader = csv.DictReader(file)
+        missing_headers = [h for h in COLUMN_MAPPING.keys() if h not in csv_reader.fieldnames]
+        if missing_headers: print(f"WARNING: Headers missing in main CSV: {missing_headers}")
 
-        # Verify all mapped CSV headers exist in the actual file headers
-        missing_headers = [csv_h for csv_h in COLUMN_MAPPING.keys() if csv_h not in csv_reader.fieldnames]
-        if missing_headers:
-             print("\n--- WARNING: Headers in COLUMN_MAPPING not found in CSV file ---")
-             for h in missing_headers:
-                 print(f" - '{h}'")
-             print("--- These columns will be skipped or cause errors. Please check spelling/case in COLUMN_MAPPING or CSV file. ---\n")
+        # Get final list of DB columns in a defined order (mapped + calculated)
+        db_columns_ordered = sorted(list(db_columns_final_set))
+        placeholders = ', '.join(['?'] * len(db_columns_ordered))
+        insert_sql = f'INSERT OR IGNORE INTO "{TABLE_NAME}" ({", ".join(f"{col}" for col in db_columns_ordered)}) VALUES ({placeholders})'
 
-        # Prepare for insertion - include the calculated column
-        db_columns_mapped = list(COLUMN_MAPPING.values())
-        db_columns_all = db_columns_mapped + ['student_teacher_ratio_value'] # Add the calculated column name
-        placeholders = ', '.join(['?'] * len(db_columns_all))
-        insert_sql = f'INSERT OR IGNORE INTO "{TABLE_NAME}" ({", ".join(f"{col}" for col in db_columns_all)}) VALUES ({placeholders})'
-        # print(insert_sql) # Uncomment to verify INSERT statement
+        # Find CSV header for PK
+        primary_key_csv_header = next((csv_h for csv_h, db_c in COLUMN_MAPPING.items() if db_c == primary_key_db_col), None)
+        if not primary_key_csv_header: raise ValueError(f"Cannot find CSV header for PK '{primary_key_db_col}'")
 
-        # Find the CSV header for the primary key
-        primary_key_csv_header = None
-        for csv_h, db_c in COLUMN_MAPPING.items():
-             if db_c == primary_key_db_col:
-                  primary_key_csv_header = csv_h
-                  break
-        if not primary_key_csv_header:
-             print(f"FATAL ERROR: Could not find CSV header for primary key '{primary_key_db_col}'.")
-             conn.close()
-             exit()
-
-        # Find the CSV header for the ratio string
-        ratio_csv_header = None
-        for csv_h, db_c in COLUMN_MAPPING.items():
-             if db_c == 'student_teacher_ratio':
-                  ratio_csv_header = csv_h
-                  break
-        # No fatal error if ratio header not found, calculation will just be None
+        # Find CSV header for ratio string
+        ratio_csv_header = next((csv_h for csv_h, db_c in COLUMN_MAPPING.items() if db_c == 'student_teacher_ratio'), None)
 
         for row_num, row in enumerate(csv_reader, start=1):
-            values_to_insert = []
-            primary_key_value_raw = row.get(primary_key_csv_header)
-            primary_key_value_cleaned = str(primary_key_value_raw).strip() if primary_key_value_raw else None
+            values_map = {}
+            pk_value_raw = row.get(primary_key_csv_header)
+            pk_value_cleaned = str(pk_value_raw).strip() if pk_value_raw else None
 
-            # Basic check: Primary key cannot be NULL/empty
-            if not primary_key_value_cleaned:
-                 print(f"Skipping row {row_num} due to missing or empty primary key ('{primary_key_csv_header}'). Raw row data: {row}")
-                 skipped_count += 1
-                 continue
+            if not pk_value_cleaned: print(f"Skipping row {row_num} due to missing PK"); skipped_count += 1; continue
 
-            # Process values for mapped columns
-            process_error = False
-            ratio_str_raw = None # Store the raw ratio string for calculation later
-            for db_col in db_columns_mapped:
-                # Find corresponding CSV header
-                csv_header = None
-                for csv_h, db_c in COLUMN_MAPPING.items():
-                    if db_c == db_col:
-                        csv_header = csv_h
-                        break
-                if csv_header is None: continue # Should not happen if mapping is complete
-
-                raw_value = row.get(csv_header)
-                if db_col == 'student_teacher_ratio':
-                    ratio_str_raw = raw_value # Save the raw string
-
-                # Determine target type and clean
+            # Process mapped columns from CSV
+            ratio_str_for_calc = None
+            for csv_header, db_col in COLUMN_MAPPING.items():
+                raw_value = row.get(csv_header) # Use get() for safety
+                if db_col == 'student_teacher_ratio': ratio_str_for_calc = raw_value
                 target_type = 'TEXT'
                 if db_col in INTEGER_COLUMNS: target_type = 'INTEGER'
                 elif db_col in REAL_COLUMNS: target_type = 'REAL'
-                cleaned = clean_value(raw_value, target_type)
-                values_to_insert.append(cleaned)
+                values_map[db_col] = clean_value(raw_value, target_type)
 
-            # Calculate and append the ratio value
-            ratio_value_calculated = calculate_ratio_value(ratio_str_raw)
-            values_to_insert.append(ratio_value_calculated)
+            # Add calculated value
+            values_map['student_teacher_ratio_value'] = calculate_ratio_value(ratio_str_for_calc)
+
+            # Prepare tuple in the correct order for INSERT
+            values_to_insert = [values_map.get(db_col) for db_col in db_columns_ordered]
 
             # Execute insert
             try:
                 cursor.execute(insert_sql, tuple(values_to_insert))
-                if cursor.rowcount > 0:
-                     inserted_count += 1
-                else:
-                    print(f"Ignoring row {row_num} due to duplicate primary key ('{primary_key_csv_header}'): '{primary_key_value_cleaned}'")
-                    skipped_count += 1
-            except Exception as insert_error:
-                print(f"--- ERROR inserting row {row_num} (PK: {primary_key_value_cleaned}) ---")
-                print(f"Error: {insert_error}")
-                # print(f"Values attempted: {values_to_insert}") # Uncomment if needed
-                print("----------------------------------------------------------------")
-                skipped_count += 1
+                if cursor.rowcount > 0: inserted_count += 1
+                else: skipped_count += 1 # Ignored duplicate PK
+            except Exception as insert_error: print(f"ERROR inserting row {row_num} (PK: {pk_value_cleaned}): {insert_error}"); skipped_count += 1
 
-    # Commit the changes
     conn.commit()
     print(f"\nData insertion complete. Inserted: {inserted_count}, Skipped/Ignored: {skipped_count}")
 
-except FileNotFoundError:
-    print(f"Error: Could not find the CSV file '{CSV_FILE}'")
-except Exception as e:
-    print(f"An error occurred during CSV processing: {e}")
-finally:
-    # Close the database connection
-    conn.close()
-    print("Database connection closed.")
+except FileNotFoundError: print(f"Error: Could not find the main CSV file '{MAIN_CSV_FILE}'")
+except ValueError as ve: print(f"ValueError during setup: {ve}")
+except Exception as e: print(f"An error occurred during main CSV processing: {e}")
+finally: conn.close(); print("Database connection closed.")
