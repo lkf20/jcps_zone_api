@@ -167,7 +167,7 @@ def get_school_details_by_scas(school_codes_adjusted):
 # --- Flask App Initialization ---
 app = Flask(__name__)
 CORS(app) # Make sure this is here and applies to the whole app
-geolocator = (user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", timeout=15)
+geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", timeout=15)
 
 # --- Helper Functions ---
 address_cache = {}
