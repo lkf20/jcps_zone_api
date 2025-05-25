@@ -167,7 +167,7 @@ def get_school_details_by_scas(school_codes_adjusted):
 # --- Flask App Initialization ---
 app = Flask(__name__)
 CORS(app) # Make sure this is here and applies to the whole app
-geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (your_email@example.com)", timeout=15)
+geolocator = (user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", timeout=15)
 
 # --- Helper Functions ---
 address_cache = {}
@@ -425,4 +425,5 @@ if __name__ == "__main__":
     if not os.path.exists(DATABASE_PATH): print("\n"+"!"*30+f"\n  DB NOT FOUND at '{DATABASE_PATH}'\n  Run setup scripts first!\n"+"!"*30+"\n"); exit()
     else: print(f"✅ Database file found at '{DATABASE_PATH}'")
     print("\n"+"="*30+"\n Starting Flask server...\n Access via http://localhost:5001\n"+"="*30+"\n")
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    # For local development only. Gunicorn will be used in production.
+    app.run(host="0.0.0.0", port=port, debug=False)
