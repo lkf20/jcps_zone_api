@@ -8,14 +8,14 @@ DATABASE_FILE = 'jcps_school_data.db'
 TABLE_NAME = 'schools'
 
 # --- New Data Configuration ---
-NEW_DATA_CSV = 'parent_satisfaction.csv' # Path to the new CSV
-NEW_COLUMN_NAME = 'parent_satisfaction'   # Name for the new DB column
-NEW_COLUMN_TYPE = 'REAL'             # Data type for the new column
+NEW_DATA_CSV = 'overall_indicator_rating.csv' # Path to the new CSV
+NEW_COLUMN_NAME = 'overall_indicator_rating'   # Name for the new DB column
+NEW_COLUMN_TYPE = 'INTEGER'             # Data type for the new column
 
 # --- CSV Headers for New Data ---
 # *** Adjust these to match your principal_emails.csv headers ***
 CSV_PK_COL = 'School Code Adjusted' # Column in CSV matching the DB Primary Key
-CSV_NEW_DATA_COL = 'ParentOverallSatisfaction_2024' # Column in CSV with the new data
+CSV_NEW_DATA_COL = 'Overall Indicator Rating' # Column in CSV with the new data
 
 # --- File Paths ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

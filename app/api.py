@@ -12,6 +12,7 @@ import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 import pprint
+from flask_cors import CORS
 
 # --- Configuration & Data Loading ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,119 +38,63 @@ traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditi
 print("🔄 Loading Shapefiles...")
 all_zones_gdf = None
 try:
+    # ... (Keep the shapefile loading logic exactly as before) ...
     shapefile_configs = [
-        (traditional_high_path, "Traditional/Magnet High"),
-        (traditional_middle_path, "Traditional/Magnet Middle"),
-        (traditional_elem_path, "Traditional/Magnet Elementary"),
-        (high_path, "High"),
-        (middle_path, "Middle"),
-        (elementary_path, "Elementary"),
-        (choice_path, "Choice"),
+        (traditional_high_path, "Traditional/Magnet High"), (traditional_middle_path, "Traditional/Magnet Middle"),
+        (traditional_elem_path, "Traditional/Magnet Elementary"), (high_path, "High"), (middle_path, "Middle"),
+        (elementary_path, "Elementary"), (choice_path, "Choice"),
     ]
-    gdfs = []
-    loaded_files_count = 0
-    # Loop through each configured shapefile path
+    gdfs = []; loaded_files_count = 0; print(f"Looking for shapefiles in: {DATA_DIR}")
     for path, zone_type in shapefile_configs:
         if os.path.exists(path):
-            # Try reading the file if it exists
-            try:
-                gdf = gpd.read_file(path)
-                gdf["zone_type"] = zone_type
-                gdfs.append(gdf)
-                print(f"  Loaded: {os.path.basename(path)}")
-                loaded_files_count += 1
-            # Catch errors during file reading
-            except Exception as load_err:
-                print(f"  ❌ Error loading {os.path.basename(path)}: {load_err}")
-        # Handle case where the file path doesn't exist
-        else:
-            print(f"  ⚠️ Warning: Shapefile not found at {path}")
+            try: gdf = gpd.read_file(path); gdf["zone_type"] = zone_type; gdfs.append(gdf); print(f"  Loaded: {os.path.basename(path)}"); loaded_files_count += 1
+            except Exception as load_err: print(f"  ❌ Error loading {os.path.basename(path)}: {load_err}")
+        else: print(f"  ⚠️ Warning: Shapefile not found at {path}")
+    if not gdfs: raise FileNotFoundError("No valid shapefiles loaded.")
+    all_zones_gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True, sort=False)).to_crs(epsg=4326)
+    print(f"✅ Successfully loaded {loaded_files_count} shapefiles.")
+    print("🛠️ Cleaning geometries..."); 
+    try: all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0); print("✅ Geometries cleaning complete.")
+    except Exception as geom_err: print(f"  ❌ Error cleaning: {geom_err}.")
+    print("🛠️ Building spatial index..."); 
+    if hasattr(all_zones_gdf, '_sindex'): delattr(all_zones_gdf, '_sindex'); 
+    if hasattr(all_zones_gdf, '_sindex_generated'): delattr(all_zones_gdf, '_sindex_generated'); all_zones_gdf.sindex; print("✅ Spatial index built.")
+except FileNotFoundError as fnf: print(f"❌❌ FATAL ERROR: {fnf}."); exit()
+except Exception as e: print(f"❌❌ FATAL ERROR loading/processing shapefiles: {e}"); exit()
 
-    # Check if any shapefiles were successfully loaded after the loop
-    if not gdfs:
-        raise FileNotFoundError("No valid shapefiles were loaded.") # Raise error if none loaded
-
-    # Concatenate all loaded GeoDataFrames into one
-    all_zones_gdf = gpd.GeoDataFrame(
-        pd.concat(gdfs, ignore_index=True, sort=False)
-    ).to_crs(epsg=4326) # Ensure WGS84 CRS
-    print(f"✅ Successfully loaded and merged {loaded_files_count} shapefiles.")
-
-    # Attempt to clean geometries (optional but good practice)
-    print("🛠️ Cleaning geometries...")
-    try:
-        # buffer(0) can sometimes fix minor geometry issues
-        all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0)
-        print("✅ Geometries cleaning complete.") # Moved print to its own line
-    except Exception as geom_err:
-        print(f"  ❌ Error cleaning: {geom_err}.") # Log error but continue
-
-    # Build the spatial index for fast querying
-    print("🛠️ Building spatial index...")
-    # Force sindex regeneration if it exists from previous operations
-    if hasattr(all_zones_gdf, '_sindex'):
-        delattr(all_zones_gdf, '_sindex')
-    if hasattr(all_zones_gdf, '_sindex_generated'):
-        delattr(all_zones_gdf, '_sindex_generated')
-    all_zones_gdf.sindex # Accessing it triggers the build
-    print("✅ Spatial index built.")
-
-# Catch specific error if no shapefiles were found
-except FileNotFoundError as fnf:
-    print(f"❌❌ FATAL ERROR: {fnf}.")
-    exit() # Stop the script
-
-# Catch any other general exceptions during the whole shapefile process
-except Exception as e:
-    print(f"❌❌ FATAL ERROR loading/processing shapefiles: {e}")
-    exit() # Stop the script
-
+# --- Constants ---
+# Define the bounding box for Jefferson County, KY
+JEFFERSON_COUNTY_BOUNDS = {
+    "min_lat": 37.9,
+    "max_lat": 38.4,
+    "min_lon": -86.1,
+    "max_lon": -85.3,
+}
 
 # --- Database Helper Functions ---
 def get_db_connection():
     """Establishes a connection to the database."""
-    # ... (Keep get_db_connection as before) ...
     if not os.path.exists(DATABASE_PATH): print(f"FATAL ERROR: DB not found at {DATABASE_PATH}"); return None
     try: conn = sqlite3.connect(DATABASE_PATH); conn.row_factory = sqlite3.Row; return conn
     except sqlite3.Error as e: print(f"Database connection error: {e}"); return None
 
-# --- NEW Function: Lookup SCA and display_name from gis_name in the main schools table ---
 def get_info_from_gis(gis_name_key):
     """Looks up SCA and display name from the schools table using the gis_name."""
-    info = {'sca': None, 'display_name': None} # Return dict
-    if not gis_name_key:
-        return info
-
-    lookup_key = str(gis_name_key).strip().upper() # Match how gis_name is likely stored
-    conn = get_db_connection()
-
+    # ... (Keep this function exactly as before) ...
+    info = {'sca': None, 'display_name': None};
+    if not gis_name_key: return info
+    lookup_key = str(gis_name_key).strip().upper(); conn = get_db_connection()
     if conn:
-        try:
-            cursor = conn.cursor()
-            # Query the main table using the gis_name column
-            sql = f"SELECT school_code_adjusted, display_name FROM {DB_SCHOOLS_TABLE} WHERE gis_name = ?"
-            cursor.execute(sql, (lookup_key,))
-            result = cursor.fetchone() # Get the first (should be only) matching row
-
-            # If a result was found, populate the info dictionary
-            if result:
-                info['sca'] = result['school_code_adjusted']
-                info['display_name'] = result['display_name']
-
-        # Catch potential database errors during the query
-        except sqlite3.Error as e:
-            print(f"Error looking up info for GIS key '{lookup_key}': {e}")
-        # Ensure the connection is always closed, whether error or success
-        finally:
-            conn.close()
-
-    # Return the info dictionary (will contain None if lookup failed or DB error)
-    # if not info['sca']: print(f"  DB Lookup MISSING for GIS Key: '{lookup_key}'") # Optional debug
+        try: 
+            cursor = conn.cursor(); sql = f"SELECT school_code_adjusted, display_name FROM {DB_SCHOOLS_TABLE} WHERE gis_name = ?"; cursor.execute(sql, (lookup_key,)); result = cursor.fetchone()
+            if result: info['sca'] = result['school_code_adjusted']; info['display_name'] = result['display_name']
+        except sqlite3.Error as e: print(f"Error looking up info for GIS key '{lookup_key}': {e}")
+        finally: conn.close()
     return info
 
 def get_elementary_feeder_scas(high_school_gis_key):
     """Finds elementary school SCAs feeding into a high school using the DB."""
-    # ... (Keep get_elementary_feeder_scas as before) ...
+    # ... (Keep this function exactly as before) ...
     feeder_school_scas = []; hs_info = get_info_from_gis(high_school_gis_key); standard_hs_name = hs_info.get('display_name')
     if not standard_hs_name: return feeder_school_scas
     conn = get_db_connection()
@@ -161,7 +106,7 @@ def get_elementary_feeder_scas(high_school_gis_key):
 
 def get_universal_magnet_scas_and_info():
     """ Fetches SCA, display_name, and school_level for all universal magnets. """
-    # ... (Keep get_universal_magnet_scas_and_info as before) ...
+    # ... (Keep this function exactly as before) ...
     universal_magnets_info = []; conn = get_db_connection()
     if conn:
         try: cursor = conn.cursor(); sql = f"SELECT school_code_adjusted, display_name, school_level FROM {DB_SCHOOLS_TABLE} WHERE universal_magnet = ?"; cursor.execute(sql, ('Yes',)); results = cursor.fetchall(); universal_magnets_info = [dict(row) for row in results]; print(f"  DB Query: Found {len(universal_magnets_info)} universal magnets.")
@@ -169,8 +114,9 @@ def get_universal_magnet_scas_and_info():
         finally: conn.close()
     return universal_magnets_info
 
+# --- UPDATED to select ALL potentially needed columns ---
 def get_school_details_by_scas(school_codes_adjusted):
-    """Fetches selected details for a list of schools by 'school_code_adjusted'."""
+    """Fetches a comprehensive set of details for schools by 'school_code_adjusted'."""
     details_map = {} # Keyed by SCA
     if not school_codes_adjusted: return details_map
     unique_scas = {str(sca).strip() for sca in school_codes_adjusted if sca}
@@ -180,17 +126,30 @@ def get_school_details_by_scas(school_codes_adjusted):
     if conn:
         try:
             cursor = conn.cursor()
+            # Define ALL columns potentially needed by ANY endpoint/formatter
             select_columns_list = [
                 "school_code_adjusted", "school_name", "display_name", "type", "zone", "gis_name",
                 "feeder_to_high_school", "network", "great_schools_rating", "great_schools_url",
-                "school_level", "enrollment", "student_teacher_ratio", "student_teacher_ratio_value",
+                "school_level", "enrollment", "membership", "all_grades_with_preschool_membership",
+                "student_teacher_ratio", "student_teacher_ratio_value",
                 "attendance_rate", "dropout_rate", "school_website_link", "ky_reportcard_URL",
                 "low_grade", "high_grade", "title_i_status", "address", "city", "state", "zipcode", "phone",
-                "latitude", "longitude", "universal_magnet",
-                "parent_satisfaction" 
-                # Add any other relevant parent satisfaction columns if needed
+                "latitude", "longitude", "universal_magnet", "parent_satisfaction",
+                "start_time", "end_time",
+                "math_all_proficient_distinguished","math_econ_disadv_proficient_distinguished", "reading_all_proficient_distinguished","reading_econ_disadv_proficient_distinguished",
+                "white_percent", "african_american_percent", "hispanic_percent", "asian_percent",
+                "two_or_more_races_percent", "economically_disadvantaged_percent",
+                "gifted_talented_percent",
+                "percent_teachers_3_years_or_less_experience", "teacher_avg_years_experience",
+                "pta_membership_percent",
+                "behavior_events_drugs", "total_assault_weapons", "percent_total_behavior",
+                "percent_disciplinary_resolutions", "overall_indicator_rating",
+                # Add any other columns from your DB here
             ]
-            select_columns_str = ", ".join(f'"{col}"' for col in select_columns_list) # Quote names
+            # Ensure no duplicates (e.g., if added manually and also in list)
+            unique_select_columns = sorted(list(set(select_columns_list)))
+            select_columns_str = ", ".join(f'"{col}"' for col in unique_select_columns)
+
             placeholders = ', '.join('?' * len(unique_scas))
             sql = f"SELECT {select_columns_str} FROM {DB_SCHOOLS_TABLE} WHERE school_code_adjusted IN ({placeholders})"
 
@@ -199,7 +158,7 @@ def get_school_details_by_scas(school_codes_adjusted):
             for row in results:
                 school_dict = dict(row)
                 sca = school_dict.get('school_code_adjusted')
-                if sca in unique_scas: details_map[sca] = school_dict # Key by SCA
+                if sca in unique_scas: details_map[sca] = school_dict
         except sqlite3.Error as e: print(f"Error querying details for SCAs {unique_scas}: {e}")
         finally: conn.close()
     return details_map
@@ -207,6 +166,7 @@ def get_school_details_by_scas(school_codes_adjusted):
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
+CORS(app) # Make sure this is here and applies to the whole app
 geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (your_email@example.com)", timeout=15)
 
 # --- Helper Functions ---
@@ -225,8 +185,8 @@ def geocode_address(address):
     except Exception as e: print(f"  ❌ Geocoding UNEXPECTED EXCEPTION for '{address}': {e}"); address_cache[address] = (None, None); return None, None
 
 # --- REFACTORED Main Logic Function with Sorting ---
-def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False): # Added sort parameters
-    """Finds zones, uses DB lookups, fetches details, sorts, returns STRUCTURED data."""
+def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
+    """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, returns STRUCTURED data."""
     # Initial checks & Spatial query
     # ... (Keep this part exactly as before, up to finding matches) ...
     if lat is None or lon is None: print("Error: Invalid user coords."); return None
@@ -248,8 +208,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 
     # Step 1: Identify SCAs and map them to zone types
     # ... (Keep this identification logic exactly as before, collecting SCAs
-    #      and mapping them in sca_to_zone_types_map using get_info_from_gis,
-    #      get_elementary_feeder_scas, and get_universal_magnet_scas_and_info) ...
+    #      and mapping them in sca_to_zone_types_map) ...
     identified_scas = set(); sca_to_zone_types_map = defaultdict(set)
     def add_sca_to_map(zone_type, sca):
         if sca: sca_str = str(sca).strip(); identified_scas.add(sca_str); sca_to_zone_types_map[sca_str].add(zone_type)
@@ -277,13 +236,13 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
         add_sca_to_map(target_zone_type, sca)
 
 
-    # Step 2: Fetch details using SCAs
-    print(f"🔎 Identified {len(identified_scas)} unique SCAs. Querying DB...")
+    # Step 2: Fetch FULL details using SCAs
+    print(f"🔎 Identified {len(identified_scas)} unique SCAs. Querying DB for details...")
     if not identified_scas: print("🤷 No SCAs identified."); return {}
     school_details_lookup = get_school_details_by_scas(list(identified_scas))
-    print(f"✅ Found details for {len(school_details_lookup)} schools in DB.")
+    print(f"✅ Found details for {len(school_details_lookup)} schools in DB (keyed by SCA).")
 
-    # --- Step 3: Build STRUCTURED Output ---
+    # Step 3: Build STRUCTURED Output - Contains full details, sorted as requested
     output_structure = {"results_by_zone": []}
     category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice"]
 
@@ -294,102 +253,172 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
         for sca in scas_for_this_zone:
             details = school_details_lookup.get(sca)
             if details:
-                # Always calculate distance for potential sorting later
+                # Always calculate distance and add it to the details dict
                 distance = None
                 school_lat = details.get('latitude'); school_lon = details.get('longitude')
                 if school_lat is not None and school_lon is not None:
                     try: distance = round(geodesic((lat, lon), (school_lat, school_lon)).miles, 1)
                     except ValueError as ve: print(f"  ⚠️ Dist calc error SCA {sca}: {ve}")
+                details['distance_mi'] = distance # Add distance to the dict
 
-                # Prepare the school dictionary with selected details
-                school_output_dict = {k: details.get(k) for k in [ # Select desired output fields
-                    "sca", "display_name", "type", "school_level", "address", "city", "zipcode",
-                    "phone", "great_schools_rating", "student_teacher_ratio_value",
-                    "attendance_rate", "parent_satisfaction",
-                    "ky_reportcard_URL", "school_website_link", "latitude", "longitude"
-                ]}
-                school_output_dict["distance_mi"] = distance # Add distance
-
-                zone_output["schools"].append(school_output_dict)
-            else: print(f"  Error: Details missing for SCA '{sca}' (Zone: {zone_type}) during formatting.")
+                zone_output["schools"].append(details) # Add the whole details dict
+            else: print(f"  Error: Details missing for SCA '{sca}' (Zone: {zone_type}) during final build.")
 
         if not zone_output["schools"]: continue
 
-        # --- Perform Sorting Based on Parameters ---
-        if sort_key and sort_key in zone_output["schools"][0]: # Check if key exists in first school's dict
-             # Helper to handle None values during sort
+        # Perform Sorting Based on Parameters
+        # ... (Keep the robust sorting logic exactly as before, using sort_key and sort_desc) ...
+        effective_sort_key = sort_key
+        effective_sort_desc = sort_desc
+        if not effective_sort_key: effective_sort_key = 'display_name'; effective_sort_desc = False
+        if effective_sort_key and effective_sort_key in zone_output["schools"][0]:
             def sort_helper(item):
-                val = item.get(sort_key)
-                is_none_or_not_numeric = val is None or not isinstance(val, (int, float))
-                # Treat None/non-numeric as very small for desc, very large for asc
-                if sort_desc:
-                    return (is_none_or_not_numeric, val if not is_none_or_not_numeric else -float('inf'))
-                else:
-                    return (is_none_or_not_numeric, val if not is_none_or_not_numeric else float('inf'))
+                val = item.get(effective_sort_key);
+                if effective_sort_key == 'display_name': is_none_or_empty = not val; return (is_none_or_empty, str(val).lower() if not is_none_or_empty else "")
+                is_none_or_not_numeric = val is None or not isinstance(val, (int, float));
+                if effective_sort_desc: return (is_none_or_not_numeric, val if not is_none_or_not_numeric else -float('inf'))
+                else: return (is_none_or_not_numeric, val if not is_none_or_not_numeric else float('inf'))
+            try: zone_output["schools"].sort(key=sort_helper, reverse=effective_sort_desc); print(f"  Sorting zone '{zone_type}' by '{effective_sort_key}' {'DESC' if effective_sort_desc else 'ASC'}")
+            except Exception as sort_err: print(f"  ⚠️ Error sorting zone '{zone_type}' by key '{effective_sort_key}': {sort_err}. Defaulting to name sort."); zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower())
+        else: zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower());
+        if effective_sort_key and effective_sort_key != 'display_name': print(f"  ⚠️ Sort key '{effective_sort_key}' not found. Defaulting to name sort.")
 
-            try:
-                 zone_output["schools"].sort(key=sort_helper, reverse=sort_desc)
-                 print(f"  Sorting zone '{zone_type}' by '{sort_key}' {'DESC' if sort_desc else 'ASC'}")
-            except Exception as sort_err:
-                 print(f"  ⚠️ Error sorting zone '{zone_type}' by key '{sort_key}': {sort_err}. Defaulting to name sort.")
-                 zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower())
-        else:
-             # Default sort by name if no valid sort key provided
-             zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower())
-             if sort_key: print(f"  ⚠️ Sort key '{sort_key}' not found or invalid for zone '{zone_type}'. Defaulting to name sort.")
 
         output_structure["results_by_zone"].append(zone_output)
 
     print(f"✅ School zone processing complete. Returning structured data.")
     return output_structure
 
-# --- Flask Routes ---
-@app.route("/test")
-def test():
-    return "🚀 Flask API (Refactored Core Logic) is working!"
-
 # Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
     start_time = time.time()
     data = request.get_json()
-    if not data: print("❌ Error: Request body missing."); return jsonify({"error": "Request body must be JSON"}), 400
+    if not data: print("❌ API Error: Request body missing."); return jsonify({"error": "Request body must be JSON"}), 400
     address = data.get("address", "").strip()
-    if not address: print("❌ Error: Address missing."); return jsonify({"error": "Address string is required"}), 400
-    print(f"\n--- Request {request.path} --- Address: '{address}'")
+    if not address: print("❌ API Error: Address missing."); return jsonify({"error": "Address string is required"}), 400
+    print(f"\n--- Request {request.path} --- Received Address: '{address}'")
+
+    # --- Geocode Address FIRST ---
+    print("[API DEBUG] Calling geocode_address...")
     lat, lon = geocode_address(address)
-    if lat is None: print(f"❌ Geocoding failed."); return jsonify({"error": f"Could not geocode address: '{address}'"}), 400
+    print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}")
+
+    # --- Geocoding & BOUNDS Check ---
+    error_msg = None
+    if lat is None or lon is None:
+        error_msg = f"Could not determine a specific location for the address: '{address}'. Please provide a more complete address."
+        print(f"[API DEBUG] ❌ Geocoding failed (no result).")
+    # <<< ADD BOUNDS CHECK HERE >>>
+    elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
+              JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
+        error_msg = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
+        print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
+    # <<< END BOUNDS CHECK >>>
+
+    if error_msg:
+        print(f"[API DEBUG] Returning 400: {error_msg}")
+        return jsonify({"error": error_msg}), 400
+    else:
+        print(f"[API DEBUG] ✅ Geocoding successful and within bounds.")
+    # --- End Geocoding & Bounds Check ---
+
     print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
 
+    # Proceed with finding schools ONLY if geocoding passed bounds check
+    print("[API DEBUG] Calling find_school_zones_and_details...")
+    # ... (rest of the function remains the same) ...
     structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
-
+    # ... (prepare response_data) ...
+    print("[API DEBUG] Preparing final 200 OK response.")
+    # ... (return response) ...
     response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
     end_time = time.time(); print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
     return jsonify(response_data), 200
 
+# --- ALSO Add Debugging inside geocode_address ---
+def geocode_address(address):
+    """Geocodes a user address string with caching. Returns (lat, lon) or (None, None)."""
+    address = str(address).strip()
+    if not address: return None, None
+    if address in address_cache:
+        print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': {address_cache[address]}")
+        return address_cache[address]
+
+    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
+    try:
+        location = geolocator.geocode(address)
+        if location:
+            coords = (location.latitude, location.longitude)
+            address_cache[address] = coords
+            print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
+            return coords
+        else:
+            print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (no result) for: '{address}'")
+            address_cache[address] = (None, None)
+            return None, None
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
+         print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
+         address_cache[address] = (None, None)
+         return None, None
+    except Exception as e:
+        print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
+        address_cache[address] = (None, None)
+        return None, None
+
+
+# --- Flask Routes ---
+@app.route("/test")
+def test():
+    return "🚀 Flask API (Single Endpoint Style - Structure) is working!"
+
+# --- PRIMARY ENDPOINT ---
+@app.route("/school-details-by-address", methods=["POST"])
+def school_details_by_address():
+    """
+    Returns full structured details for schools associated with an address.
+    Accepts optional sort parameters in the JSON body.
+    Body: {"address": "...", "sort_key": "...", "sort_desc": true/false }
+    """
+    data = request.get_json()
+    sort_key = data.get('sort_key', 'display_name') # Default sort by name
+    sort_desc = data.get('sort_desc', False)       # Default sort ascending
+
+    # Validate sort_key against a list of allowed keys if desired for security/robustness
+    allowed_sort_keys = [ # Mirror keys available in get_school_details_by_scas + distance_mi
+        "display_name", "distance_mi", "great_schools_rating", "parent_satisfaction",
+        "enrollment", "membership", "student_teacher_ratio_value", "attendance_rate",
+        "dropout_rate", "teacher_avg_years_experience", "percent_total_behavior",
+        # Add others as needed
+    ]
+    if sort_key not in allowed_sort_keys:
+        print(f"⚠️ Warning: Invalid sort_key '{sort_key}' received. Defaulting to display_name.")
+        sort_key = 'display_name'
+        sort_desc = False
+
+    return handle_school_request(sort_key=sort_key, sort_desc=sort_desc)
+
+
+# --- Optional: Keep old endpoints as convenience wrappers (or remove them) ---
 @app.route("/school-zone", methods=["POST"])
 def school_zone():
-    """Returns schools sorted by name (default)."""
-    # Calls helper with default sort (effectively by name via find_school_zones_and_details default)
+    """Convenience endpoint: Returns schools sorted by name (ascending)."""
     return handle_school_request(sort_key='display_name', sort_desc=False)
 
 @app.route("/school-distances", methods=["POST"])
 def school_distances():
-    """Returns schools sorted by distance (ASC)."""
+    """Convenience endpoint: Returns schools sorted by distance (ASC)."""
     return handle_school_request(sort_key='distance_mi', sort_desc=False)
 
-# --- NEW ROUTE: School Ratings ---
 @app.route("/school-ratings", methods=["POST"])
 def school_ratings():
-    """Returns schools sorted by Great Schools Rating (DESC)."""
-    # Ensure 'great_schools_rating' is the correct column name selected
+    """Convenience endpoint: Returns schools sorted by Great Schools Rating (DESC)."""
     return handle_school_request(sort_key='great_schools_rating', sort_desc=True)
 
-# --- NEW ROUTE: Parent Satisfaction ---
 @app.route("/school-parent-satisfaction", methods=["POST"])
 def school_parent_satisfaction():
-    """Returns schools sorted by Parent Satisfaction Rating (DESC)."""
-    actual_parent_satisfaction_column = 'parent_satisfaction' 
-    return handle_school_request(sort_key=actual_parent_satisfaction_column, sort_desc=True)
+    """Convenience endpoint: Returns schools sorted by Parent Satisfaction Rating (DESC)."""
+    # Ensure this key matches the one selected/available
+    return handle_school_request(sort_key='parent_satisfaction', sort_desc=True)
 
 # --- Run App ---
 if __name__ == "__main__":
