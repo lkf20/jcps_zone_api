@@ -172,17 +172,42 @@ geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", tim
 # --- Helper Functions ---
 address_cache = {}
 def geocode_address(address):
-    # ... (Keep geocode_address function exactly as before) ...
-    address = str(address).strip();
-    if not address: return None, None
-    if address in address_cache: return address_cache[address]
-    print(f"  -> Geocoding user address: '{address}'")
+    """
+    Geocodes a user address string with caching.
+    Returns (lat, lon, error_type)
+    error_type can be None (success), 'not_found', or 'service_error'.
+    """
+    address = str(address).strip()
+    if not address:
+        return None, None, 'not_found' # Or perhaps 'invalid_input'
+
+    if address in address_cache:
+        cached_lat, cached_lon, cached_error_type = address_cache[address]
+        print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': ({cached_lat}, {cached_lon}, {cached_error_type})")
+        return cached_lat, cached_lon, cached_error_type
+
+    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
     try:
         location = geolocator.geocode(address)
-        if location: coords = (location.latitude, location.longitude); address_cache[address] = coords; print(f"  ✅ Geocode success: {address} -> ({coords[0]:.5f}, {coords[1]:.5f})"); return coords
-        else: print(f"  ⚠️ Geocoding failed (no result): '{address}'"); address_cache[address] = (None, None); return None, None
-    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err: print(f"  ❌ Geocoding Service ERROR for '{address}': {geo_err}"); address_cache[address] = (None, None); return None, None
-    except Exception as e: print(f"  ❌ Geocoding UNEXPECTED EXCEPTION for '{address}': {e}"); address_cache[address] = (None, None); return None, None
+        if location:
+            coords = (location.latitude, location.longitude)
+            address_cache[address] = (coords[0], coords[1], None) # Cache success
+            print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
+            return coords[0], coords[1], None
+        else:
+            print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (address not found) for: '{address}'")
+            address_cache[address] = (None, None, 'not_found') # Cache "not found"
+            return None, None, 'not_found'
+    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
+         print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
+         address_cache[address] = (None, None, 'service_error') # Cache "service error"
+         return None, None, 'service_error'
+    except Exception as e:
+        # Catching a general exception here is okay for robustness,
+        # but still classify it as a service_error for the user.
+        print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
+        address_cache[address] = (None, None, 'service_error') # Cache "service error"
+        return None, None, 'service_error'
 
 # --- REFACTORED Main Logic Function with Sorting ---
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
@@ -293,46 +318,55 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 def handle_school_request(sort_key=None, sort_desc=False):
     start_time = time.time()
     data = request.get_json()
-    if not data: print("❌ API Error: Request body missing."); return jsonify({"error": "Request body must be JSON"}), 400
+    if not data:
+        print("❌ API Error: Request body missing.")
+        return jsonify({"error": "Request body must be JSON"}), 400
     address = data.get("address", "").strip()
-    if not address: print("❌ API Error: Address missing."); return jsonify({"error": "Address string is required"}), 400
+    if not address:
+        print("❌ API Error: Address missing.")
+        return jsonify({"error": "Address string is required"}), 400
     print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
     # --- Geocode Address FIRST ---
     print("[API DEBUG] Calling geocode_address...")
-    lat, lon = geocode_address(address)
-    print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}")
+    lat, lon, geocode_error_type = geocode_address(address) # Capture the new error_type
+    print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}, error_type={geocode_error_type}")
 
     # --- Geocoding & BOUNDS Check ---
-    error_msg = None
-    if lat is None or lon is None:
-        error_msg = f"Could not determine a specific location for the address: '{address}'. Please provide a more complete address."
-        print(f"[API DEBUG] ❌ Geocoding failed (no result).")
-    # <<< ADD BOUNDS CHECK HERE >>>
+    user_facing_error_message = None
+
+    if geocode_error_type == 'service_error':
+        user_facing_error_message = f"We're experiencing a temporary technical issue trying to locate the address: '{address}'. Please try again in a few moments."
+        print(f"[API DEBUG] ❌ Geocoding service error for '{address}'.")
+    elif lat is None or lon is None: # This now implies geocode_error_type was 'not_found' or address was empty
+        user_facing_error_message = f"Could not determine a specific location for the address: '{address}'. Please ensure the address is correct and complete, or try a nearby landmark."
+        print(f"[API DEBUG] ❌ Geocoding failed (address not found or invalid).")
     elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
               JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
-        error_msg = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
+        user_facing_error_message = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
         print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
     # <<< END BOUNDS CHECK >>>
 
-    if error_msg:
-        print(f"[API DEBUG] Returning 400: {error_msg}")
-        return jsonify({"error": error_msg}), 400
+    if user_facing_error_message:
+        print(f"[API DEBUG] Returning 400: {user_facing_error_message}")
+        # For service errors, a 503 might be more appropriate, but 400 is also okay
+        # if you want to keep client-side error handling simpler.
+        # If geocode_error_type == 'service_error', consider status 503.
+        status_code = 503 if geocode_error_type == 'service_error' else 400
+        return jsonify({"error": user_facing_error_message}), status_code
     else:
         print(f"[API DEBUG] ✅ Geocoding successful and within bounds.")
     # --- End Geocoding & Bounds Check ---
 
     print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
 
-    # Proceed with finding schools ONLY if geocoding passed bounds check
     print("[API DEBUG] Calling find_school_zones_and_details...")
-    # ... (rest of the function remains the same) ...
     structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
-    # ... (prepare response_data) ...
+    
     print("[API DEBUG] Preparing final 200 OK response.")
-    # ... (return response) ...
     response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
-    end_time = time.time(); print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
+    end_time = time.time()
+    print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
     return jsonify(response_data), 200
 
 # --- ALSO Add Debugging inside geocode_address ---
