@@ -179,7 +179,9 @@ def geocode_address(address):
     """
     address = str(address).strip()
     if not address:
-        return None, None, 'not_found' # Or perhaps 'invalid_input'
+        print(f"  [API DEBUG GEOCODE] ⚠️ Address input is empty.")
+        address_cache[address] = (None, None, 'not_found') # Or 'invalid_input'
+        return None, None, 'not_found'
 
     if address in address_cache:
         cached_lat, cached_lon, cached_error_type = address_cache[address]
