@@ -380,34 +380,34 @@ def handle_school_request(sort_key=None, sort_desc=False):
         return jsonify({"error": "An unexpected server error occurred. Please try again later."}), 500
 
 # --- ALSO Add Debugging inside geocode_address ---
-def geocode_address(address):
-    """Geocodes a user address string with caching. Returns (lat, lon) or (None, None)."""
-    address = str(address).strip()
-    if not address: return None, None
-    if address in address_cache:
-        print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': {address_cache[address]}")
-        return address_cache[address]
+# def geocode_address(address):
+#     """Geocodes a user address string with caching. Returns (lat, lon) or (None, None)."""
+#     address = str(address).strip()
+#     if not address: return None, None
+#     if address in address_cache:
+#         print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': {address_cache[address]}")
+#         return address_cache[address]
 
-    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
-    try:
-        location = geolocator.geocode(address)
-        if location:
-            coords = (location.latitude, location.longitude)
-            address_cache[address] = coords
-            print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
-            return coords
-        else:
-            print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (no result) for: '{address}'")
-            address_cache[address] = (None, None)
-            return None, None
-    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
-         print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
-         address_cache[address] = (None, None)
-         return None, None
-    except Exception as e:
-        print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
-        address_cache[address] = (None, None)
-        return None, None
+#     print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
+#     try:
+#         location = geolocator.geocode(address)
+#         if location:
+#             coords = (location.latitude, location.longitude)
+#             address_cache[address] = coords
+#             print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
+#             return coords
+#         else:
+#             print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (no result) for: '{address}'")
+#             address_cache[address] = (None, None)
+#             return None, None
+#     except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
+#          print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
+#          address_cache[address] = (None, None)
+#          return None, None
+#     except Exception as e:
+#         print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
+#         address_cache[address] = (None, None)
+#         return None, None
 
 
 # --- Flask Routes ---
