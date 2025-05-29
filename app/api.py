@@ -426,4 +426,5 @@ if __name__ == "__main__":
     else: print(f"✅ Database file found at '{DATABASE_PATH}'")
     print("\n"+"="*30+"\n Starting Flask server...\n Access via http://localhost:5001\n"+"="*30+"\n")
     # For local development only. Gunicorn will be used in production.
-    app.run(host="0.0.0.0", port=port, debug=False)
+    # app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=5001, debug=True)
