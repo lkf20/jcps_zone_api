@@ -315,59 +315,67 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
     return output_structure
 
 # Helper to process request and call core logic
+# Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
-    start_time = time.time()
-    data = request.get_json()
-    if not data:
-        print("❌ API Error: Request body missing.")
-        return jsonify({"error": "Request body must be JSON"}), 400
-    address = data.get("address", "").strip()
-    if not address:
-        print("❌ API Error: Address missing.")
-        return jsonify({"error": "Address string is required"}), 400
-    print(f"\n--- Request {request.path} --- Received Address: '{address}'")
+    try: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADD TOP-LEVEL TRY
+        start_time = time.time()
+        data = request.get_json()
+        if not data:
+            print("❌ API Error: Request body missing.")
+            # This error is fine as is, client expects JSON error here
+            return jsonify({"error": "Request body must be JSON"}), 400
+        address = data.get("address", "").strip()
+        if not address:
+            print("❌ API Error: Address missing.")
+            # This error is fine as is
+            return jsonify({"error": "Address string is required"}), 400
+        print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
-    # --- Geocode Address FIRST ---
-    print("[API DEBUG] Calling geocode_address...")
-    lat, lon, geocode_error_type = geocode_address(address) # Capture the new error_type
-    print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}, error_type={geocode_error_type}")
+        # --- Geocode Address FIRST ---
+        print("[API DEBUG] Calling geocode_address...")
+        lat, lon, geocode_error_type = geocode_address(address)
+        print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}, error_type={geocode_error_type}")
 
-    # --- Geocoding & BOUNDS Check ---
-    user_facing_error_message = None
+        user_facing_error_message = None
 
-    if geocode_error_type == 'service_error':
-        user_facing_error_message = f"We're experiencing a temporary technical issue trying to locate the address: '{address}'. Please try again in a few moments."
-        print(f"[API DEBUG] ❌ Geocoding service error for '{address}'.")
-    elif lat is None or lon is None: # This now implies geocode_error_type was 'not_found' or address was empty
-        user_facing_error_message = f"Could not determine a specific location for the address: '{address}'. Please ensure the address is correct and complete, or try a nearby landmark."
-        print(f"[API DEBUG] ❌ Geocoding failed (address not found or invalid).")
-    elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
-              JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
-        user_facing_error_message = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
-        print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
-    # <<< END BOUNDS CHECK >>>
+        if geocode_error_type == 'service_error':
+            user_facing_error_message = f"We're experiencing a temporary technical issue trying to locate the address: '{address}'. Please try again in a few moments."
+            print(f"[API DEBUG] ❌ Geocoding service error for '{address}'.")
+        elif lat is None or lon is None:
+            user_facing_error_message = f"Could not determine a specific location for the address: '{address}'. Please ensure the address is correct and complete, or try a nearby landmark."
+            print(f"[API DEBUG] ❌ Geocoding failed (address not found or invalid).")
+        elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
+                  JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
+            user_facing_error_message = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
+            print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
 
-    if user_facing_error_message:
-        print(f"[API DEBUG] Returning 400: {user_facing_error_message}")
-        # For service errors, a 503 might be more appropriate, but 400 is also okay
-        # if you want to keep client-side error handling simpler.
-        # If geocode_error_type == 'service_error', consider status 503.
-        status_code = 503 if geocode_error_type == 'service_error' else 400
-        return jsonify({"error": user_facing_error_message}), status_code
-    else:
-        print(f"[API DEBUG] ✅ Geocoding successful and within bounds.")
-    # --- End Geocoding & Bounds Check ---
+        if user_facing_error_message:
+            print(f"[API DEBUG] Returning error response: {user_facing_error_message}")
+            status_code = 503 if geocode_error_type == 'service_error' else 400
+            return jsonify({"error": user_facing_error_message}), status_code
+        else:
+            print(f"[API DEBUG] ✅ Geocoding successful and within bounds.")
 
-    print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
+        print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
 
-    print("[API DEBUG] Calling find_school_zones_and_details...")
-    structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
-    
-    print("[API DEBUG] Preparing final 200 OK response.")
-    response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
-    end_time = time.time()
-    print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
-    return jsonify(response_data), 200
+        print("[API DEBUG] Calling find_school_zones_and_details...")
+        # It's possible find_school_zones_and_details could raise an error too
+        structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
+        
+        print("[API DEBUG] Preparing final 200 OK response.")
+        response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
+        end_time = time.time()
+        print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
+        return jsonify(response_data), 200
+
+    except Exception as e: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CATCH ALL OTHER UNEXPECTED ERRORS
+        # Log the full error for server-side debugging
+        print(f"❌❌❌ UNHANDLED EXCEPTION in /school-details-by-address endpoint: {e}")
+        import traceback
+        traceback.print_exc() # This will print the full stack trace to your server logs
+
+        # Return a generic JSON error to the client
+        return jsonify({"error": "An unexpected server error occurred. Please try again later."}), 500
 
 # --- ALSO Add Debugging inside geocode_address ---
 def geocode_address(address):
