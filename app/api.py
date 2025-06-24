@@ -47,52 +47,100 @@ print("Columns:", tm_middle_gdf.columns)
 print("\nTraditional/Magnet Middle Schools:")
 print(tm_middle_gdf["Traditiona"].dropna().unique())
 
-# --- Load Shapefiles ---
-print("🔄 Loading Shapefiles...")
-print(f"[{time.time() - app_start_time:.2f}s] 🔄 Loading Shapefiles...")
-shapefile_load_start_time = time.time()
-# ... your shapefile loading logic ...
-for path, zone_type in shapefile_configs:
-    file_load_iter_start = time.time()
-    # ... your loading for one file ...
-    print(f"[{time.time() - app_start_time:.2f}s]   Loaded: {os.path.basename(path)} in {time.time() - file_load_iter_start:.2f}s")
-# ...
-print(f"[{time.time() - app_start_time:.2f}s] ✅ Successfully loaded {loaded_files_count} shapefiles. Total shapefile load time: {time.time() - shapefile_load_start_time:.2f}s")
+# # --- Load Shapefiles ---
+# app_start_time is already defined at the top
 
-print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Cleaning geometries...")
-geom_clean_start_time = time.time()
-all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0)
-print(f"[{time.time() - app_start_time:.2f}s] ✅ Geometries cleaning complete in {time.time() - geom_clean_start_time:.2f}s.")
+print(f"[{time.time() - app_start_time:.2f}s] --- Attempting to load shapefiles ---", flush=True)
+shapefile_load_overall_start_time = time.time() # For the whole shapefile process
 
-print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Building spatial index...")
-sindex_build_start_time = time.time()
-all_zones_gdf.sindex
-print(f"[{time.time() - app_start_time:.2f}s] ✅ Spatial index built in {time.time() - sindex_build_start_time:.2f}s.")
-all_zones_gdf = None
+all_zones_gdf = None # Initialize before the try block
+
 try:
-    # ... (Keep the shapefile loading logic exactly as before) ...
+    # Define shapefile_configs HERE, inside the try block or just before it if it uses variables defined above.
+    # For clarity, defining it right where it's needed is good.
     shapefile_configs = [
-        (traditional_high_path, "Traditional/Magnet High"), (traditional_middle_path, "Traditional/Magnet Middle"),
-        (traditional_elem_path, "Traditional/Magnet Elementary"), (high_path, "High"), (middle_path, "Middle"),
-        (elementary_path, "Elementary"), (choice_path, "Choice"),
+        (traditional_high_path, "Traditional/Magnet High"),
+        (traditional_middle_path, "Traditional/Magnet Middle"),
+        (traditional_elem_path, "Traditional/Magnet Elementary"),
+        (high_path, "High"),
+        (middle_path, "Middle"),
+        (elementary_path, "Elementary"),
+        (choice_path, "Choice"),
     ]
-    gdfs = []; loaded_files_count = 0; print(f"Looking for shapefiles in: {DATA_DIR}")
+
+    gdfs = []
+    loaded_files_count = 0
+    print(f"[{time.time() - app_start_time:.2f}s] Looking for shapefiles in: {DATA_DIR}", flush=True)
+
     for path, zone_type in shapefile_configs:
+        file_load_iter_start = time.time()
         if os.path.exists(path):
-            try: gdf = gpd.read_file(path); gdf["zone_type"] = zone_type; gdfs.append(gdf); print(f"  Loaded: {os.path.basename(path)}"); loaded_files_count += 1
-            except Exception as load_err: print(f"  ❌ Error loading {os.path.basename(path)}: {load_err}")
-        else: print(f"  ⚠️ Warning: Shapefile not found at {path}")
-    if not gdfs: raise FileNotFoundError("No valid shapefiles loaded.")
-    all_zones_gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True, sort=False)).to_crs(epsg=4326)
-    print(f"✅ Successfully loaded {loaded_files_count} shapefiles.")
-    print("🛠️ Cleaning geometries..."); 
-    try: all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0); print("✅ Geometries cleaning complete.")
-    except Exception as geom_err: print(f"  ❌ Error cleaning: {geom_err}.")
-    print("🛠️ Building spatial index..."); 
-    if hasattr(all_zones_gdf, '_sindex'): delattr(all_zones_gdf, '_sindex'); 
-    if hasattr(all_zones_gdf, '_sindex_generated'): delattr(all_zones_gdf, '_sindex_generated'); all_zones_gdf.sindex; print("✅ Spatial index built.")
-except FileNotFoundError as fnf: print(f"❌❌ FATAL ERROR: {fnf}."); exit()
-except Exception as e: print(f"❌❌ FATAL ERROR loading/processing shapefiles: {e}"); exit()
+            try:
+                gdf = gpd.read_file(path)
+                gdf["zone_type"] = zone_type
+                gdfs.append(gdf)
+                print(f"[{time.time() - app_start_time:.2f}s]   Loaded: {os.path.basename(path)} (took {time.time() - file_load_iter_start:.2f}s)", flush=True)
+                loaded_files_count += 1
+            except Exception as load_err:
+                print(f"[{time.time() - app_start_time:.2f}s]   ❌ Error loading {os.path.basename(path)}: {load_err}", flush=True)
+        else:
+            print(f"[{time.time() - app_start_time:.2f}s]   ⚠️ Warning: Shapefile not found at {path}", flush=True)
+
+    if not gdfs:
+        print(f"[{time.time() - app_start_time:.2f}s] ❌ No valid shapefiles were loaded.", flush=True)
+        raise FileNotFoundError("No valid shapefiles loaded, application cannot proceed with GIS operations.") # Re-raise
+
+    # Concatenation and CRS conversion
+    concat_start_time = time.time()
+    all_zones_gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True, sort=False))
+    print(f"[{time.time() - app_start_time:.2f}s]   Concatenated GDFs in {time.time() - concat_start_time:.2f}s", flush=True)
+    
+    crs_convert_start_time = time.time()
+    all_zones_gdf = all_zones_gdf.to_crs(epsg=4326)
+    print(f"[{time.time() - app_start_time:.2f}s]   Converted to EPSG:4326 in {time.time() - crs_convert_start_time:.2f}s", flush=True)
+
+    print(f"[{time.time() - app_start_time:.2f}s] ✅ Successfully loaded and processed {loaded_files_count} shapefiles.", flush=True)
+
+    # Geometry Cleaning
+    print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Cleaning geometries...", flush=True)
+    geom_clean_start_time = time.time()
+    # Defensive: check if geometry column exists and is not empty
+    if 'geometry' in all_zones_gdf.columns and not all_zones_gdf.geometry.empty:
+        try:
+            all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0)
+            print(f"[{time.time() - app_start_time:.2f}s] ✅ Geometries cleaning complete (took {time.time() - geom_clean_start_time:.2f}s).", flush=True)
+        except Exception as geom_err:
+            print(f"[{time.time() - app_start_time:.2f}s]   ❌ Error cleaning geometries: {geom_err}. Proceeding without cleaning.", flush=True)
+    else:
+        print(f"[{time.time() - app_start_time:.2f}s]   ⚠️ No geometries to clean or geometry column missing.", flush=True)
+
+
+    # Spatial Index Building
+    print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Building spatial index...", flush=True)
+    sindex_build_start_time = time.time()
+    # Defensive: ensure gdf is not None and has geometry
+    if all_zones_gdf is not None and 'geometry' in all_zones_gdf.columns and not all_zones_gdf.empty:
+        # Ensure sindex is fresh if it somehow existed
+        if hasattr(all_zones_gdf, '_sindex'): delattr(all_zones_gdf, '_sindex')
+        if hasattr(all_zones_gdf, '_sindex_generated'): delattr(all_zones_gdf, '_sindex_generated')
+        
+        all_zones_gdf.sindex # This triggers the build
+        print(f"[{time.time() - app_start_time:.2f}s] ✅ Spatial index built (took {time.time() - sindex_build_start_time:.2f}s).", flush=True)
+    else:
+        print(f"[{time.time() - app_start_time:.2f}s]   ⚠️ Cannot build spatial index, GeoDataFrame is invalid or empty.", flush=True)
+        raise ValueError("Cannot build spatial index on invalid or empty GeoDataFrame.") # Re-raise
+
+    print(f"[{time.time() - app_start_time:.2f}s] --- Shapefile loading and processing complete. Total time: {time.time() - shapefile_load_overall_start_time:.2f}s ---", flush=True)
+
+except FileNotFoundError as fnf:
+    print(f"[{time.time() - app_start_time:.2f}s] ❌❌ FATAL ERROR (FileNotFound during shapefile processing): {fnf}.", flush=True)
+    raise # Re-raise to let Gunicorn worker fail clearly
+except Exception as e:
+    print(f"[{time.time() - app_start_time:.2f}s] ❌❌ FATAL ERROR during shapefile loading/processing: {e}", flush=True)
+    import traceback
+    traceback.print_exc(file=sys.stderr) # Print to stderr for Cloud Run logs
+    sys.stderr.flush()
+    raise # Re-raise
 
 
 
