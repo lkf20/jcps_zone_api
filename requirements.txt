@@ -5,3 +5,4 @@ shapely
 geopy
 pandas
 gunicorn
+rtree
