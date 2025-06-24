@@ -12,7 +12,12 @@ import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 import pprint
+import time
 from flask_cors import CORS
+
+# --- Configuration & Data Loading ---
+app_start_time = time.time() # Overall start
+print(f"[{time.time() - app_start_time:.2f}s] Initializing...")
 
 # --- Configuration & Data Loading ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,8 +39,35 @@ traditional_middle_path = os.path.join(DATA_DIR, "TraditionalMiddle", "Tradition
 traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_HS_Bnds.shp")
 traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditional_ES_Bnds.shp")
 
+# Preview column names
+tm_middle_gdf = gpd.read_file(traditional_middle_path)
+print("Columns:", tm_middle_gdf.columns)
+
+# Print distinct school names
+print("\nTraditional/Magnet Middle Schools:")
+print(tm_middle_gdf["Traditiona"].dropna().unique())
+
 # --- Load Shapefiles ---
 print("🔄 Loading Shapefiles...")
+print(f"[{time.time() - app_start_time:.2f}s] 🔄 Loading Shapefiles...")
+shapefile_load_start_time = time.time()
+# ... your shapefile loading logic ...
+for path, zone_type in shapefile_configs:
+    file_load_iter_start = time.time()
+    # ... your loading for one file ...
+    print(f"[{time.time() - app_start_time:.2f}s]   Loaded: {os.path.basename(path)} in {time.time() - file_load_iter_start:.2f}s")
+# ...
+print(f"[{time.time() - app_start_time:.2f}s] ✅ Successfully loaded {loaded_files_count} shapefiles. Total shapefile load time: {time.time() - shapefile_load_start_time:.2f}s")
+
+print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Cleaning geometries...")
+geom_clean_start_time = time.time()
+all_zones_gdf['geometry'] = all_zones_gdf.geometry.buffer(0)
+print(f"[{time.time() - app_start_time:.2f}s] ✅ Geometries cleaning complete in {time.time() - geom_clean_start_time:.2f}s.")
+
+print(f"[{time.time() - app_start_time:.2f}s] 🛠️ Building spatial index...")
+sindex_build_start_time = time.time()
+all_zones_gdf.sindex
+print(f"[{time.time() - app_start_time:.2f}s] ✅ Spatial index built in {time.time() - sindex_build_start_time:.2f}s.")
 all_zones_gdf = None
 try:
     # ... (Keep the shapefile loading logic exactly as before) ...
@@ -61,6 +93,8 @@ try:
     if hasattr(all_zones_gdf, '_sindex_generated'): delattr(all_zones_gdf, '_sindex_generated'); all_zones_gdf.sindex; print("✅ Spatial index built.")
 except FileNotFoundError as fnf: print(f"❌❌ FATAL ERROR: {fnf}."); exit()
 except Exception as e: print(f"❌❌ FATAL ERROR loading/processing shapefiles: {e}"); exit()
+
+
 
 # --- Constants ---
 # Define the bounding box for Jefferson County, KY
@@ -166,6 +200,8 @@ def get_school_details_by_scas(school_codes_adjusted):
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
+print(f"[{time.time() - app_start_time:.2f}s] Flask app initialized. Gunicorn should take over now.")
+
 CORS(app) # Make sure this is here and applies to the whole app
 geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", timeout=15)
 
@@ -245,7 +281,9 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             gis_key = None; determined_sca = None; determined_display_name = None
             if zone_type == "Elementary": high_school_gis_key = str(row.get("High", "")).strip().upper(); [add_sca_to_map(zone_type, sca) for sca in get_elementary_feeder_scas(high_school_gis_key)]; continue
             elif zone_type in ["High", "Traditional/Magnet High"]: gis_key = str(row.get("High") or row.get("Traditiona", "")).strip().upper()
-            elif zone_type in ["Middle", "Traditional/Magnet Middle"]: raw_middle = str(row.get("Middle", "")).strip().upper(); raw_name_col = str(row.get("Name", "")).strip().upper(); gis_key = raw_middle if raw_middle else raw_name_col
+            elif zone_type == "Middle": gis_key = str(row.get("Middle", "")).strip().upper()
+            elif zone_type == "Traditional/Magnet Middle": raw_middle = str(row.get("Traditiona", "")).strip().upper(); raw_name_col = str(row.get("Name", "")).strip().upper(); gis_key = raw_middle if raw_middle else raw_name_col
+            elif zone_type == "Traditional Elementary": gis_key = str(row.get("Traditiona", "")).strip().upper
             elif zone_type == "Traditional/Magnet Elementary": gis_key = str(row.get("Traditiona", "")).strip().upper()
             elif zone_type == "Choice": potential_key = str(row.get("Name", "")).strip().upper(); info = get_info_from_gis(potential_key); determined_sca = info.get('sca')
             else: continue
