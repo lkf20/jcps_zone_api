@@ -27,7 +27,7 @@ COLUMN_MAPPING = {
 
     # Type & Structure
     'Level': 'level',
-    'Zone': 'zone',
+    'School Zone': 'school_zone',
     'Feeder to High School': 'feeder_to_high_school',
     'Network': 'network',
     'School Level': 'school_level',
@@ -47,6 +47,7 @@ COLUMN_MAPPING = {
     'Explore Pathways': 'explore_pathways',
     'Explore Pathways Programs': 'explore_pathways_programs',
     'Specialized School Choices': 'specialized_school_choices',
+    'Universal Academies or Other':'universal_academies_or_other',
 
     # Ratings & Links
     'Great Schools Rating': 'great_schools_rating', # INTEGER
@@ -240,14 +241,51 @@ def main():
         print(f"--- FATAL ERROR creating table: {e} ---"); conn.close(); exit()
 
     print("Creating database indexes...")
+    # Replace the old index_cols list with this one
+
     index_cols = [
-        'gis_name', 'display_name', 'feeder_to_high_school', 'school_level', 'membership', 'great_schools_rating',
-        'parent_satisfaction', 'math_all_proficient_distinguished', 'reading_all_proficient_distinguished',
-        'white_percent', 'african_american_percent', 'hispanic_percent', 'asian_percent',
-        'two_or_more_races_percent', 'economically_disadvantaged_percent', 'gifted_talented_percent',
-        'percent_teachers_3_years_or_less_experience', 'teacher_avg_years_experience', 'pta_membership_percent',
-        'percent_total_behavior', 'total_assault_weapons', 'start_time', 'end_time',
-        'choice_zone', 'the_academies_of_louisville', 'overall_indicator_rating'
+        # Core Lookups
+        'display_name',
+        'feeder_to_high_school',
+        'gis_name',
+        'school_level',
+        'start_time',
+        'end_time',
+
+        # New Flag-Based Columns for Indexing
+        'choice_zone',
+        'explore_pathways',
+        'explore_pathways_programs',
+        'geographical_magnet_traditional',
+        'magnet_programs',
+        'reside',
+        'specialized_school_choices',
+        'the_academies_of_louisville',
+        'the_academies_of_louisville_programs',
+        'universal_academies_or_other',
+        'universal_magnet_traditional_program',
+        'universal_magnet_traditional_school',
+        
+
+        # Key Performance and Demographic Metrics for Sorting/Filtering
+        'african_american_percent',
+        'asian_percent',
+        'economically_disadvantaged_percent',
+        'gifted_talented_percent',
+        'great_schools_rating',
+        'hispanic_percent',
+        'math_all_proficient_distinguished',
+        'membership',
+        'overall_indicator_rating',
+        'parent_satisfaction',
+        'percent_teachers_3_years_or_less_experience',
+        'percent_total_behavior',
+        'pta_membership_percent',
+        'reading_all_proficient_distinguished',
+        'teacher_avg_years_experience',
+        'total_assault_weapons',
+        'two_or_more_races_percent',
+        'white_percent'
     ]
     index_commands = [f'CREATE INDEX IF NOT EXISTS idx_{TABLE_NAME}_feeder_level ON "{TABLE_NAME}" (feeder_to_high_school, school_level);']
     for col in index_cols:

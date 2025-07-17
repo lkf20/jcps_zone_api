@@ -186,15 +186,44 @@ def get_elementary_feeder_scas(high_school_gis_key):
         finally: conn.close()
     return feeder_school_scas
 
-def get_universal_magnet_scas_and_info():
-    """ Fetches SCA, display_name, and school_level for all universal magnets. """
-    # ... (Keep this function exactly as before) ...
-    universal_magnets_info = []; conn = get_db_connection()
+# ADD THIS NEW FUNCTION IN THE SAME SPOT
+# Replace the entire existing function with this one.
+
+def get_address_independent_schools_info():
+    """
+    Fetches comprehensive details for all schools that have ANY address-independent flag.
+    This provides the data needed for the main logic to make a final decision.
+    """
+    schools_info = []
+    # This list includes ALL flags we might need to check
+    flag_columns = [
+        "universal_magnet_traditional_school",
+        "universal_magnet_traditional_program",
+        "universal_academies_or_other",
+        "the_academies_of_louisville"
+    ]
+    # We also need the network column to check for a match
+    all_needed_cols = ["school_code_adjusted", "display_name", "school_level", "network"] + flag_columns
+    select_cols_str = ", ".join(f'"{col}"' for col in sorted(list(set(all_needed_cols))))
+
+    conn = get_db_connection()
     if conn:
-        try: cursor = conn.cursor(); sql = f"SELECT school_code_adjusted, display_name, school_level FROM {DB_SCHOOLS_TABLE} WHERE universal_magnet = ?"; cursor.execute(sql, ('Yes',)); results = cursor.fetchall(); universal_magnets_info = [dict(row) for row in results]; print(f"  DB Query: Found {len(universal_magnets_info)} universal magnets.")
-        except sqlite3.Error as e: print(f"Error querying universal magnets: {e}")
-        finally: conn.close()
-    return universal_magnets_info
+        try:
+            cursor = conn.cursor()
+            where_conditions = ' OR '.join([f'"{col}" = ?' for col in flag_columns])
+            sql = f"SELECT {select_cols_str} FROM {DB_SCHOOLS_TABLE} WHERE {where_conditions}"
+            params = tuple(['Yes'] * len(flag_columns))
+
+            cursor.execute(sql, params)
+            results = cursor.fetchall()
+            schools_info = [dict(row) for row in results]
+            print(f"  DB Query: Found {len(schools_info)} candidate address-independent schools (based on DB flags).")
+        except sqlite3.Error as e:
+            print(f"❌ Error querying address-independent schools: {e}")
+            print(f"  >>> PLEASE VERIFY that all flag columns exist in your '{DB_SCHOOLS_TABLE}' table.")
+        finally:
+            conn.close()
+    return schools_info
 
 # --- UPDATED to select ALL potentially needed columns ---
 def get_school_details_by_scas(school_codes_adjusted):
@@ -210,22 +239,26 @@ def get_school_details_by_scas(school_codes_adjusted):
             cursor = conn.cursor()
             # Define ALL columns potentially needed by ANY endpoint/formatter
             select_columns_list = [
-                "school_code_adjusted", "school_name", "display_name", "type", "zone", "gis_name",
-                "feeder_to_high_school", "network", "great_schools_rating", "great_schools_url",
-                "school_level", "enrollment", "membership", "all_grades_with_preschool_membership",
-                "student_teacher_ratio", "student_teacher_ratio_value",
-                "attendance_rate", "dropout_rate", "school_website_link", "ky_reportcard_URL",
-                "low_grade", "high_grade", "title_i_status", "address", "city", "state", "zipcode", "phone",
-                "latitude", "longitude", "universal_magnet", "parent_satisfaction",
-                "start_time", "end_time",
-                "math_all_proficient_distinguished","math_econ_disadv_proficient_distinguished", "reading_all_proficient_distinguished","reading_econ_disadv_proficient_distinguished",
-                "white_percent", "african_american_percent", "hispanic_percent", "asian_percent",
-                "two_or_more_races_percent", "economically_disadvantaged_percent",
-                "gifted_talented_percent",
-                "percent_teachers_3_years_or_less_experience", "teacher_avg_years_experience",
-                "pta_membership_percent",
-                "behavior_events_drugs", "total_assault_weapons", "percent_total_behavior",
-                "percent_disciplinary_resolutions", "overall_indicator_rating",
+                 "address", "african_american_percent", "all_grades_with_preschool_membership",
+                    "asian_percent", "attendance_rate", "behavior_events_drugs", "choice_zone", "city",
+                    "display_name", "dropout_rate", "economically_disadvantaged_percent", "end_time",
+                    "enrollment", "explore_pathways", "explore_pathways_programs",
+                    "feeder_to_high_school", "geographical_magnet_traditional", "gifted_talented_percent",
+                    "gis_name", "great_schools_rating", "great_schools_url", "high_grade",
+                    "hispanic_percent", "ky_reportcard_URL", "latitude", "longitude", "low_grade",
+                    "magnet_programs", "math_all_proficient_distinguished",
+                    "math_econ_disadv_proficient_distinguished", "membership", "network",
+                    "overall_indicator_rating", "parent_satisfaction", "percent_disciplinary_resolutions",
+                    "percent_teachers_3_years_or_less_experience", "percent_total_behavior", "phone",
+                    "pta_membership_percent", "reading_all_proficient_distinguished",
+                    "reading_econ_disadv_proficient_distinguished", "reside", "school_code_adjusted",
+                    "school_level", "school_name", "school_website_link", "school_zone", "start_time",
+                    "state", "student_teacher_ratio", "student_teacher_ratio_value",
+                    "teacher_avg_years_experience", "the_academies_of_louisville",
+                    "the_academies_of_louisville_programs", "title_i_status", "total_assault_weapons",
+                    "two_or_more_races_percent", "universal_academies_or_other",
+                    "universal_magnet_traditional_program", "universal_magnet_traditional_school",
+                    "white_percent", "zipcode",
                 # Add any other columns from your DB here
             ]
             # Ensure no duplicates (e.g., if added manually and also in list)
@@ -295,114 +328,171 @@ def geocode_address(address):
         address_cache[address] = (None, None, 'service_error') # Cache "service error"
         return None, None, 'service_error'
 
-# --- REFACTORED Main Logic Function with Sorting ---
+
+# Replace the entire existing function with this new, final version.
+
+# Replace the entire existing function with this new, definitive version.
+
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
-    """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, returns STRUCTURED data."""
-    # Initial checks & Spatial query
-    # ... (Keep this part exactly as before, up to finding matches) ...
+    """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, and returns structured data."""
     if lat is None or lon is None: print("Error: Invalid user coords."); return None
     point = Point(lon, lat)
     if gdf is None or not hasattr(gdf, 'sindex') or gdf.empty: print("Error: GDF invalid."); return None
+
+    # --- 1. SPATIAL QUERY ---
     matches = gpd.GeoDataFrame()
     try:
         possible_matches_index = list(gdf.sindex.query(point, predicate='contains'))
         if possible_matches_index: matches = gdf.iloc[possible_matches_index]; contains_mask = matches.geometry.contains(point); matches = matches[contains_mask]
-        if not matches.empty: print(f"  ℹ️ Spatial index found {len(matches)} precise matches.")
-        else: print("  ℹ️ Spatial index found no containing polygons.")
-        if matches.empty: print(f"  ℹ️ Falling back..."); matches = gdf[gdf.geometry.contains(point)]
-        if not matches.empty: print(f"  ℹ️ Fallback check found {len(matches)} matches.")
-    except Exception as e: print(f"❌ Error during spatial query: {e}. Trying fallback."); 
-    try: matches = gdf[gdf.geometry.contains(point)] 
-    except Exception as fe: print(f"❌ Final fallback error: {fe}"); matches = gpd.GeoDataFrame()
+    except Exception as e: print(f"❌ Error during spatial query: {e}.")
+    if matches.empty: matches = gdf[gdf.geometry.contains(point)]
+    print(f"✅ Found {len(matches)} matching zone(s).")
 
-    print(f"✅ Found {len(matches)} matching zone(s). Identifying schools...")
+    # --- NEW, IMPROVED DIAGNOSTIC PRINT ---
+    print("\n--- ✅ Found Matching GIS Zones ---")
+    for index, row in matches.iterrows():
+        zone_type = row.get("zone_type", "Unknown")
+        school_name = "N/A"
+        if zone_type == "Elementary":
+            school_name = f"Feeder for {row.get('High', 'N/A')}"
+        elif zone_type == "Middle":
+            school_name = row.get("Middle", "N/A")
+        elif zone_type == "High":
+            school_name = row.get("High", "N/A")
+        elif zone_type in ["Traditional/Magnet Middle", "Traditional/Magnet High", "Traditional/Magnet Elementary"]:
+            school_name = row.get("Traditiona", "N/A")
+        elif zone_type == "Choice":
+            school_name = row.get("Name", "N/A")
+            
+        print(f"  - Type: {zone_type:<30} | School/Zone Identified: {school_name}")
+    print("----------------------------------\n")
+    # --- END OF NEW DIAGNOSTIC ---
 
-    # Step 1: Identify SCAs and map them to zone types
-    # ... (Keep this identification logic exactly as before, collecting SCAs
-    #      and mapping them in sca_to_zone_types_map) ...
-    identified_scas = set(); sca_to_zone_types_map = defaultdict(set)
-    def add_sca_to_map(zone_type, sca):
-        if sca: sca_str = str(sca).strip(); identified_scas.add(sca_str); sca_to_zone_types_map[sca_str].add(zone_type)
+    # --- 2. DETERMINE USER'S HOME NETWORK ---
+    user_network = None
     for _, row in matches.iterrows():
-        zone_type = row.get("zone_type", "Unknown");
-        try:
-            gis_key = None; determined_sca = None; determined_display_name = None
-            if zone_type == "Elementary": high_school_gis_key = str(row.get("High", "")).strip().upper(); [add_sca_to_map(zone_type, sca) for sca in get_elementary_feeder_scas(high_school_gis_key)]; continue
-            elif zone_type in ["High", "Traditional/Magnet High"]: gis_key = str(row.get("High") or row.get("Traditiona", "")).strip().upper()
-            elif zone_type == "Middle": gis_key = str(row.get("Middle", "")).strip().upper()
-            elif zone_type == "Traditional/Magnet Middle": raw_middle = str(row.get("Traditiona", "")).strip().upper(); raw_name_col = str(row.get("Name", "")).strip().upper(); gis_key = raw_middle if raw_middle else raw_name_col
-            elif zone_type == "Traditional Elementary": gis_key = str(row.get("Traditiona", "")).strip().upper
-            elif zone_type == "Traditional/Magnet Elementary": gis_key = str(row.get("Traditiona", "")).strip().upper()
-            elif zone_type == "Choice": potential_key = str(row.get("Name", "")).strip().upper(); info = get_info_from_gis(potential_key); determined_sca = info.get('sca')
-            else: continue
-            if gis_key and not determined_sca: info = get_info_from_gis(gis_key); determined_sca = info.get('sca');
-            if not determined_sca and gis_key and zone_type != "Choice": print(f"  ⚠️ DB Lookup MISSING: Zone='{zone_type}', GIS Key='{gis_key}'")
-            if determined_sca: add_sca_to_map(zone_type, determined_sca)
-        except Exception as e: print(f"❌ Error processing row (Index: {row.name}, Zone: {zone_type}): {e}")
-    print("Adding Universal Magnet schools from DB...")
-    universal_magnets_info = get_universal_magnet_scas_and_info()
-    for info in universal_magnets_info:
-        sca = info.get('school_code_adjusted'); school_lvl = info.get('school_level'); target_zone_type = "Unknown Magnet"
-        if school_lvl == "Elementary School": target_zone_type = "Traditional/Magnet Elementary"
-        elif school_lvl == "Middle School": target_zone_type = "Traditional/Magnet Middle"
-        elif school_lvl == "High School": target_zone_type = "Traditional/Magnet High"
-        add_sca_to_map(target_zone_type, sca)
+        if row.get("zone_type") == "High":
+            hs_gis_key = str(row.get("High", "")).strip().upper()
+            if hs_gis_key:
+                hs_info = get_info_from_gis(hs_gis_key)
+                if hs_info.get('sca'):
+                    hs_details = get_school_details_by_scas([hs_info['sca']]).get(hs_info['sca'])
+                    if hs_details:
+                        user_network = hs_details.get('network')
+                        print(f"  📌 User's Resides Network identified as: '{user_network}' from High School '{hs_gis_key}'")
+                break
 
+    # --- 3. IDENTIFY ALL ELIGIBLE SCHOOLS ---
+    final_schools_map = defaultdict(set)
+    def add_school_to_final_list(sca, zone_type):
+        if sca: final_schools_map[str(sca).strip()].add(zone_type)
 
-    # Step 2: Fetch FULL details using SCAs
-    print(f"🔎 Identified {len(identified_scas)} unique SCAs. Querying DB for details...")
-    if not identified_scas: print("🤷 No SCAs identified."); return {}
-    school_details_lookup = get_school_details_by_scas(list(identified_scas))
-    print(f"✅ Found details for {len(school_details_lookup)} schools in DB (keyed by SCA).")
+    # A. Add all GIS-based schools first (Resides schools)
+    print("Processing GIS-based schools (from shapefiles)...")
+    for _, row in matches.iterrows():
+        zone_type = row.get("zone_type", "Unknown")
+        gis_key, info = None, None
+        if zone_type == "Elementary":
+            high_school_gis_key = str(row.get("High", "")).strip().upper()
+            for sca in get_elementary_feeder_scas(high_school_gis_key): add_school_to_final_list(sca, zone_type)
+            continue
+        elif zone_type == "High": gis_key = str(row.get("High", "")).strip().upper()
+        elif zone_type == "Middle": gis_key = str(row.get("Middle", "")).strip().upper()
+        elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
+             gis_key = str(row.get("Traditiona") or row.get("Name", "")).strip().upper()
+        elif zone_type == "Choice": gis_key = str(row.get("Name", "")).strip().upper()
+        
+        if gis_key:
+            info = get_info_from_gis(gis_key)
+            if info and info.get('sca'): add_school_to_final_list(info['sca'], zone_type)
 
-    # Step 3: Build STRUCTURED Output - Contains full details, sorted as requested
+    # B. Add address-independent schools based on your specific rules
+    print("Processing address-independent schools with corrected rules...")
+    address_independent_schools = get_address_independent_schools_info()
+    for school_info in address_independent_schools:
+        sca = school_info.get('school_code_adjusted')
+        school_lvl = school_info.get('school_level')
+        should_add = False
+
+        # NEW: Check if it qualifies as an Elementary choice school
+        if school_lvl == "Elementary School":
+            # Any of these flags makes it a choice school.
+            # We add all universal/magnet elementary schools for every user.
+            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or
+                school_info.get('universal_magnet_traditional_program') == 'Yes' or 
+                school_info.get('universal_academies_or_other') == 'Yes'):
+                should_add = True
+        
+        # Check if it qualifies as a Middle School choice
+        elif school_lvl == "Middle School":
+            # For Middle School, ANY of these flags makes it a choice school.
+            # This correctly IGNORES the 'the_academies_of_louisville' flag.
+            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or
+                school_info.get('universal_magnet_traditional_program') == 'Yes' or
+                school_info.get('universal_academies_or_other') == 'Yes'):
+                should_add = True
+        
+        # Check if it qualifies as a High School choice
+        elif school_lvl == "High School":
+            # Rule 1: Is it an Academy of Louisville that ALSO matches the user's network?
+            is_network_academy = (
+                school_info.get('the_academies_of_louisville') == 'Yes' and
+                school_info.get('network') == user_network
+            )
+            # Rule 2: Does it have any of the truly "universal" flags?
+            is_universal = (
+                school_info.get('universal_magnet_traditional_school') == 'Yes' or
+                school_info.get('universal_magnet_traditional_program') == 'Yes' or
+                school_info.get('universal_academies_or_other') == 'Yes' 
+            )
+            # A high school is added if it meets EITHER of these conditions.
+            if is_network_academy or is_universal:
+                should_add = True
+        
+        if should_add:
+            target_zone_type = "Traditional/Magnet High" if school_lvl == "High School" else "Traditional/Magnet Middle"
+            add_school_to_final_list(sca, target_zone_type)
+
+    # --- 4. FETCH DETAILS AND BUILD FINAL OUTPUT ---
+    identified_scas = list(final_schools_map.keys())
+    print(f"🔎 Found {len(identified_scas)} unique schools to display. Querying DB for details...")
+    if not identified_scas: return {}
+    
+    school_details_lookup = get_school_details_by_scas(identified_scas)
+    print(f"✅ Found details for {len(school_details_lookup)} schools in DB.")
+    
+    # ... (The rest of the function remains the same)
     output_structure = {"results_by_zone": []}
     category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice"]
-
     for zone_type in category_order:
         zone_output = {"zone_type": zone_type, "schools": []}
-        scas_for_this_zone = {sca for sca, zones in sca_to_zone_types_map.items() if zone_type in zones}
-
-        for sca in scas_for_this_zone:
-            details = school_details_lookup.get(sca)
-            if details:
-                # Always calculate distance and add it to the details dict
-                distance = None
-                school_lat = details.get('latitude'); school_lon = details.get('longitude')
-                if school_lat is not None and school_lon is not None:
-                    try: distance = round(geodesic((lat, lon), (school_lat, school_lon)).miles, 1)
-                    except ValueError as ve: print(f"  ⚠️ Dist calc error SCA {sca}: {ve}")
-                details['distance_mi'] = distance # Add distance to the dict
-
-                zone_output["schools"].append(details) # Add the whole details dict
-            else: print(f"  Error: Details missing for SCA '{sca}' (Zone: {zone_type}) during final build.")
-
+        for sca, zones in final_schools_map.items():
+            if zone_type in zones:
+                details = school_details_lookup.get(sca)
+                if details:
+                    distance = None
+                    school_lat, school_lon = details.get('latitude'), details.get('longitude')
+                    if school_lat is not None and school_lon is not None:
+                        try: distance = round(geodesic((lat, lon), (school_lat, school_lon)).miles, 1)
+                        except ValueError: pass
+                    details['distance_mi'] = distance
+                    zone_output["schools"].append(details)
         if not zone_output["schools"]: continue
-
-        # Perform Sorting Based on Parameters
-        # ... (Keep the robust sorting logic exactly as before, using sort_key and sort_desc) ...
-        effective_sort_key = sort_key
-        effective_sort_desc = sort_desc
-        if not effective_sort_key: effective_sort_key = 'display_name'; effective_sort_desc = False
-        if effective_sort_key and effective_sort_key in zone_output["schools"][0]:
+        effective_sort_key = sort_key or 'display_name'
+        effective_sort_desc = sort_desc if sort_key else False
+        if effective_sort_key in zone_output["schools"][0]:
             def sort_helper(item):
-                val = item.get(effective_sort_key);
-                if effective_sort_key == 'display_name': is_none_or_empty = not val; return (is_none_or_empty, str(val).lower() if not is_none_or_empty else "")
-                is_none_or_not_numeric = val is None or not isinstance(val, (int, float));
-                if effective_sort_desc: return (is_none_or_not_numeric, val if not is_none_or_not_numeric else -float('inf'))
-                else: return (is_none_or_not_numeric, val if not is_none_or_not_numeric else float('inf'))
-            try: zone_output["schools"].sort(key=sort_helper, reverse=effective_sort_desc); print(f"  Sorting zone '{zone_type}' by '{effective_sort_key}' {'DESC' if effective_sort_desc else 'ASC'}")
-            except Exception as sort_err: print(f"  ⚠️ Error sorting zone '{zone_type}' by key '{effective_sort_key}': {sort_err}. Defaulting to name sort."); zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower())
-        else: zone_output["schools"].sort(key=lambda x: x.get('display_name','').lower());
-        if effective_sort_key and effective_sort_key != 'display_name': print(f"  ⚠️ Sort key '{effective_sort_key}' not found. Defaulting to name sort.")
-
-
+                val = item.get(effective_sort_key); is_none = val is None; is_numeric = isinstance(val, (int, float))
+                if is_numeric: return (is_none, val if not is_none else (-float('inf') if effective_sort_desc else float('inf')))
+                return (is_none, str(val).lower() if not is_none else "")
+            try: zone_output["schools"].sort(key=sort_helper, reverse=effective_sort_desc)
+            except Exception: zone_output["schools"].sort(key=lambda x: str(x.get('display_name','')).lower())
+        else: zone_output["schools"].sort(key=lambda x: str(x.get('display_name','')).lower())
         output_structure["results_by_zone"].append(zone_output)
 
-    print(f"✅ School zone processing complete. Returning structured data.")
+    print(f"✅ School zone processing complete.")
     return output_structure
 
-# Helper to process request and call core logic
 # Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
     try: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADD TOP-LEVEL TRY
