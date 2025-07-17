@@ -2,9 +2,9 @@ import requests
 import json
 
 api_url = "http://localhost:5001/school-details-by-address"
-# payload = {"address": "7005 Shallow Lake Road Prospect, KY"}
+payload = {"address": "7005 Shallow Lake Road Prospect, KY"}
 # Or try another address:
-payload = {"address": "4425 Preston Hwy, Louisville, KY"}
+# payload = {"address": "4425 Preston Hwy, Louisville, KY"}
 
 
 headers = {"Content-Type": "application/json"}
