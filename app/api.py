@@ -450,18 +450,26 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 should_add = True
         
         if should_add:
-            target_zone_type = "Traditional/Magnet High" if school_lvl == "High School" else "Traditional/Magnet Middle"
-            add_school_to_final_list(sca, target_zone_type)
+            target_zone_type = None # Start with a clean slate
+            if school_lvl == "Elementary School":
+                target_zone_type = "Traditional/Magnet Elementary"
+            elif school_lvl == "Middle School":
+                target_zone_type = "Traditional/Magnet Middle"
+            elif school_lvl == "High School":
+                target_zone_type = "Traditional/Magnet High"
+
+            if target_zone_type:
+                add_school_to_final_list(sca, target_zone_type)
 
     # --- 4. FETCH DETAILS AND BUILD FINAL OUTPUT ---
     identified_scas = list(final_schools_map.keys())
     print(f"🔎 Found {len(identified_scas)} unique schools to display. Querying DB for details...")
-    if not identified_scas: return {}
+    if not identified_scas: 
+        return {}
     
     school_details_lookup = get_school_details_by_scas(identified_scas)
     print(f"✅ Found details for {len(school_details_lookup)} schools in DB.")
     
-    # ... (The rest of the function remains the same)
     output_structure = {"results_by_zone": []}
     category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice"]
     for zone_type in category_order:
