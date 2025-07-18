@@ -459,16 +459,18 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 should_add = True
         
         if should_add:
-            target_zone_type = None # Start with a clean slate
-            if school_lvl == "Elementary School":
-                target_zone_type = "Traditional/Magnet Elementary"
-            elif school_lvl == "Middle School":
-                target_zone_type = "Traditional/Magnet Middle"
-            elif school_lvl == "High School":
-                target_zone_type = "Traditional/Magnet High"
+            # Only add if the school is not already in our list
+            if sca not in final_schools_map:
+                target_zone_type = None # Start with a clean slate
+                if school_lvl == "Elementary School":
+                    target_zone_type = "Traditional/Magnet Elementary"
+                elif school_lvl == "Middle School":
+                    target_zone_type = "Traditional/Magnet Middle"
+                elif school_lvl == "High School":
+                    target_zone_type = "Traditional/Magnet High"
 
-            if target_zone_type:
-                add_school_to_final_list(sca, target_zone_type)
+                if target_zone_type:
+                    add_school_to_final_list(sca, target_zone_type)
 
     # --- 4. FETCH DETAILS AND BUILD FINAL OUTPUT ---
     identified_scas = list(final_schools_map.keys())
