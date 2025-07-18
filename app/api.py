@@ -38,6 +38,7 @@ elementary_path = os.path.join(DATA_DIR, "Elementary", "Resides_ES_Clusters_Boun
 traditional_middle_path = os.path.join(DATA_DIR, "TraditionalMiddle", "Traditional_MS_Bnds.shp")
 traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_HS_Bnds.shp")
 traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditional_ES_Bnds.shp")
+mst_middle_path = os.path.join(DATA_DIR, "MagnetMiddle", "MST_MS_Bnds.shp")
 
 # Preview column names
 tm_middle_gdf = gpd.read_file(traditional_middle_path)
@@ -59,6 +60,7 @@ try:
     # Define shapefile_configs HERE, inside the try block or just before it if it uses variables defined above.
     # For clarity, defining it right where it's needed is good.
     shapefile_configs = [
+        (mst_middle_path, "MST Magnet Middle"),
         (traditional_high_path, "Traditional/Magnet High"),
         (traditional_middle_path, "Traditional/Magnet Middle"),
         (traditional_elem_path, "Traditional/Magnet Elementary"),
@@ -398,13 +400,20 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             continue
         elif zone_type == "High": gis_key = str(row.get("High", "")).strip().upper()
         elif zone_type == "Middle": gis_key = str(row.get("Middle", "")).strip().upper()
+        elif zone_type == "MST Magnet Middle":
+            # This handles Farnsley, Meyzeek, Newburg from the MST file
+            gis_key = str(row.get("MST", "")).strip().upper() 
         elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
              gis_key = str(row.get("Traditiona") or row.get("Name", "")).strip().upper()
         elif zone_type == "Choice": gis_key = str(row.get("Name", "")).strip().upper()
         
         if gis_key:
             info = get_info_from_gis(gis_key)
-            if info and info.get('sca'): add_school_to_final_list(info['sca'], zone_type)
+            if info and info.get('sca'): 
+                if zone_type == "MST Magnet Middle":
+                    add_school_to_final_list(info['sca'], "Traditional/Magnet Middle")
+                else:
+                    add_school_to_final_list(info['sca'], zone_type)
 
     # B. Add address-independent schools based on your specific rules
     print("Processing address-independent schools with corrected rules...")
