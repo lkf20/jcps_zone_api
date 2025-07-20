@@ -2,9 +2,15 @@ import requests
 import json
 
 api_url = "http://localhost:5001/school-details-by-address"
+# Ballard Zone Address
 # payload = {"address": "7005 Shallow Lake Road Prospect, KY"}
-# Or try another address:
+
+# Seneca Zone Address:
 payload = {"address": "4425 Preston Hwy, Louisville, KY"}
+
+#Eastern Zone Address:
+# payload = {"address": "217 Marengo Dr Louisville, KY"}
+
 
 
 headers = {"Content-Type": "application/json"}
