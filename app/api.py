@@ -1,3 +1,4 @@
+import re
 import os
 import json
 import time
@@ -292,14 +293,13 @@ geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", tim
 address_cache = {}
 def geocode_address(address):
     """
-    Geocodes a user address string with caching.
+    Geocodes a user address string with caching, a fallback, and a bounding box for reliability.
     Returns (lat, lon, error_type)
-    error_type can be None (success), 'not_found', or 'service_error'.
     """
     address = str(address).strip()
     if not address:
         print(f"  [API DEBUG GEOCODE] ⚠️ Address input is empty.")
-        address_cache[address] = (None, None, 'not_found') # Or 'invalid_input'
+        address_cache[address] = (None, None, 'not_found')
         return None, None, 'not_found'
 
     if address in address_cache:
@@ -309,31 +309,40 @@ def geocode_address(address):
 
     print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
     try:
-        location = geolocator.geocode(address)
+        # Create the viewbox from your defined county bounds to guide the geocoder
+        jc_viewbox = [
+            (JEFFERSON_COUNTY_BOUNDS["max_lat"], JEFFERSON_COUNTY_BOUNDS["max_lon"]),
+            (JEFFERSON_COUNTY_BOUNDS["min_lat"], JEFFERSON_COUNTY_BOUNDS["min_lon"])
+        ]
+
+        # First attempt with the full address and the viewbox hint
+        location = geolocator.geocode(address, viewbox=jc_viewbox, bounded=False) # bounded=False allows results slightly outside if necessary
+
+        # If the first attempt fails, try a simplified address
+        if not location:
+            simplified_address = re.sub(r'^\d+\s+', '', address)
+            print(f"  [API DEBUG GEOCODE] ⚠️ Full address not found. Retrying with simplified address: '{simplified_address}'")
+            location = geolocator.geocode(simplified_address, viewbox=jc_viewbox, bounded=False)
+        # --- END: NEW LOGIC ---
+
         if location:
             coords = (location.latitude, location.longitude)
-            address_cache[address] = (coords[0], coords[1], None) # Cache success
+            address_cache[address] = (coords[0], coords[1], None)
             print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords[0], coords[1], None
         else:
-            print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (address not found) for: '{address}'")
-            address_cache[address] = (None, None, 'not_found') # Cache "not found"
+            print(f"  [API DEBUG GEOCODE] ❌ Nominatim failed for both full and simplified address: '{address}'")
+            address_cache[address] = (None, None, 'not_found')
             return None, None, 'not_found'
+            
     except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
          print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
-         address_cache[address] = (None, None, 'service_error') # Cache "service error"
+         address_cache[address] = (None, None, 'service_error')
          return None, None, 'service_error'
     except Exception as e:
-        # Catching a general exception here is okay for robustness,
-        # but still classify it as a service_error for the user.
         print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
-        address_cache[address] = (None, None, 'service_error') # Cache "service error"
+        address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
-
-
-# Replace the entire existing function with this new, final version.
-
-# Replace the entire existing function with this new, definitive version.
 
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, and returns structured data."""
