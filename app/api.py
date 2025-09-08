@@ -293,7 +293,7 @@ geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", tim
 address_cache = {}
 def geocode_address(address):
     """
-    Geocodes a user address string with caching, a fallback, and a bounding box for reliability.
+    Geocodes a user address with caching and a 3-step fallback for maximum reliability.
     Returns (lat, lon, error_type)
     """
     address = str(address).strip()
@@ -309,21 +309,32 @@ def geocode_address(address):
 
     print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
     try:
-        # Create the viewbox from your defined county bounds to guide the geocoder
         jc_viewbox = [
             (JEFFERSON_COUNTY_BOUNDS["max_lat"], JEFFERSON_COUNTY_BOUNDS["max_lon"]),
             (JEFFERSON_COUNTY_BOUNDS["min_lat"], JEFFERSON_COUNTY_BOUNDS["min_lon"])
         ]
 
-        # First attempt with the full address and the viewbox hint
-        location = geolocator.geocode(address, viewbox=jc_viewbox, bounded=False) # bounded=False allows results slightly outside if necessary
+        # --- START: NEW 3-ATTEMPT LOGIC ---
+        location = None
 
-        # If the first attempt fails, try a simplified address
+        # Attempt 1: Full address (most specific)
+        print("  [API DEBUG GEOCODE] Attempt 1: Full address with viewbox.")
+        location = geolocator.geocode(address, viewbox=jc_viewbox, bounded=False)
+
+        # Attempt 2: Street address only (often more reliable with viewbox)
+        if not location:
+            street_address = address.split(',')[0].strip()
+            if street_address.lower() != address.lower(): # Only try if it's different
+                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 1 failed. Attempt 2: Street address only '{street_address}'")
+                location = geolocator.geocode(street_address, viewbox=jc_viewbox, bounded=False)
+
+        # Attempt 3: Simplified address with no house number (last resort)
         if not location:
             simplified_address = re.sub(r'^\d+\s+', '', address)
-            print(f"  [API DEBUG GEOCODE] ⚠️ Full address not found. Retrying with simplified address: '{simplified_address}'")
-            location = geolocator.geocode(simplified_address, viewbox=jc_viewbox, bounded=False)
-        # --- END: NEW LOGIC ---
+            if simplified_address.lower() != address.lower(): # Only try if it's different
+                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 2 failed. Attempt 3: Simplified address '{simplified_address}'")
+                location = geolocator.geocode(simplified_address, viewbox=jc_viewbox, bounded=False)
+        # --- END: NEW 3-ATTEMPT LOGIC ---
 
         if location:
             coords = (location.latitude, location.longitude)
@@ -331,7 +342,7 @@ def geocode_address(address):
             print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords[0], coords[1], None
         else:
-            print(f"  [API DEBUG GEOCODE] ❌ Nominatim failed for both full and simplified address: '{address}'")
+            print(f"  [API DEBUG GEOCODE] ❌ Nominatim failed all 3 attempts for: '{address}'")
             address_cache[address] = (None, None, 'not_found')
             return None, None, 'not_found'
             
