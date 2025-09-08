@@ -1,3 +1,4 @@
+import re
 import os
 import json
 import time
@@ -292,14 +293,13 @@ geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", tim
 address_cache = {}
 def geocode_address(address):
     """
-    Geocodes a user address string with caching.
+    Geocodes a user address with caching and a 3-step fallback for maximum reliability.
     Returns (lat, lon, error_type)
-    error_type can be None (success), 'not_found', or 'service_error'.
     """
     address = str(address).strip()
     if not address:
         print(f"  [API DEBUG GEOCODE] ⚠️ Address input is empty.")
-        address_cache[address] = (None, None, 'not_found') # Or 'invalid_input'
+        address_cache[address] = (None, None, 'not_found')
         return None, None, 'not_found'
 
     if address in address_cache:
@@ -309,31 +309,51 @@ def geocode_address(address):
 
     print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
     try:
-        location = geolocator.geocode(address)
+        jc_viewbox = [
+            (JEFFERSON_COUNTY_BOUNDS["max_lat"], JEFFERSON_COUNTY_BOUNDS["max_lon"]),
+            (JEFFERSON_COUNTY_BOUNDS["min_lat"], JEFFERSON_COUNTY_BOUNDS["min_lon"])
+        ]
+
+        # --- START: NEW 3-ATTEMPT LOGIC ---
+        location = None
+
+        # Attempt 1: Full address (most specific)
+        print("  [API DEBUG GEOCODE] Attempt 1: Full address with viewbox.")
+        location = geolocator.geocode(address, viewbox=jc_viewbox, bounded=False)
+
+        # Attempt 2: Street address only (often more reliable with viewbox)
+        if not location:
+            street_address = address.split(',')[0].strip()
+            if street_address.lower() != address.lower(): # Only try if it's different
+                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 1 failed. Attempt 2: Street address only '{street_address}'")
+                location = geolocator.geocode(street_address, viewbox=jc_viewbox, bounded=False)
+
+        # Attempt 3: Simplified address with no house number (last resort)
+        if not location:
+            simplified_address = re.sub(r'^\d+\s+', '', address)
+            if simplified_address.lower() != address.lower(): # Only try if it's different
+                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 2 failed. Attempt 3: Simplified address '{simplified_address}'")
+                location = geolocator.geocode(simplified_address, viewbox=jc_viewbox, bounded=False)
+        # --- END: NEW 3-ATTEMPT LOGIC ---
+
         if location:
             coords = (location.latitude, location.longitude)
-            address_cache[address] = (coords[0], coords[1], None) # Cache success
+            address_cache[address] = (coords[0], coords[1], None)
             print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords[0], coords[1], None
         else:
-            print(f"  [API DEBUG GEOCODE] ⚠️ Nominatim failed (address not found) for: '{address}'")
-            address_cache[address] = (None, None, 'not_found') # Cache "not found"
+            print(f"  [API DEBUG GEOCODE] ❌ Nominatim failed all 3 attempts for: '{address}'")
+            address_cache[address] = (None, None, 'not_found')
             return None, None, 'not_found'
+            
     except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
          print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
-         address_cache[address] = (None, None, 'service_error') # Cache "service error"
+         address_cache[address] = (None, None, 'service_error')
          return None, None, 'service_error'
     except Exception as e:
-        # Catching a general exception here is okay for robustness,
-        # but still classify it as a service_error for the user.
         print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
-        address_cache[address] = (None, None, 'service_error') # Cache "service error"
+        address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
-
-
-# Replace the entire existing function with this new, final version.
-
-# Replace the entire existing function with this new, definitive version.
 
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, and returns structured data."""
