@@ -6,15 +6,15 @@ import sqlite3
 from collections import defaultdict
 
 from flask import Flask, request, jsonify
-from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
-from geopy.exc import GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError
 import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 import pprint
 import time
 from flask_cors import CORS
+import googlemaps
+
 
 # --- Configuration & Data Loading ---
 app_start_time = time.time() # Overall start
@@ -287,19 +287,24 @@ app = Flask(__name__)
 print(f"[{time.time() - app_start_time:.2f}s] Flask app initialized. Gunicorn should take over now.")
 
 CORS(app) # Make sure this is here and applies to the whole app
-geolocator = Nominatim(user_agent="jcps_school_bot/1.0 (lkf20@hotmail.com)", timeout=15)
+
+# --- NEW: Google Maps Client Initialization ---
+# It's best practice to get the key from an environment variable
+GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
+if not GOOGLE_MAPS_API_KEY:
+    print("⚠️ WARNING: GOOGLE_MAPS_API_KEY environment variable not set.")
+gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
+# --- END NEW ---
 
 # --- Helper Functions ---
 address_cache = {}
 def geocode_address(address):
     """
-    Geocodes a user address with caching and a 3-step fallback for maximum reliability.
-    Returns (lat, lon, error_type)
+    Geocodes an address using the Google Maps API with caching and a bounding box.
+    Returns (lat, lon, error_type).
     """
     address = str(address).strip()
     if not address:
-        print(f"  [API DEBUG GEOCODE] ⚠️ Address input is empty.")
-        address_cache[address] = (None, None, 'not_found')
         return None, None, 'not_found'
 
     if address in address_cache:
@@ -307,51 +312,37 @@ def geocode_address(address):
         print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': ({cached_lat}, {cached_lon}, {cached_error_type})")
         return cached_lat, cached_lon, cached_error_type
 
-    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Nominatim...")
+    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Google Maps API...")
     try:
-        jc_viewbox = [
-            (JEFFERSON_COUNTY_BOUNDS["max_lat"], JEFFERSON_COUNTY_BOUNDS["max_lon"]),
-            (JEFFERSON_COUNTY_BOUNDS["min_lat"], JEFFERSON_COUNTY_BOUNDS["min_lon"])
-        ]
+        # Use the bounds to hint to Google where to look
+        jc_bounds = {
+            "northeast": (JEFFERSON_COUNTY_BOUNDS["max_lat"], JEFFERSON_COUNTY_BOUNDS["max_lon"]),
+            "southwest": (JEFFERSON_COUNTY_BOUNDS["min_lat"], JEFFERSON_COUNTY_BOUNDS["min_lon"])
+        }
+        
+        results = gmaps.geocode(address, bounds=jc_bounds)
+        
+        if results:
+            location = results[0]['geometry']['location']
+            coords = (location['lat'], location['lng'])
+            
+            # Optional but recommended: Check if the result is actually in our bounds
+            if not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= coords[0] <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
+                    JEFFERSON_COUNTY_BOUNDS["min_lon"] <= coords[1] <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
+                print(f"  [API DEBUG GEOCODE] ⚠️ Google found a location, but it's outside Jefferson County bounds.")
+                address_cache[address] = (None, None, 'not_found')
+                return None, None, 'not_found'
 
-        # --- START: NEW 3-ATTEMPT LOGIC ---
-        location = None
-
-        # Attempt 1: Full address (most specific)
-        print("  [API DEBUG GEOCODE] Attempt 1: Full address with viewbox.")
-        location = geolocator.geocode(address, viewbox=jc_viewbox, bounded=False)
-
-        # Attempt 2: Street address only (often more reliable with viewbox)
-        if not location:
-            street_address = address.split(',')[0].strip()
-            if street_address.lower() != address.lower(): # Only try if it's different
-                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 1 failed. Attempt 2: Street address only '{street_address}'")
-                location = geolocator.geocode(street_address, viewbox=jc_viewbox, bounded=False)
-
-        # Attempt 3: Simplified address with no house number (last resort)
-        if not location:
-            simplified_address = re.sub(r'^\d+\s+', '', address)
-            if simplified_address.lower() != address.lower(): # Only try if it's different
-                print(f"  [API DEBUG GEOCODE] ⚠️ Attempt 2 failed. Attempt 3: Simplified address '{simplified_address}'")
-                location = geolocator.geocode(simplified_address, viewbox=jc_viewbox, bounded=False)
-        # --- END: NEW 3-ATTEMPT LOGIC ---
-
-        if location:
-            coords = (location.latitude, location.longitude)
             address_cache[address] = (coords[0], coords[1], None)
-            print(f"  [API DEBUG GEOCODE] ✅ Nominatim success: ({coords[0]:.5f}, {coords[1]:.5f})")
+            print(f"  [API DEBUG GEOCODE] ✅ Google success: ({coords[0]:.5f}, {coords[1]:.5f})")
             return coords[0], coords[1], None
         else:
-            print(f"  [API DEBUG GEOCODE] ❌ Nominatim failed all 3 attempts for: '{address}'")
+            print(f"  [API DEBUG GEOCODE] ❌ Google failed (address not found) for: '{address}'")
             address_cache[address] = (None, None, 'not_found')
             return None, None, 'not_found'
-            
-    except (GeocoderTimedOut, GeocoderUnavailable, GeocoderServiceError) as geo_err:
-         print(f"  [API DEBUG GEOCODE] ❌ Nominatim Service ERROR: {geo_err}")
-         address_cache[address] = (None, None, 'service_error')
-         return None, None, 'service_error'
+
     except Exception as e:
-        print(f"  [API DEBUG GEOCODE] ❌ Nominatim UNEXPECTED EXCEPTION: {e}")
+        print(f"  [API DEBUG GEOCODE] ❌ Google API UNEXPECTED EXCEPTION: {e}")
         address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
 
