@@ -30,6 +30,15 @@ print(f"Data Directory: {DATA_DIR}")
 DATABASE_PATH = os.path.join(BASE_DIR, 'jcps_school_data.db')
 DB_SCHOOLS_TABLE = 'schools'
 
+SATELLITE_ZONES_PATH = os.path.join(DATA_DIR, 'satellite_zones.json')
+satellite_data = {}
+try:
+    with open(SATELLITE_ZONES_PATH, 'r') as f:
+        satellite_data = json.load(f)
+    print(f"✅ Successfully loaded satellite zone data.")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load satellite_zones.json. Satellite feature will be disabled. Error: {e}")
+
 # Shapefile paths
 # ... (keep shapefile paths as before) ...
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
@@ -346,43 +355,19 @@ def geocode_address(address):
         address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
 
+
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
-    """Finds zones, uses DB lookups, fetches FULL details by SCA, sorts, and returns structured data."""
+    """Finds all zones, adds satellite/choice schools, fetches details, and returns structured data."""
     if lat is None or lon is None: print("Error: Invalid user coords."); return None
     point = Point(lon, lat)
     if gdf is None or not hasattr(gdf, 'sindex') or gdf.empty: print("Error: GDF invalid."); return None
 
-    # --- 1. SPATIAL QUERY ---
-    matches = gpd.GeoDataFrame()
-    try:
-        possible_matches_index = list(gdf.sindex.query(point, predicate='contains'))
-        if possible_matches_index: matches = gdf.iloc[possible_matches_index]; contains_mask = matches.geometry.contains(point); matches = matches[contains_mask]
-    except Exception as e: print(f"❌ Error during spatial query: {e}.")
-    if matches.empty: matches = gdf[gdf.geometry.contains(point)]
-    print(f"✅ Found {len(matches)} matching zone(s).")
-
-    # --- NEW, IMPROVED DIAGNOSTIC PRINT ---
-    print("\n--- ✅ Found Matching GIS Zones ---")
-    for index, row in matches.iterrows():
-        zone_type = row.get("zone_type", "Unknown")
-        school_name = "N/A"
-        if zone_type == "Elementary":
-            school_name = f"Feeder for {row.get('High', 'N/A')}"
-        elif zone_type == "Middle":
-            school_name = row.get("Middle", "N/A")
-        elif zone_type == "High":
-            school_name = row.get("High", "N/A")
-        elif zone_type in ["Traditional/Magnet Middle", "Traditional/Magnet High", "Traditional/Magnet Elementary"]:
-            school_name = row.get("Traditiona", "N/A")
-        elif zone_type == "Choice":
-            school_name = row.get("Name", "N/A")
-            
-        print(f"  - Type: {zone_type:<30} | School/Zone Identified: {school_name}")
-    print("----------------------------------\n")
-    # --- END OF NEW DIAGNOSTIC ---
-
-    # --- 2. DETERMINE USER'S HOME NETWORK ---
+    matches = gdf[gdf.geometry.contains(point)]
+    
+    # --- 1. IDENTIFY USER'S RESIDE HIGH SCHOOL ZONE AND NETWORK ---
+    user_reside_high_school_zone_name = None
     user_network = None
+
     for _, row in matches.iterrows():
         if row.get("zone_type") == "High":
             hs_gis_key = str(row.get("High", "")).strip().upper()
@@ -392,135 +377,107 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                     hs_details = get_school_details_by_scas([hs_info['sca']]).get(hs_info['sca'])
                     if hs_details:
                         user_network = hs_details.get('network')
-                        print(f"  📌 User's Resides Network identified as: '{user_network}' from High School '{hs_gis_key}'")
-                break
+                        user_reside_high_school_zone_name = hs_details.get('school_zone')
+                        print(f"  📌 User's Reside High School Zone: '{user_reside_high_school_zone_name}' | Network: '{user_network}'")
+                break 
 
-    # --- 3. IDENTIFY ALL ELIGIBLE SCHOOLS ---
-    final_schools_map = defaultdict(set)
-    def add_school_to_final_list(sca, zone_type):
-        if sca: final_schools_map[str(sca).strip()].add(zone_type)
+    # --- 2. GATHER ALL ELIGIBLE SCHOOLS ---
+    final_schools_map = defaultdict(dict)
 
-    # A. Add all GIS-based schools first (Resides schools)
-    print("Processing GIS-based schools (from shapefiles)...")
+    def add_school(sca, zone_type, status):
+        if sca:
+            current_priority = {"Magnet/Choice Program": 1, "Satellite School": 2, "Reside": 3}
+            existing_status = final_schools_map.get(sca, {}).get('status', '')
+            if current_priority.get(status, 0) >= current_priority.get(existing_status, 0):
+                final_schools_map[sca]['zone_type'] = zone_type
+                final_schools_map[sca]['status'] = status
+
+    # A. Add ALL GIS-based schools (This is the restored, working logic)
+    print("--- Processing GIS-based School Zones ---")
     for _, row in matches.iterrows():
-        zone_type = row.get("zone_type", "Unknown")
-        gis_key, info = None, None
+        zone_type = row.get("zone_type")
+        gis_key = None
+        current_status = "Reside"
+        
         if zone_type == "Elementary":
             high_school_gis_key = str(row.get("High", "")).strip().upper()
-            for sca in get_elementary_feeder_scas(high_school_gis_key): add_school_to_final_list(sca, zone_type)
+            for sca in get_elementary_feeder_scas(high_school_gis_key):
+                add_school(sca, 'Elementary', 'Reside')
             continue
-        elif zone_type == "High": gis_key = str(row.get("High", "")).strip().upper()
-        elif zone_type == "Middle": gis_key = str(row.get("Middle", "")).strip().upper()
-        elif zone_type == "MST Magnet Middle":
-            # This handles Farnsley, Meyzeek, Newburg from the MST file
-            gis_key = str(row.get("MST", "")).strip().upper() 
-        elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
-             gis_key = str(row.get("Traditiona") or row.get("Name", "")).strip().upper()
-        elif zone_type == "Choice": gis_key = str(row.get("Name", "")).strip().upper()
+        elif zone_type == "High":
+            gis_key = str(row.get("High", "")).strip().upper()
+            current_status = "Reside"
+        elif zone_type == "Middle":
+            gis_key = str(row.get("Middle", "")).strip().upper()
+            current_status = "Reside"
+        else: # Handle all magnet/choice/traditional zones from GIS files
+            current_status = "Magnet/Choice Program"
+            if zone_type == "MST Magnet Middle":
+                gis_key = str(row.get("MST", "")).strip().upper()
+                zone_type = "Traditional/Magnet Middle" # Normalize
+            elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
+                gis_key = str(row.get("Traditiona", "")).strip().upper()
+            elif zone_type == "Choice":
+                gis_key = str(row.get("Name", "")).strip().upper()
         
         if gis_key:
             info = get_info_from_gis(gis_key)
-            if info and info.get('sca'): 
-                if zone_type == "MST Magnet Middle":
-                    add_school_to_final_list(info['sca'], "Traditional/Magnet Middle")
-                else:
-                    add_school_to_final_list(info['sca'], zone_type)
+            if info and info.get('sca'):
+                add_school(info['sca'], zone_type, current_status)
 
-    # B. Add address-independent schools based on your specific rules
-    print("Processing address-independent schools with corrected rules...")
+    # B. Add Satellite schools
+    # THIS IS THE CORRECTED LINE: using `satellite_data` which is loaded at the top of the file
+    if user_reside_high_school_zone_name and user_reside_high_school_zone_name in satellite_data:
+        print(f"--- Found Matching Satellite Zone: '{user_reside_high_school_zone_name}' ---")
+        for school_info in satellite_data[user_reside_high_school_zone_name]:
+            sca = school_info.get('school_code_adjusted')
+            print(f"  -> Adding Satellite School: {school_info.get('display_name')}")
+            add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
+
+    # C. Add remaining universal choice & academy schools (This is the restored, working logic)
+    print("--- Processing Universal Choice and Academy Schools ---")
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
         sca = school_info.get('school_code_adjusted')
         school_lvl = school_info.get('school_level')
         should_add = False
-
-        # NEW: Check if it qualifies as an Elementary choice school
         if school_lvl == "Elementary School":
-            # Any of these flags makes it a choice school.
-            # We add all universal/magnet elementary schools for every user.
-            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or
-                school_info.get('universal_magnet_traditional_program') == 'Yes' or 
-                school_info.get('universal_academies_or_other') == 'Yes'):
-                should_add = True
-        
-        # Check if it qualifies as a Middle School choice
+            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes'): should_add = True
         elif school_lvl == "Middle School":
-            # For Middle School, ANY of these flags makes it a choice school.
-            # This correctly IGNORES the 'the_academies_of_louisville' flag.
-            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or
-                school_info.get('universal_magnet_traditional_program') == 'Yes' or
-                school_info.get('universal_academies_or_other') == 'Yes'):
-                should_add = True
-        
-        # Check if it qualifies as a High School choice
+            if (school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes'): should_add = True
         elif school_lvl == "High School":
-            # Rule 1: Is it an Academy of Louisville that ALSO matches the user's network?
-            is_network_academy = (
-                school_info.get('the_academies_of_louisville') == 'Yes' and
-                school_info.get('network') == user_network
-            )
-            # Rule 2: Does it have any of the truly "universal" flags?
-            is_universal = (
-                school_info.get('universal_magnet_traditional_school') == 'Yes' or
-                school_info.get('universal_magnet_traditional_program') == 'Yes' or
-                school_info.get('universal_academies_or_other') == 'Yes' 
-            )
-            # A high school is added if it meets EITHER of these conditions.
-            if is_network_academy or is_universal:
-                should_add = True
-        
+            is_network_academy = (school_info.get('the_academies_of_louisville') == 'Yes' and school_info.get('network') == user_network)
+            is_universal = (school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes')
+            if is_network_academy or is_universal: should_add = True
         if should_add:
-            # Only add if the school is not already in our list
-            if sca not in final_schools_map:
-                target_zone_type = None # Start with a clean slate
-                if school_lvl == "Elementary School":
-                    target_zone_type = "Traditional/Magnet Elementary"
-                elif school_lvl == "Middle School":
-                    target_zone_type = "Traditional/Magnet Middle"
-                elif school_lvl == "High School":
-                    target_zone_type = "Traditional/Magnet High"
-
-                if target_zone_type:
-                    add_school_to_final_list(sca, target_zone_type)
-
-    # --- 4. FETCH DETAILS AND BUILD FINAL OUTPUT ---
+            zone_type = None
+            if school_lvl == "Elementary School": zone_type = "Traditional/Magnet Elementary"
+            elif school_lvl == "Middle School": zone_type = "Traditional/Magnet Middle"
+            elif school_lvl == "High School": zone_type = "Traditional/Magnet High"
+            if zone_type:
+                add_school(sca, zone_type, "Magnet/Choice Program")
+    
+    # --- 3. FETCH DETAILS AND BUILD FINAL OUTPUT ---
     identified_scas = list(final_schools_map.keys())
-    print(f"🔎 Found {len(identified_scas)} unique schools to display. Querying DB for details...")
-    if not identified_scas: 
-        return {}
-    
     school_details_lookup = get_school_details_by_scas(identified_scas)
-    print(f"✅ Found details for {len(school_details_lookup)} schools in DB.")
     
-    output_structure = {"results_by_zone": []}
-    category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High", "Choice"]
-    for zone_type in category_order:
-        zone_output = {"zone_type": zone_type, "schools": []}
-        for sca, zones in final_schools_map.items():
-            if zone_type in zones:
-                details = school_details_lookup.get(sca)
-                if details:
-                    distance = None
-                    school_lat, school_lon = details.get('latitude'), details.get('longitude')
-                    if school_lat is not None and school_lon is not None:
-                        try: distance = round(geodesic((lat, lon), (school_lat, school_lon)).miles, 1)
-                        except ValueError: pass
-                    details['distance_mi'] = distance
-                    zone_output["schools"].append(details)
-        if not zone_output["schools"]: continue
-        effective_sort_key = sort_key or 'display_name'
-        effective_sort_desc = sort_desc if sort_key else False
-        if effective_sort_key in zone_output["schools"][0]:
-            def sort_helper(item):
-                val = item.get(effective_sort_key); is_none = val is None; is_numeric = isinstance(val, (int, float))
-                if is_numeric: return (is_none, val if not is_none else (-float('inf') if effective_sort_desc else float('inf')))
-                return (is_none, str(val).lower() if not is_none else "")
-            try: zone_output["schools"].sort(key=sort_helper, reverse=effective_sort_desc)
-            except Exception: zone_output["schools"].sort(key=lambda x: str(x.get('display_name','')).lower())
-        else: zone_output["schools"].sort(key=lambda x: str(x.get('display_name','')).lower())
-        output_structure["results_by_zone"].append(zone_output)
+    schools_by_zone_type = defaultdict(list)
+    for sca, info in final_schools_map.items():
+        details = school_details_lookup.get(sca)
+        if details:
+            details['display_status'] = info['status']
+            distance = round(geodesic((lat, lon), (details['latitude'], details['longitude'])).miles, 1) if details.get('latitude') else None
+            details['distance_mi'] = distance
+            schools_by_zone_type[info['zone_type']].append(details)
 
-    print(f"✅ School zone processing complete.")
+    output_structure = {"results_by_zone": []}
+    category_order = ["Elementary", "Middle", "High", "Traditional/Magnet Elementary", "Traditional/Magnet Middle", "Traditional/Magnet High"]
+    for zone_type in category_order:
+        if schools_by_zone_type[zone_type]:
+            schools = schools_by_zone_type[zone_type]
+            schools.sort(key=lambda x: (x.get('distance_mi') is None, x.get('distance_mi', float('inf'))))
+            output_structure["results_by_zone"].append({"zone_type": zone_type, "schools": schools})
+
     return output_structure
 
 # Helper to process request and call core logic
@@ -572,9 +529,17 @@ def handle_school_request(sort_key=None, sort_desc=False):
         
         print("[API DEBUG] Preparing final 200 OK response.")
         response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
+        
+        print("\n--- FINAL API OUTPUT SENT TO FRONT-END ---")
+        # We use json.dumps with an indent to make it easy to read
+        print(json.dumps(response_data, indent=2))
+        print("--- END OF API OUTPUT ---\n")
+        
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
         return jsonify(response_data), 200
+
+
 
     except Exception as e: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CATCH ALL OTHER UNEXPECTED ERRORS
         # Log the full error for server-side debugging
