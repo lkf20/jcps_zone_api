@@ -1,0 +1,20 @@
+{
+  "Waggener Zone": [
+    {
+      "school_code_adjusted": "275156",
+      "display_name": "Dunn Elementary"
+    }
+  ],
+  "Marion C. Moore Zone": [
+    {
+      "school_code_adjusted": "275128",
+      "display_name": "Price Elementary"
+    }
+  ],
+  "Southern Zone": [
+    {
+      "school_code_adjusted": "275099",
+      "display_name": "Minors Lane Elementary"
+    }
+  ]
+}
