@@ -386,6 +386,9 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 
     def add_school(sca, zone_type, status):
         if sca:
+            school_name_for_log = get_info_from_gis(sca).get('display_name') # Helper to get name for readable log
+            if "Moore" in str(school_name_for_log):
+                 print(f"DEBUG: add_school called for '{school_name_for_log}' (SCA: {sca}) with status '{status}' and zone_type '{zone_type}'")
             current_priority = {"Magnet/Choice Program": 1, "Satellite School": 2, "Reside": 3}
             existing_status = final_schools_map.get(sca, {}).get('status', '')
             if current_priority.get(status, 0) >= current_priority.get(existing_status, 0):
@@ -407,6 +410,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
         elif zone_type == "High":
             gis_key = str(row.get("High", "")).strip().upper()
             current_status = "Reside"
+            print(f"DEBUG: Found a match in a 'Reside' zone polygon. The polygon's name is: {row.get('Name')}")
         elif zone_type == "Middle":
             gis_key = str(row.get("Middle", "")).strip().upper()
             current_status = "Reside"
@@ -419,6 +423,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 gis_key = str(row.get("Traditiona", "")).strip().upper()
             elif zone_type == "Choice":
                 gis_key = str(row.get("Name", "")).strip().upper()
+                print(f"DEBUG: Found a match in a 'Choice' zone polygon. The polygon's name is: {row.get('Name')}")
         
         if gis_key:
             info = get_info_from_gis(gis_key)
@@ -435,6 +440,8 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
 
     # C. Add remaining universal choice & academy schools (This is the restored, working logic)
+    print("--- DEBUG: Checking Moore School status BEFORE universal choice loop ---")
+    print(final_schools_map.get('275155')) # '275155' is the SCA for Moore School
     print("--- Processing Universal Choice and Academy Schools ---")
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
@@ -460,12 +467,33 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
     # --- 3. FETCH DETAILS AND BUILD FINAL OUTPUT ---
     identified_scas = list(final_schools_map.keys())
     school_details_lookup = get_school_details_by_scas(identified_scas)
+
+    # --- DEBUG LOG 2: The Final Check ---
+    print("--- DEBUG LOG 2: FINAL STATUS CHECK BEFORE BUILDING OUTPUT ---")
+    for sca in identified_scas:
+        details = school_details_lookup.get(sca)
+        if details and "Moore" in details.get('display_name', ''):
+            print(f"  -> For '{details['display_name']}' (SCA: {sca}), the final determined status is: '{final_schools_map[sca]['status']}'")
+    print("----------------------------------------------------------\n")
     
     schools_by_zone_type = defaultdict(list)
     for sca, info in final_schools_map.items():
         details = school_details_lookup.get(sca)
         if details:
+            if "Moore" in details.get('display_name', ''):
+                print("--- FINAL MOORE CHECK ---")
+                reside_value = details.get('reside')
+                print(f"  -> Reside value from DB is: '{reside_value}'")
+                print(f"  -> Type of reside value is: {type(reside_value)}")
+                print(f"  -> Does it equal 'Yes'? {reside_value == 'Yes'}")
             details['display_status'] = info['status']
+                        # --- START: ADD THIS DEBUG BLOCK ---
+            # This log will show the FINAL status for Moore School before it's sent
+            if details.get('school_code_adjusted') == '275155': # SCA for Moore School
+                print(f"--- DEBUG: FINAL CHECK for Moore School (SCA: {sca}) ---")
+                print(f"    - Initial Status from map: '{info['status']}'")
+                print(f"    - Reside flag from DB: '{details.get('reside')}'")
+            # --- END: ADD THIS DEBUG BLOCK ---
             distance = round(geodesic((lat, lon), (details['latitude'], details['longitude'])).miles, 1) if details.get('latitude') else None
             details['distance_mi'] = distance
             schools_by_zone_type[info['zone_type']].append(details)
@@ -530,10 +558,10 @@ def handle_school_request(sort_key=None, sort_desc=False):
         print("[API DEBUG] Preparing final 200 OK response.")
         response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
         
-        print("\n--- FINAL API OUTPUT SENT TO FRONT-END ---")
-        # We use json.dumps with an indent to make it easy to read
-        print(json.dumps(response_data, indent=2))
-        print("--- END OF API OUTPUT ---\n")
+        # print("\n--- FINAL API OUTPUT SENT TO FRONT-END ---")
+        # # We use json.dumps with an indent to make it easy to read
+        # print(json.dumps(response_data, indent=2))
+        # print("--- END OF API OUTPUT ---\n")
         
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
@@ -605,6 +633,70 @@ def school_parent_satisfaction():
     """Convenience endpoint: Returns schools sorted by Parent Satisfaction Rating (DESC)."""
     # Ensure this key matches the one selected/available
     return handle_school_request(sort_key='parent_satisfaction', sort_desc=True)
+
+
+@app.route("/generate-test-case", methods=["POST"])
+def generate_test_case():
+    """
+    A temporary helper endpoint to generate JSON for the test_cases.json file.
+    It takes an address and a zone name, and prints the formatted test case.
+    """
+    data = request.get_json()
+    address = data.get("address")
+    zone_name = data.get("zone_name")
+
+    if not address or not zone_name:
+        return jsonify({"error": "Address and zone_name are required"}), 400
+
+    print(f"\n--- GENERATING TEST CASE for Zone: {zone_name} ---")
+    
+    # --- This reuses your existing core logic ---
+    lat, lon, _ = geocode_address(address)
+    if lat is None:
+        return jsonify({"error": f"Could not geocode address: {address}"}), 400
+    
+    structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf)
+    # --- End of reusing logic ---
+
+    # --- This is the new logic to format the output ---
+    expected_schools = {
+        "Elementary": [],
+        "Middle": [],
+        "High": []
+    }
+
+    for zone in structured_results.get("results_by_zone", []):
+        zone_type = zone.get("zone_type")
+        level = None
+        if "Elementary" in zone_type:
+            level = "Elementary"
+        elif "Middle" in zone_type:
+            level = "Middle"
+        elif "High" in zone_type:
+            level = "High"
+        
+        if level:
+            for school in zone.get("schools", []):
+                expected_schools[level].append({
+                    "display_name": school.get("display_name"),
+                    "expected_status": school.get("display_status")
+                })
+
+    # Sort the lists for consistency
+    for level in expected_schools:
+        expected_schools[level].sort(key=lambda x: x['display_name'])
+
+    test_case_output = {
+        "zone_name": zone_name,
+        "address": address,
+        "expected_schools": expected_schools
+    }
+
+    # Pretty-print the JSON to the terminal
+    print(json.dumps(test_case_output, indent=2))
+    print("--- COPY THE JSON OBJECT ABOVE AND PASTE IT INTO test_cases.json ---")
+    
+    return jsonify({"message": f"Test case for {zone_name} printed to API console."}), 200
 
 # --- Run App ---
 if __name__ == "__main__":
