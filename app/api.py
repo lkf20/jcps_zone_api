@@ -401,56 +401,64 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
     final_schools_map = defaultdict(dict)
     def add_school(sca, zone_type, status):
         if sca:
-            # Priority: Reside > Satellite > Magnet > Academy
             current_priority = {"Academy Choice": 1, "Magnet/Choice Program": 2, "Satellite School": 3, "Reside": 4}
             existing_status = final_schools_map.get(sca, {}).get('status', '')
             if current_priority.get(status, 0) >= current_priority.get(existing_status, 0):
                 final_schools_map[sca]['zone_type'] = zone_type
                 final_schools_map[sca]['status'] = status
 
-    # A. Add Reside Schools from GIS
-    print("--- Processing GIS-based Reside Schools ---")
+    # A. Add ALL GIS-based schools (This is the restored, working logic)
+    print("--- Processing GIS-based School Zones ---")
     for _, row in matches.iterrows():
-        zone_type = row.get("zone_type")
+        zone_type = row.get("zone_type"); gis_key = None; info = None;
+        level_hint = None
+        current_status = "Reside"
+
+        if "High" in zone_type: level_hint = "High School"
+        elif "Middle" in zone_type: level_hint = "Middle School"
+        
         if zone_type == "Elementary":
-            high_school_gis_key = str(row.get("High", "")).strip().upper()
-            for sca in get_elementary_feeder_scas(high_school_gis_key):
-                add_school(sca, 'Elementary', 'Reside')
+            for sca in get_elementary_feeder_scas(str(row.get("High", "")).strip().upper()): add_school(sca, 'Elementary', 'Reside')
+            continue
         elif zone_type in ["High", "Middle"]:
             gis_key = str(row.get(zone_type, "")).strip().upper()
-            level_hint = f"{zone_type} School"
+        else: # Handle all magnet/choice/traditional zones
+            current_status = "Magnet/Choice Program"
+            if zone_type == "MST Magnet Middle":
+                gis_key = str(row.get("MST", "")).strip().upper()
+                zone_type = "Traditional/Magnet Middle"
+            elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
+                gis_key = str(row.get("Traditiona", "")).strip().upper()
+            elif zone_type == "Choice":
+                gis_key = str(row.get("Name", "")).strip().upper()
+        
+        if gis_key:
             info = get_info_from_gis(gis_key, school_level_hint=level_hint)
-            if info.get('sca'):
-                add_school(info['sca'], zone_type, 'Reside')
+            if info and info.get('sca'): add_school(info['sca'], zone_type, current_status)
 
-    # B. Add Satellite Schools
+    # B. Add Satellite schools
     if user_reside_high_school_zone_name and user_reside_high_school_zone_name in satellite_data:
         print(f"--- Adding Satellite Schools for '{user_reside_high_school_zone_name}' ---")
         for school_info in satellite_data[user_reside_high_school_zone_name]:
             sca = school_info.get('school_code_adjusted')
             add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
 
-    # C. Add ALL other choice schools (Magnet, Traditional, Academy)
+    # C. Add universal choice & academy schools
     print("--- Processing Universal Choice and Academy Schools ---")
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
         sca = school_info.get('school_code_adjusted')
         school_lvl = school_info.get('school_level')
-        
         status = None
         is_magnet = school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes'
         is_academy_choice = school_info.get('the_academies_of_louisville') == 'Yes' and school_info.get('network') == user_network
 
-        # The new priority logic
-        if is_magnet:
-            status = "Magnet/Choice Program"
-        elif is_academy_choice:
-            status = "Academies of Louisville" # New specific status
-
+        if is_magnet: status = "Magnet/Choice Program"
+        elif is_academy_choice: status = "Academies of Louisville"
+        
         if status:
             zone_type = {"Elementary School": "Traditional/Magnet Elementary", "Middle School": "Traditional/Magnet Middle", "High School": "Traditional/Magnet High"}.get(school_lvl)
-            if zone_type:
-                add_school(sca, zone_type, status)
+            if zone_type: add_school(sca, zone_type, status)
     
     # --- 3. FETCH DETAILS AND BUILD FINAL OUTPUT ---
     identified_scas = list(final_schools_map.keys())
@@ -464,7 +472,6 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             details['distance_mi'] = round(geodesic((lat, lon), (details['latitude'], details['longitude'])).miles, 1) if details.get('latitude') else None
             
             final_zone_type = info['zone_type']
-            # Correct the zone_type for true Reside schools
             if info['status'] == 'Reside':
                 school_lvl = details.get('school_level')
                 if school_lvl == "Elementary School": final_zone_type = "Elementary"
@@ -483,7 +490,6 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 
     return output_structure
 
-    
 # Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
     try: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADD TOP-LEVEL TRY
