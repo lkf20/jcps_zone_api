@@ -50,13 +50,6 @@ traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_H
 traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditional_ES_Bnds.shp")
 mst_middle_path = os.path.join(DATA_DIR, "MagnetMiddle", "MST_MS_Bnds.shp")
 
-# Preview column names
-tm_middle_gdf = gpd.read_file(traditional_middle_path)
-print("Columns:", tm_middle_gdf.columns)
-
-# Print distinct school names
-print("\nTraditional/Magnet Middle Schools:")
-print(tm_middle_gdf["Traditiona"].dropna().unique())
 
 # # --- Load Shapefiles ---
 # app_start_time is already defined at the top
@@ -507,43 +500,28 @@ def handle_school_request(sort_key=None, sort_desc=False):
         print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
         # --- Geocode Address FIRST ---
-        
         lat, lon, geocode_error_type = geocode_address(address)
-        
-
         user_facing_error_message = None
 
         if geocode_error_type == 'service_error':
             user_facing_error_message = f"We're experiencing a temporary technical issue trying to locate the address: '{address}'. Please try again in a few moments."
-            print(f"[API DEBUG] ❌ Geocoding service error for '{address}'.")
         elif lat is None or lon is None:
             user_facing_error_message = f"Could not determine a specific location for the address: '{address}'. Please ensure the address is correct and complete, or try a nearby landmark."
-            print(f"[API DEBUG] ❌ Geocoding failed (address not found or invalid).")
         elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
                   JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
             user_facing_error_message = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
-            print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
 
         if user_facing_error_message:
-            
             status_code = 503 if geocode_error_type == 'service_error' else 400
             return jsonify({"error": user_facing_error_message}), status_code
-        else:
-            
 
-        
 
-        
+
         # It's possible find_school_zones_and_details could raise an error too
         structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
         
         
         response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
-        
-        # print("\n--- FINAL API OUTPUT SENT TO FRONT-END ---")
-        # # We use json.dumps with an indent to make it easy to read
-        # print(json.dumps(response_data, indent=2))
-        # print("--- END OF API OUTPUT ---\n")
         
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
