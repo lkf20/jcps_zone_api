@@ -50,13 +50,6 @@ traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_H
 traditional_elem_path = os.path.join(DATA_DIR, "TraditionalElementary", "Traditional_ES_Bnds.shp")
 mst_middle_path = os.path.join(DATA_DIR, "MagnetMiddle", "MST_MS_Bnds.shp")
 
-# Preview column names
-tm_middle_gdf = gpd.read_file(traditional_middle_path)
-print("Columns:", tm_middle_gdf.columns)
-
-# Print distinct school names
-print("\nTraditional/Magnet Middle Schools:")
-print(tm_middle_gdf["Traditiona"].dropna().unique())
 
 # # --- Load Shapefiles ---
 # app_start_time is already defined at the top
@@ -248,7 +241,7 @@ def get_address_independent_schools_info():
             cursor.execute(sql, params)
             results = cursor.fetchall()
             schools_info = [dict(row) for row in results]
-            print(f"  DB Query: Found {len(schools_info)} candidate address-independent schools (based on DB flags).")
+            
         except sqlite3.Error as e:
             print(f"❌ Error querying address-independent schools: {e}")
             print(f"  >>> PLEASE VERIFY that all flag columns exist in your '{DB_SCHOOLS_TABLE}' table.")
@@ -337,10 +330,10 @@ def geocode_address(address):
 
     if address in address_cache:
         cached_lat, cached_lon, cached_error_type = address_cache[address]
-        print(f"  [API DEBUG GEOCODE] Cache HIT for '{address}': ({cached_lat}, {cached_lon}, {cached_error_type})")
+        
         return cached_lat, cached_lon, cached_error_type
 
-    print(f"  [API DEBUG GEOCODE] Cache MISS. Geocoding '{address}' via Google Maps API...")
+    
     try:
         # Use the bounds to hint to Google where to look
         jc_bounds = {
@@ -357,7 +350,7 @@ def geocode_address(address):
             # Optional but recommended: Check if the result is actually in our bounds
             if not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= coords[0] <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
                     JEFFERSON_COUNTY_BOUNDS["min_lon"] <= coords[1] <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
-                print(f"  [API DEBUG GEOCODE] ⚠️ Google found a location, but it's outside Jefferson County bounds.")
+                
                 address_cache[address] = (None, None, 'not_found')
                 return None, None, 'not_found'
 
@@ -408,7 +401,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 final_schools_map[sca]['status'] = status
 
     # A. Add ALL GIS-based schools (This is the restored, working logic)
-    print("--- Processing GIS-based School Zones ---")
+    
     for _, row in matches.iterrows():
         zone_type = row.get("zone_type"); gis_key = None; info = None;
         level_hint = None
@@ -438,13 +431,13 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 
     # B. Add Satellite schools
     if user_reside_high_school_zone_name and user_reside_high_school_zone_name in satellite_data:
-        print(f"--- Adding Satellite Schools for '{user_reside_high_school_zone_name}' ---")
+        
         for school_info in satellite_data[user_reside_high_school_zone_name]:
             sca = school_info.get('school_code_adjusted')
             add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
 
     # C. Add universal choice & academy schools
-    print("--- Processing Universal Choice and Academy Schools ---")
+    
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
         sca = school_info.get('school_code_adjusted')
@@ -507,43 +500,28 @@ def handle_school_request(sort_key=None, sort_desc=False):
         print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
         # --- Geocode Address FIRST ---
-        print("[API DEBUG] Calling geocode_address...")
         lat, lon, geocode_error_type = geocode_address(address)
-        print(f"[API DEBUG] geocode_address returned: lat={lat}, lon={lon}, error_type={geocode_error_type}")
-
         user_facing_error_message = None
 
         if geocode_error_type == 'service_error':
             user_facing_error_message = f"We're experiencing a temporary technical issue trying to locate the address: '{address}'. Please try again in a few moments."
-            print(f"[API DEBUG] ❌ Geocoding service error for '{address}'.")
         elif lat is None or lon is None:
             user_facing_error_message = f"Could not determine a specific location for the address: '{address}'. Please ensure the address is correct and complete, or try a nearby landmark."
-            print(f"[API DEBUG] ❌ Geocoding failed (address not found or invalid).")
         elif not (JEFFERSON_COUNTY_BOUNDS["min_lat"] <= lat <= JEFFERSON_COUNTY_BOUNDS["max_lat"] and
                   JEFFERSON_COUNTY_BOUNDS["min_lon"] <= lon <= JEFFERSON_COUNTY_BOUNDS["max_lon"]):
             user_facing_error_message = f"The location found for '{address}' appears to be outside the Jefferson County service area. Please provide a local address."
-            print(f"[API DEBUG] ❌ Geocoded location ({lat},{lon}) is outside defined bounds.")
 
         if user_facing_error_message:
-            print(f"[API DEBUG] Returning error response: {user_facing_error_message}")
             status_code = 503 if geocode_error_type == 'service_error' else 400
             return jsonify({"error": user_facing_error_message}), status_code
-        else:
-            print(f"[API DEBUG] ✅ Geocoding successful and within bounds.")
 
-        print(f"📍 Geocoded to: Lat={lat:.5f}, Lon={lon:.5f}")
 
-        print("[API DEBUG] Calling find_school_zones_and_details...")
+
         # It's possible find_school_zones_and_details could raise an error too
         structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
         
-        print("[API DEBUG] Preparing final 200 OK response.")
-        response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
         
-        # print("\n--- FINAL API OUTPUT SENT TO FRONT-END ---")
-        # # We use json.dumps with an indent to make it easy to read
-        # print(json.dumps(response_data, indent=2))
-        # print("--- END OF API OUTPUT ---\n")
+        response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
         
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
