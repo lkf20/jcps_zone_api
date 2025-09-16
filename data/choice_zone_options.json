@@ -1,0 +1,221 @@
+{
+  "Atherton Zone": {
+    "Elementary": [
+      { "display_name": "Atkinson Academy", "school_code_adjusted": "275185" },
+      { "display_name": "Breckinridge-Franklin Elementary", "school_code_adjusted": "275038" },
+      { "display_name": "Byck Elementary", "school_code_adjusted": "275243" },
+      { "display_name": "Portland Elementary", "school_code_adjusted": "275500" },
+      { "display_name": "Bloom Elementary", "school_code_adjusted": "275225" },
+      { "display_name": "Camp Taylor Elementary", "school_code_adjusted": "275004" },
+      { "display_name": "Shelby Academy", "school_code_adjusted": "275610" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Ballard Zone": {
+    "Elementary": [
+      { "display_name": "Atkinson Academy", "school_code_adjusted": "275185" },
+      { "display_name": "Breckinridge-Franklin Elementary", "school_code_adjusted": "275038" },
+      { "display_name": "Byck Elementary", "school_code_adjusted": "275243" },
+      { "display_name": "Portland Elementary", "school_code_adjusted": "275500" },
+      { "display_name": "Chancey Elementary", "school_code_adjusted": "275102" },
+      { "display_name": "Dunn Elementary", "school_code_adjusted": "275156" },
+      { "display_name": "Norton Commons Elementary", "school_code_adjusted": "275371" },
+      { "display_name": "Norton Elementary", "school_code_adjusted": "275096" },
+      { "display_name": "Zachary Taylor Elementary", "school_code_adjusted": "275078" },
+      { "display_name": "Wilder Elementary", "school_code_adjusted": "275067" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Doss Zone": {
+    "Elementary": [
+      { "display_name": "Kennedy Elementary", "school_code_adjusted": "275720" },
+      { "display_name": "King Elementary", "school_code_adjusted": "275432" },
+      { "display_name": "Maupin Elementary", "school_code_adjusted": "275480" },
+      { "display_name": "Crums Lane Elementary", "school_code_adjusted": "275092" },
+      { "display_name": "Kenwood Elementary", "school_code_adjusted": "275059" },
+      { "display_name": "Stonestreet Elementary", "school_code_adjusted": "275071" },
+      { "display_name": "Trunnell Elementary", "school_code_adjusted": "275104" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Eastern Zone": {
+    "Elementary": [
+      { "display_name": "Atkinson Academy", "school_code_adjusted": "275185" },
+      { "display_name": "Breckinridge-Franklin Elementary", "school_code_adjusted": "275038" },
+      { "display_name": "Byck Elementary", "school_code_adjusted": "275243" },
+      { "display_name": "Portland Elementary", "school_code_adjusted": "275500" },
+      { "display_name": "Bowen Elementary", "school_code_adjusted": "275094" },
+      { "display_name": "Hite Elementary", "school_code_adjusted": "275095" },
+      { "display_name": "Lowe Elementary", "school_code_adjusted": "275146" },
+      { "display_name": "Middletown Elementary", "school_code_adjusted": "275024" },
+      { "display_name": "Stopher Elementary", "school_code_adjusted": "275211" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Fairdale Zone": {
+    "Elementary": [
+      { "display_name": "Kennedy Elementary", "school_code_adjusted": "275720" },
+      { "display_name": "King Elementary", "school_code_adjusted": "275432" },
+      { "display_name": "Maupin Elementary", "school_code_adjusted": "275480" },
+      { "display_name": "Auburndale Elementary", "school_code_adjusted": "275127" },
+      { "display_name": "Coral Ridge Elementary", "school_code_adjusted": "275060" },
+      { "display_name": "Fairdale Elementary", "school_code_adjusted": "275010" },
+      { "display_name": "Minors Lane Elementary", "school_code_adjusted": "275099" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Fern Creek Zone": {
+    "Elementary": [
+      { "display_name": "Cochran Elementary", "school_code_adjusted": "275323" },
+      { "display_name": "McFerran Preparatory Academy", "school_code_adjusted": "275440" },
+      { "display_name": "Dr. William H. Perry Elementary School", "school_code_adjusted": "275182" },
+      { "display_name": "Young Elementary", "school_code_adjusted": "275374" },
+      { "display_name": "Bates Elementary", "school_code_adjusted": "275055" },
+      { "display_name": "Fern Creek Elementary", "school_code_adjusted": "275011" },
+      { "display_name": "Price Elementary", "school_code_adjusted": "275128" },
+      { "display_name": "Watterson Elementary", "school_code_adjusted": "275072" },
+      { "display_name": "Wheeler Elementary", "school_code_adjusted": "275109" },
+      { "display_name": "Wilt Elementary", "school_code_adjusted": "275117" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Iroquois Zone": {
+    "Elementary": [
+      { "display_name": "Kennedy Elementary", "school_code_adjusted": "275720" },
+      { "display_name": "King Elementary", "school_code_adjusted": "275432" },
+      { "display_name": "Maupin Elementary", "school_code_adjusted": "275480" },
+      { "display_name": "Cane Run Elementary", "school_code_adjusted": "275005" },
+      { "display_name": "Frayser Elementary", "school_code_adjusted": "275290" },
+      { "display_name": "Gutermuth Elementary", "school_code_adjusted": "275115" },
+      { "display_name": "Hazelwood Elementary", "school_code_adjusted": "275300" },
+      { "display_name": "Jacob Elementary", "school_code_adjusted": "275325" },
+      { "display_name": "Mill Creek Elementary", "school_code_adjusted": "275147" },
+      { "display_name": "Rutherford Elementary", "school_code_adjusted": "275560" },
+      { "display_name": "Semple Elementary", "school_code_adjusted": "275580" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Jeffersontown Zone": {
+    "Elementary": [
+      { "display_name": "Cochran Elementary", "school_code_adjusted": "275323" },
+      { "display_name": "McFerran Preparatory Academy", "school_code_adjusted": "275440" },
+      { "display_name": "Dr. William H. Perry Elementary School", "school_code_adjusted": "275182" },
+      { "display_name": "Young Elementary", "school_code_adjusted": "275374" },
+      { "display_name": "Cochrane Elementary", "school_code_adjusted": "275083" },
+      { "display_name": "Farmer Elementary", "school_code_adjusted": "275212" },
+      { "display_name": "Jeffersontown Elementary", "school_code_adjusted": "275166" },
+      { "display_name": "Tully Elementary", "school_code_adjusted": "275016" },
+      { "display_name": "Watterson Elementary", "school_code_adjusted": "275072" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Moore Zone": {
+    "Elementary": [
+      { "display_name": "Cochran Elementary", "school_code_adjusted": "275323" },
+      { "display_name": "McFerran Preparatory Academy", "school_code_adjusted": "275440" },
+      { "display_name": "Dr. William H. Perry Elementary School", "school_code_adjusted": "275182" },
+      { "display_name": "Young Elementary", "school_code_adjusted": "275374" },
+      { "display_name": "Hartstern Elementary", "school_code_adjusted": "275121" },
+      { "display_name": "Luhr Elementary", "school_code_adjusted": "275107" },
+      { "display_name": "Price Elementary", "school_code_adjusted": "275128" },
+      { "display_name": "Smyrna Elementary School", "school_code_adjusted": "275087" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Pleasure Ridge Park Zone": {
+    "Elementary": [
+      { "display_name": "Kennedy Elementary", "school_code_adjusted": "275720" },
+      { "display_name": "King Elementary", "school_code_adjusted": "275432" },
+      { "display_name": "Maupin Elementary", "school_code_adjusted": "275480" },
+      { "display_name": "Eisenhower Elementary", "school_code_adjusted": "275131" },
+      { "display_name": "Greenwood Elementary", "school_code_adjusted": "275014" },
+      { "display_name": "Kerrick Elementary", "school_code_adjusted": "275079" },
+      { "display_name": "Sanders Elementary", "school_code_adjusted": "275086" },
+      { "display_name": "Shacklette Elementary", "school_code_adjusted": "275097" },
+      { "display_name": "Wellington Elementary", "school_code_adjusted": "275116" },
+      { "display_name": "Wilkerson Elementary School", "school_code_adjusted": "275066" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Seneca Zone": {
+    "Elementary": [
+      { "display_name": "Cochran Elementary", "school_code_adjusted": "275323" },
+      { "display_name": "McFerran Preparatory Academy", "school_code_adjusted": "275440" },
+      { "display_name": "Dr. William H. Perry Elementary School", "school_code_adjusted": "275182" },
+      { "display_name": "Young Elementary", "school_code_adjusted": "275374" },
+      { "display_name": "Goldsmith Elementary", "school_code_adjusted": "275061" },
+      { "display_name": "Indian Trail Elementary", "school_code_adjusted": "275076" },
+      { "display_name": "Klondike Lane Elementary", "school_code_adjusted": "275134" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Southern Zone": {
+    "Elementary": [
+      { "display_name": "Cochran Elementary", "school_code_adjusted": "275323" },
+      { "display_name": "McFerran Preparatory Academy", "school_code_adjusted": "275440" },
+      { "display_name": "Dr. William H. Perry Elementary School", "school_code_adjusted": "275182" },
+      { "display_name": "Young Elementary", "school_code_adjusted": "275374" },
+      { "display_name": "Blake Elementary", "school_code_adjusted": "275149" },
+      { "display_name": "Blue Lick Elementary", "school_code_adjusted": "275091" },
+      { "display_name": "Laukhuf Elementary", "school_code_adjusted": "275145" },
+      { "display_name": "Minors Lane Elementary", "school_code_adjusted": "275099" },
+      { "display_name": "Okolona Elementary", "school_code_adjusted": "275027" },
+      { "display_name": "Rangeland Elementary", "school_code_adjusted": "275081" },
+      { "display_name": "Slaughter Elementary", "school_code_adjusted": "275103" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Valley Zone": {
+    "Elementary": [
+      { "display_name": "Kennedy Elementary", "school_code_adjusted": "275720" },
+      { "display_name": "King Elementary", "school_code_adjusted": "275432" },
+      { "display_name": "Maupin Elementary", "school_code_adjusted": "275480" },
+      { "display_name": "Dixie Elementary", "school_code_adjusted": "275082" },
+      { "display_name": "Johnsontown Road Elementary", "school_code_adjusted": "275106" },
+      { "display_name": "Medora Elementary", "school_code_adjusted": "275022" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  },
+  "Waggener Zone": {
+    "Elementary": [
+      { "display_name": "Atkinson Academy", "school_code_adjusted": "275185" },
+      { "display_name": "Breckinridge-Franklin Elementary", "school_code_adjusted": "275038" },
+      { "display_name": "Byck Elementary", "school_code_adjusted": "275243" },
+      { "display_name": "Portland Elementary", "school_code_adjusted": "275500" },
+      { "display_name": "Chenoweth Elementary", "school_code_adjusted": "275046" },
+      { "display_name": "Dunn Elementary", "school_code_adjusted": "275156" },
+      { "display_name": "Field Elementary", "school_code_adjusted": "275250" },
+      { "display_name": "Alex R. Kennedy Elementary", "school_code_adjusted": "275175" },
+      { "display_name": "St. Matthews Elementary", "school_code_adjusted": "275064" }
+    ],
+    "Middle": [
+      { "display_name": "Hudson Middle", "school_code_adjusted": "275406" }
+    ]
+  }
+}

@@ -39,6 +39,17 @@ try:
 except Exception as e:
     print(f"⚠️ Warning: Could not load satellite_zones.json. Satellite feature will be disabled. Error: {e}")
 
+# --- Load Choice Zone Options Data ---
+CHOICE_ZONE_OPTIONS_PATH = os.path.join(DATA_DIR, 'choice_zone_options.json')
+choice_zone_data = {}
+try:
+    with open(CHOICE_ZONE_OPTIONS_PATH, 'r') as f:
+        choice_zone_data = json.load(f)
+    print(f"✅ Successfully loaded choice zone options data.")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load {os.path.basename(CHOICE_ZONE_OPTIONS_PATH)}. This feature will be disabled. Error: {e}")
+
+
 
 # <<< START: ADDED CODE >>>
 # --- Load Zone-Specific Magnet Data ---
@@ -381,13 +392,19 @@ def geocode_address(address):
 
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds all zones, adds satellite/choice schools, fetches details, and returns structured data."""
-    if lat is None or lon is None: print("Error: Invalid user coords."); return None
+    if lat is None or lon is None: print("Error: Invalid user coords."); return None, False
     point = Point(lon, lat)
     matches = gdf[gdf.geometry.contains(point)]
     
-    # --- 1. IDENTIFY USER'S RESIDE HIGH SCHOOL ZONE AND NETWORK ---
+    # --- 1. DETERMINE USER'S ZONES (RESIDE AND CHOICE) ---
     user_reside_high_school_zone_name = None
     user_network = None
+    # Check if the user's location falls within the Choice Zone boundary
+    is_in_choice_zone = any(row.get("zone_type") == "Choice" for _, row in matches.iterrows())
+    
+    if is_in_choice_zone:
+        print("  [API DEBUG] User location IS within the Choice Zone.")
+
     for _, row in matches.iterrows():
         if row.get("zone_type") == "High":
             hs_gis_key = str(row.get("High", "")).strip().upper()
@@ -411,8 +428,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 final_schools_map[sca]['zone_type'] = zone_type
                 final_schools_map[sca]['status'] = status
 
-    # A. Add ALL GIS-based schools (This is the restored, working logic)
-    
+    # A. Add ALL GIS-based schools
     for _, row in matches.iterrows():
         zone_type = row.get("zone_type"); gis_key = None; info = None;
         level_hint = None
@@ -426,7 +442,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             continue
         elif zone_type in ["High", "Middle"]:
             gis_key = str(row.get(zone_type, "")).strip().upper()
-        else: # Handle all magnet/choice/traditional zones
+        else: 
             current_status = "Magnet/Choice Program"
             if zone_type == "MST Magnet Middle":
                 gis_key = str(row.get("MST", "")).strip().upper()
@@ -434,7 +450,7 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
                 gis_key = str(row.get("Traditiona", "")).strip().upper()
             elif zone_type == "Choice":
-                gis_key = str(row.get("Name", "")).strip().upper()
+                continue
         
         if gis_key:
             info = get_info_from_gis(gis_key, school_level_hint=level_hint)
@@ -442,27 +458,40 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
 
     # B. Add Satellite schools
     if user_reside_high_school_zone_name and user_reside_high_school_zone_name in satellite_data:
-        
         for school_info in satellite_data[user_reside_high_school_zone_name]:
             sca = school_info.get('school_code_adjusted')
             add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
 
     # B-2. Add Zone-Specific Magnet schools
     if user_reside_high_school_zone_name and user_reside_high_school_zone_name in zone_specific_magnets_data:
-        print(f"  [API DEBUG] Found zone-specific magnet rules for '{user_reside_high_school_zone_name}'")
         for school_info in zone_specific_magnets_data[user_reside_high_school_zone_name]:
             sca = school_info.get('school_code_adjusted')
             add_school(sca, "Traditional/Magnet Elementary", "Magnet/Choice Program")
-
+            
+    # B-3. Add Choice Zone Options
+    if is_in_choice_zone and user_reside_high_school_zone_name in choice_zone_data:
+        print(f"  [API DEBUG] Applying Choice Zone options for '{user_reside_high_school_zone_name}'")
+        zone_options = choice_zone_data[user_reside_high_school_zone_name]
+        
+        # <<< START: MODIFIED CODE >>>
+        # Add Elementary choices with "Reside" status and correct zone type
+        for school_info in zone_options.get("Elementary", []):
+            sca = school_info.get('school_code_adjusted')
+            add_school(sca, "Elementary", "Reside")
+            
+        # Add Middle school choices with "Reside" status and correct zone type
+        for school_info in zone_options.get("Middle", []):
+            sca = school_info.get('school_code_adjusted')
+            add_school(sca, "Middle", "Reside")
+        # <<< END: MODIFIED CODE >>>
 
     # C. Add universal choice & academy schools
-    
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
         sca = school_info.get('school_code_adjusted')
         school_lvl = school_info.get('school_level')
         status = None
-        is_magnet = school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes'
+        is_magnet = school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes' or school_info.get('choice_zone') == 'Yes'
         is_academy_choice = school_info.get('the_academies_of_louisville') == 'Yes' and school_info.get('network') == user_network
 
         if is_magnet: status = "Magnet/Choice Program"
@@ -500,25 +529,20 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             schools.sort(key=lambda x: (x.get('distance_mi') is None, x.get('distance_mi', float('inf'))))
             output_structure["results_by_zone"].append({"zone_type": zone_type, "schools": schools})
 
-    return output_structure
+    return output_structure, is_in_choice_zone
 
 # Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
-    try: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADD TOP-LEVEL TRY
+    try:
         start_time = time.time()
         data = request.get_json()
         if not data:
-            print("❌ API Error: Request body missing.")
-            # This error is fine as is, client expects JSON error here
             return jsonify({"error": "Request body must be JSON"}), 400
         address = data.get("address", "").strip()
         if not address:
-            print("❌ API Error: Address missing.")
-            # This error is fine as is
             return jsonify({"error": "Address string is required"}), 400
         print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
-        # --- Geocode Address FIRST ---
         lat, lon, geocode_error_type = geocode_address(address)
         user_facing_error_message = None
 
@@ -534,29 +558,29 @@ def handle_school_request(sort_key=None, sort_desc=False):
             status_code = 503 if geocode_error_type == 'service_error' else 400
             return jsonify({"error": user_facing_error_message}), status_code
 
-
-
-        # It's possible find_school_zones_and_details could raise an error too
-        structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
+        # <<< START: MODIFIED CODE >>>
+        # Unpack the tuple returned by the main logic function
+        structured_results, is_in_choice_zone = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
         
-        
-        response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
+        # Add the new flag to the response data
+        response_data = {
+            "query_address": address, 
+            "query_lat": lat, 
+            "query_lon": lon, 
+            "is_in_choice_zone": is_in_choice_zone, # <-- NEW FLAG
+            **(structured_results or {"results_by_zone": []})
+        }
+        # <<< END: MODIFIED CODE >>>
         
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
         return jsonify(response_data), 200
 
-
-
-    except Exception as e: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CATCH ALL OTHER UNEXPECTED ERRORS
-        # Log the full error for server-side debugging
+    except Exception as e:
         print(f"❌❌❌ UNHANDLED EXCEPTION in /school-details-by-address endpoint: {e}")
         import traceback
-        traceback.print_exc() # This will print the full stack trace to your server logs
-
-        # Return a generic JSON error to the client
+        traceback.print_exc() 
         return jsonify({"error": "An unexpected server error occurred. Please try again later."}), 500
-
 
 
 # --- Flask Routes ---
