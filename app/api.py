@@ -39,20 +39,8 @@ try:
 except Exception as e:
     print(f"⚠️ Warning: Could not load satellite_zones.json. Satellite feature will be disabled. Error: {e}")
 
-
-# <<< START: ADDED CODE >>>
-# --- Load Zone-Specific Magnet Data ---
-ZONE_MAGNETS_PATH = os.path.join(DATA_DIR, 'zone_specific_magnets.json')
-zone_specific_magnets_data = {}
-try:
-    with open(ZONE_MAGNETS_PATH, 'r') as f:
-        zone_specific_magnets_data = json.load(f)
-    print(f"✅ Successfully loaded zone-specific magnet data.")
-except Exception as e:
-    print(f"⚠️ Warning: Could not load {os.path.basename(ZONE_MAGNETS_PATH)}. This feature will be disabled. Error: {e}")
-# <<< END: ADDED CODE >>>
-
 # Shapefile paths
+# ... (keep shapefile paths as before) ...
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
 high_path = os.path.join(DATA_DIR, "High", "Resides_HS_Boundaries.shp")
 middle_path = os.path.join(DATA_DIR, "Middle", "Resides_MS_Boundaries.shp")
@@ -379,6 +367,7 @@ def geocode_address(address):
         address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
 
+
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds all zones, adds satellite/choice schools, fetches details, and returns structured data."""
     if lat is None or lon is None: print("Error: Invalid user coords."); return None
@@ -446,14 +435,6 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
         for school_info in satellite_data[user_reside_high_school_zone_name]:
             sca = school_info.get('school_code_adjusted')
             add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
-
-    # B-2. Add Zone-Specific Magnet schools
-    if user_reside_high_school_zone_name and user_reside_high_school_zone_name in zone_specific_magnets_data:
-        print(f"  [API DEBUG] Found zone-specific magnet rules for '{user_reside_high_school_zone_name}'")
-        for school_info in zone_specific_magnets_data[user_reside_high_school_zone_name]:
-            sca = school_info.get('school_code_adjusted')
-            add_school(sca, "Traditional/Magnet Elementary", "Magnet/Choice Program")
-
 
     # C. Add universal choice & academy schools
     
