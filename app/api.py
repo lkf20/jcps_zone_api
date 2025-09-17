@@ -14,6 +14,7 @@ import pprint
 import time
 from flask_cors import CORS
 import googlemaps
+import sys
 
 
 # --- Configuration & Data Loading ---
@@ -637,12 +638,61 @@ def school_parent_satisfaction():
     # Ensure this key matches the one selected/available
     return handle_school_request(sort_key='parent_satisfaction', sort_desc=True)
 
+@app.route("/school-details-by-coords", methods=["POST"])
+def school_details_by_coords():
+    """Endpoint for testing that bypasses geocoding."""
+    start_time = time.time()
+    data = request.get_json()
+    if not data or 'lat' not in data or 'lon' not in data:
+        return jsonify({"error": "lat and lon are required"}), 400
+    lat, lon = data['lat'], data['lon']
+    print(f"\n--- Request /school-details-by-coords --- Coords: ({lat}, {lon})")
+    # For testing, the address string is just for human-readable context
+    address_str = data.get("address", f"Coord lookup: {lat}, {lon}")
+    response_data = handle_school_request(lat, lon, address_str, data.get('sort_key'), data.get('sort_desc'))
+    print(f"--- Request completed in {time.time() - start_time:.2f} seconds ---")
+    return jsonify(response_data)
+
+@app.route("/generate-test-case-by-coords", methods=["POST"])
+def generate_test_case_by_coords():
+    """Test case generator that uses coordinates directly."""
+    data = request.get_json()
+    lat, lon, zone_name, address = data.get('lat'), data.get('lon'), data.get('zone_name'), data.get('address')
+    if not all([lat, lon, zone_name, address]):
+        return jsonify({"error": "lat, lon, zone_name, and address are required"}), 400
+    
+    structured_results, _ = find_school_zones_and_details(lat, lon, all_zones_gdf)
+    
+    expected_schools = {"Elementary": [], "Middle": [], "High": []}
+    safe_results = structured_results or {}
+    for zone in safe_results.get("results_by_zone", []):
+        level = None
+        if "Elementary" in zone.get("zone_type", ""): level = "Elementary"
+        elif "Middle" in zone.get("zone_type", ""): level = "Middle"
+        elif "High" in zone.get("zone_type", ""): level = "High"
+        if level:
+            for school in zone.get("schools", []):
+                expected_schools[level].append({
+                    "display_name": school.get("display_name"),
+                    "expected_status": school.get("display_status")
+                })
+    for level in expected_schools:
+        expected_schools[level].sort(key=lambda x: x['display_name'])
+    
+    test_case_output = {
+        "zone_name": zone_name,
+        "address": address, # Keep address for context
+        "lat": lat,         # Add lat
+        "lon": lon,         # Add lon
+        "expected_schools": expected_schools
+    }
+    return jsonify(test_case_output)
 
 @app.route("/generate-test-case", methods=["POST"])
 def generate_test_case():
     """
     A temporary helper endpoint to generate JSON for the test_cases.json file.
-    It takes an address and a zone name, and prints the formatted test case.
+    It takes an address and a zone name, and returns the formatted test case.
     """
     data = request.get_json()
     address = data.get("address")
@@ -651,32 +701,28 @@ def generate_test_case():
     if not address or not zone_name:
         return jsonify({"error": "Address and zone_name are required"}), 400
 
-    print(f"\n--- GENERATING TEST CASE for Zone: {zone_name} ---")
-    
     # --- This reuses your existing core logic ---
     lat, lon, _ = geocode_address(address)
     if lat is None:
+        # Return an error object that the runner script can check
         return jsonify({"error": f"Could not geocode address: {address}"}), 400
     
-    structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf)
-    # --- End of reusing logic ---
-
-    # --- This is the new logic to format the output ---
+    structured_results, _ = find_school_zones_and_details(lat, lon, all_zones_gdf)
+    
+    # --- Format the output ---
     expected_schools = {
         "Elementary": [],
         "Middle": [],
         "High": []
     }
 
-    for zone in structured_results.get("results_by_zone", []):
+    safe_results = structured_results or {}
+    for zone in safe_results.get("results_by_zone", []):
         zone_type = zone.get("zone_type")
         level = None
-        if "Elementary" in zone_type:
-            level = "Elementary"
-        elif "Middle" in zone_type:
-            level = "Middle"
-        elif "High" in zone_type:
-            level = "High"
+        if "Elementary" in zone_type: level = "Elementary"
+        elif "Middle" in zone_type: level = "Middle"
+        elif "High" in zone_type: level = "High"
         
         if level:
             for school in zone.get("schools", []):
@@ -685,7 +731,6 @@ def generate_test_case():
                     "expected_status": school.get("display_status")
                 })
 
-    # Sort the lists for consistency
     for level in expected_schools:
         expected_schools[level].sort(key=lambda x: x['display_name'])
 
@@ -695,11 +740,10 @@ def generate_test_case():
         "expected_schools": expected_schools
     }
 
-    # Pretty-print the JSON to the terminal
-    print(json.dumps(test_case_output, indent=2))
-    print("--- COPY THE JSON OBJECT ABOVE AND PASTE IT INTO test_cases.json ---")
-    
-    return jsonify({"message": f"Test case for {zone_name} printed to API console."}), 200
+    # <<< START: MODIFIED CODE >>>
+    # Instead of printing, return the JSON object directly
+    return jsonify(test_case_output), 200
+    # <<< END: MODIFIED CODE >>> 
 
 # --- Run App ---
 if __name__ == "__main__":
