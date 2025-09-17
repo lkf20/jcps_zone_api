@@ -48,6 +48,8 @@ COLUMN_MAPPING = {
     'Explore Pathways Programs': 'explore_pathways_programs',
     'Specialized School Choices': 'specialized_school_choices',
     'Universal Academies or Other':'universal_academies_or_other',
+    'Districtwide Pathways': 'districtwide_pathways',
+    'Districtwide Pathways Programs': 'districtwide_pathways_programs',
 
     # Ratings & Links
     'Great Schools Rating': 'great_schools_rating', # INTEGER
@@ -265,6 +267,7 @@ def main():
         'universal_academies_or_other',
         'universal_magnet_traditional_program',
         'universal_magnet_traditional_school',
+        'districtwide_pathways',
         
 
         # Key Performance and Demographic Metrics for Sorting/Filtering
