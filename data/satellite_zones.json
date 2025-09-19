@@ -16,5 +16,11 @@
       "school_code_adjusted": "275099",
       "display_name": "Minors Lane Elementary"
     }
+  ],
+  "Fern Creek Zone": [
+    {
+      "school_code_adjusted": "275072",
+      "display_name": "Watterson Elementary"
+    }
   ]
 }
