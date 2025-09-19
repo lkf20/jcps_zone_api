@@ -5830,5 +5830,1565 @@
       ]
     },
     "zone_name": "Atherton Zone"
+  },
+  {
+    "address": "16005 Shelbyville Rd, Louisville, KY 40245, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Bowen Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Greathouse/Shryock Traditional Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hite Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lowe Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Middletown Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Stopher Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Ballard High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Eastern High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Waggener High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Barret Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Echo Trail Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Meyzeek Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Eastern Zone"
+  },
+  {
+    "address": "4320 Billtown Rd, Jeffersontown, KY 40299, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Audubon Traditional Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochrane Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Farmer Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jeffersontown Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Tully Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Watterson Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jeffersontown High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Marion C. Moore School",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Carrithers Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Jeffersontown Zone"
+  },
+  {
+    "address": "5313 Sprigwood Ln, Louisville, KY 40291, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Audubon Traditional Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Bates Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Price Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Watterson Elementary",
+          "expected_status": "Satellite School"
+        },
+        {
+          "display_name": "Wheeler Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Wilt Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jeffersontown High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Marion C. Moore School",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Ramsey Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Fern Creek Zone"
+  },
+  {
+    "address": "5250 Bardstown Rd, Louisville, KY 40291, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Audubon Traditional Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Bates Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Price Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Watterson Elementary",
+          "expected_status": "Satellite School"
+        },
+        {
+          "display_name": "Wheeler Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Wilt Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jeffersontown High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Marion C. Moore School",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Ramsey Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Fern Creek Zone"
+  },
+  {
+    "address": "5044 Poplar Level Rd, Louisville, KY 40219, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Blake Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Blue Lick Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Indian Trail Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Laukhuf Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Minors Lane Elementary",
+          "expected_status": "Satellite School"
+        },
+        {
+          "display_name": "Okolona Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Rangeland Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Schaffner Traditional Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Slaughter Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Butler Traditional High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Fern Creek High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jeffersontown High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Marion C. Moore School",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Thomas Jefferson Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Southern Zone"
+  },
+  {
+    "address": "2118 S Preston St, Louisville, KY 40217, USA",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cane Run Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Foster Traditional Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Frayser Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Gutermuth Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hazelwood Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jacob Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Mill Creek Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Rutherford Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Semple Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Doss High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Iroquois High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Pleasure Ridge Park High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Valley High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Meyzeek Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Iroquois Zone"
+  },
+  {
+    "address": "1313 Southwestern Pkwy, Louisville, KY 40211",
+    "expected_schools": {
+      "Elementary": [
+        {
+          "display_name": "Atkinson Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Brandeis Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Breckinridge-Franklin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Byck Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Cochran Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Coleridge-Taylor Montessori Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Dr. William H. Perry Elementary School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Eisenhower Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Engelhard Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Foster Traditional Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Greenwood Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Hawthorne Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kennedy Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Kerrick Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "King Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Lincoln Elementary Performing Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Maupin Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "McFerran Preparatory Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Portland Elementary",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Sanders Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Shacklette Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Wellington Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Wilkerson Elementary",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Young Elementary",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "High": [
+        {
+          "display_name": "Atherton High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Central High Magnet Career Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Doss High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "Fairdale High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Iroquois High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Louisville Male High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Pleasure Ridge Park High",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Seneca High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Southern High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Valley High",
+          "expected_status": "Academies of Louisville"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western High",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "duPont Manual High",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ],
+      "Middle": [
+        {
+          "display_name": "Farnsley Middle",
+          "expected_status": "Reside"
+        },
+        {
+          "display_name": "Frederick Law Olmsted Academy South",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Grace M. James Academy of Excellence",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Highland Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Hudson Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "J. Graham Brown School",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Jefferson County Traditional Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Newburg Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Noe Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "The Academy @ Shawnee Middle",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "W.E.B. DuBois Academy",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Western Middle School for the Arts",
+          "expected_status": "Magnet/Choice Program"
+        },
+        {
+          "display_name": "Westport Middle",
+          "expected_status": "Magnet/Choice Program"
+        }
+      ]
+    },
+    "zone_name": "Pleasure Ridge Park Zone"
   }
 ]

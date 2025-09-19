@@ -39,6 +39,14 @@ ADDRESSES_TO_TEST = [
     {"zone_name": "Pleasure Ridge Park Zone", "address": "608 S 40th St, Louisville, KY 40211, USA"},
     {"zone_name": "Atherton Zone", "address": "717 Gwendolyn St, Louisville, KY 40203, USA"},
     {"zone_name": "Atherton Zone", "address": "1418 Morton AVE, Louisville, KY 40204, USA"},
+    # Other middle schools to test
+    {"zone_name": "Eastern Zone", "address": "16005 Shelbyville Rd, Louisville, KY 40245, USA"},
+    {"zone_name": "Jeffersontown Zone", "address": "4320 Billtown Rd, Jeffersontown, KY 40299, USA"},
+    {"zone_name": "Fern Creek Zone", "address": "5313 Sprigwood Ln, Louisville, KY 40291, USA"},
+    {"zone_name": "Fern Creek Zone", "address": "5250 Bardstown Rd, Louisville, KY 40291, USA"},
+    {"zone_name": "Southern Zone", "address": "5044 Poplar Level Rd, Louisville, KY 40219, USA"},
+    {"zone_name": "Iroquois Zone", "address": "2118 S Preston St, Louisville, KY 40217, USA"},
+    {"zone_name": "Pleasure Ridge Park Zone", "address": "1313 Southwestern Pkwy, Louisville, KY 40211"},
 ]
 
 def run_generator():
