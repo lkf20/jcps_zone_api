@@ -20,7 +20,7 @@ ADDRESSES_TO_TEST = [
     {"zone_name": "Doss Zone", "address": "7601 St Andrews Church Rd, Louisville, KY 40214"},
     {"zone_name": "Fairdale Zone", "address": "9906 Callie Dr, Louisville, KY"},
     {"zone_name": "Fern Creek Zone", "address": "9115 Fern Creek Rd, Louisville, KY 40291"},
-    {"zone_name": "Jeffersontown Zone", "address": "2209 Patti Ln, Jeffersontown, KY 40299"},
+    {"zone_name": "Jeffersontown Zone", "address": "9619 Glenawyn Circle, Louisville, KY 40299"},
     {"zone_name": "Moore Zone", "address": "6415 Outer Loop, Louisville, KY 40228"},
     {"zone_name": "Pleasure Ridge Park Zone", "address": "5901 Greenwood Rd, Louisville, KY 40258"},
     {"zone_name": "Southern Zone", "address": "8620 Preston Hwy, Louisville, KY 40219"},

@@ -8,10 +8,6 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -28,24 +24,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dunn Elementary",
           "expected_status": "Satellite School"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Field Elementary",
@@ -64,27 +48,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -176,10 +140,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -216,15 +176,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -236,24 +188,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dunn Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Greathouse/Shryock Traditional Elementary",
@@ -268,23 +208,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -392,10 +316,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -436,10 +356,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -452,10 +368,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -464,19 +376,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -488,27 +388,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -596,10 +476,6 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -640,19 +516,11 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -665,10 +533,6 @@
         },
         {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -692,14 +556,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Klondike Lane Elementary",
           "expected_status": "Reside"
         },
@@ -708,16 +564,8 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "McFerran Preparatory Academy",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Young Elementary",
@@ -800,10 +648,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -860,27 +704,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -900,14 +728,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
           "expected_status": "Magnet/Choice Program"
         },
@@ -916,20 +736,8 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Middletown Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Stopher Elementary",
@@ -1024,10 +832,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1064,15 +868,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1084,19 +880,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1124,32 +908,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Mill Creek Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Rutherford Elementary",
@@ -1256,10 +1020,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1296,15 +1056,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1316,24 +1068,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Crums Lane Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Hawthorne Elementary",
@@ -1344,16 +1084,8 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Kenwood Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Layne Elementary",
@@ -1366,14 +1098,6 @@
         {
           "display_name": "Maupin Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Stonestreet Elementary",
@@ -1472,10 +1196,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1516,10 +1236,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Auburndale Elementary",
           "expected_status": "Reside"
         },
@@ -1528,15 +1244,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Cochran Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1546,14 +1254,6 @@
         {
           "display_name": "Coral Ridge Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Fairdale Elementary",
@@ -1568,32 +1268,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Minors Lane Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Schaffner Traditional Elementary",
@@ -1688,10 +1368,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1732,10 +1408,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1748,27 +1420,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1784,27 +1440,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1904,10 +1540,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -1948,13 +1580,9 @@
     "zone_name": "Fern Creek Zone"
   },
   {
-    "address": "2209 Patti Ln, Jeffersontown, KY 40299",
+    "address": "9619 Glenawyn Circle, Louisville, KY 40299",
     "expected_schools": {
       "Elementary": [
-        {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
         {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
@@ -1964,15 +1592,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Cochran Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -1986,10 +1606,6 @@
         {
           "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Farmer Elementary",
@@ -2008,27 +1624,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2124,10 +1720,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -2168,15 +1760,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2184,19 +1768,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2216,32 +1788,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Luhr Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Schaffner Traditional Elementary",
@@ -2332,10 +1884,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -2380,15 +1928,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2400,24 +1940,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Eisenhower Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Greenwood Elementary",
@@ -2432,10 +1960,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Kerrick Elementary",
           "expected_status": "Reside"
         },
@@ -2445,18 +1969,6 @@
         },
         {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2568,10 +2080,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -2608,10 +2116,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Blake Elementary",
           "expected_status": "Reside"
         },
@@ -2624,27 +2128,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2660,27 +2148,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Laukhuf Elementary",
           "expected_status": "Reside"
         },
         {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2690,10 +2162,6 @@
         {
           "display_name": "Okolona Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Rangeland Elementary",
@@ -2792,10 +2260,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -2836,15 +2300,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -2856,24 +2312,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dixie Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Hawthorne Elementary",
@@ -2892,28 +2336,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Medora Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Young Elementary",
@@ -3004,10 +2432,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -3048,15 +2472,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -3080,10 +2496,6 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Farmer Elementary",
           "expected_status": "Reside"
         },
@@ -3104,28 +2516,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "McFerran Preparatory Academy",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Tully Elementary",
@@ -3264,15 +2660,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -3296,10 +2684,6 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Farmer Elementary",
           "expected_status": "Reside"
         },
@@ -3320,28 +2704,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "McFerran Preparatory Academy",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Tully Elementary",
@@ -3480,10 +2848,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Auburndale Elementary",
           "expected_status": "Reside"
         },
@@ -3492,15 +2856,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Cochran Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -3510,14 +2866,6 @@
         {
           "display_name": "Coral Ridge Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Fairdale Elementary",
@@ -3548,16 +2896,8 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Minors Lane Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Schaffner Traditional Elementary",
@@ -3716,24 +3056,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dunn Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Greathouse/Shryock Traditional Elementary",
@@ -3748,23 +3076,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -3940,24 +3252,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dunn Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Field Elementary",
@@ -3976,23 +3276,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -4128,23 +3412,11 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Cochran Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -4154,14 +3426,6 @@
         {
           "display_name": "Crums Lane Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Foster Traditional Academy",
@@ -4198,14 +3462,6 @@
         {
           "display_name": "Maupin Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Stonestreet Elementary",
@@ -4368,19 +3624,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -4400,28 +3644,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Lowe Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Middletown Elementary",
@@ -4564,15 +3792,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -4616,14 +3836,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
           "expected_status": "Magnet/Choice Program"
         },
@@ -4632,16 +3844,8 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "McFerran Preparatory Academy",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Price Elementary",
@@ -4780,15 +3984,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -4832,14 +4028,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Klondike Lane Elementary",
           "expected_status": "Reside"
         },
@@ -4848,16 +4036,8 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "McFerran Preparatory Academy",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Young Elementary",
@@ -4984,15 +4164,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5004,24 +4176,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Dixie Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Hawthorne Elementary",
@@ -5052,16 +4212,8 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Medora Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Young Elementary",
@@ -5196,15 +4348,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5212,24 +4356,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Eisenhower Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Foster Traditional Academy",
@@ -5266,14 +4398,6 @@
         {
           "display_name": "Maupin Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Sanders Elementary",
@@ -5448,19 +4572,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5476,23 +4588,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5656,19 +4752,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5684,23 +4768,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5848,27 +4916,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -5888,14 +4940,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
           "expected_status": "Magnet/Choice Program"
         },
@@ -5904,20 +4948,8 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Middletown Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Stopher Elementary",
@@ -6012,10 +5044,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6052,10 +5080,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6064,15 +5088,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Cochran Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6086,10 +5102,6 @@
         {
           "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Farmer Elementary",
@@ -6108,27 +5120,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6224,10 +5216,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6268,10 +5256,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6284,27 +5268,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6320,27 +5288,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6437,10 +5385,6 @@
         },
         {
           "display_name": "Highland Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Hudson Middle",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6488,10 +5432,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Audubon Traditional Elementary",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6504,27 +5444,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6540,27 +5464,7 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6660,10 +5564,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6708,10 +5608,6 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Blake Elementary",
           "expected_status": "Reside"
         },
@@ -6724,27 +5620,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Breckinridge-Franklin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Byck Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6760,27 +5640,11 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Laukhuf Elementary",
           "expected_status": "Reside"
         },
         {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6790,10 +5654,6 @@
         {
           "display_name": "Okolona Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Rangeland Elementary",
@@ -6888,10 +5748,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -6936,15 +5792,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -6956,19 +5804,7 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Engelhard Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -7000,32 +5836,12 @@
           "expected_status": "Reside"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "King Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Mill Creek Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Portland Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Rutherford Elementary",
@@ -7120,10 +5936,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Hudson Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "J. Graham Brown School",
           "expected_status": "Magnet/Choice Program"
         },
@@ -7168,15 +5980,7 @@
     "expected_schools": {
       "Elementary": [
         {
-          "display_name": "Atkinson Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Brandeis Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Breckinridge-Franklin Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -7184,24 +5988,12 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Cochran Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Coleridge-Taylor Montessori Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Dr. William H. Perry Elementary School",
           "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Eisenhower Elementary",
           "expected_status": "Reside"
-        },
-        {
-          "display_name": "Engelhard Elementary",
-          "expected_status": "Magnet/Choice Program"
         },
         {
           "display_name": "Foster Traditional Academy",
@@ -7220,10 +6012,6 @@
           "expected_status": "Magnet/Choice Program"
         },
         {
-          "display_name": "Kennedy Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
           "display_name": "Kerrick Elementary",
           "expected_status": "Reside"
         },
@@ -7233,18 +6021,6 @@
         },
         {
           "display_name": "Lincoln Elementary Performing Arts",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Maupin Elementary",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "McFerran Preparatory Academy",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Portland Elementary",
           "expected_status": "Magnet/Choice Program"
         },
         {
@@ -7349,10 +6125,6 @@
         },
         {
           "display_name": "Highland Middle",
-          "expected_status": "Magnet/Choice Program"
-        },
-        {
-          "display_name": "Hudson Middle",
           "expected_status": "Magnet/Choice Program"
         },
         {
