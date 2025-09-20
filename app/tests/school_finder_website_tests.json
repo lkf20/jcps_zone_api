@@ -4859,6 +4859,10 @@
         "display_name": "Cochran Elementary",
         "expected_status": "Reside"
       },
+            {
+        "display_name": "Cochrane Elementary",
+        "expected_status": "Reside"
+      },
       {
         "display_name": "Engelhard Elementary",
         "expected_status": "Reside"
@@ -5049,6 +5053,10 @@
       },
       {
         "display_name": "Cochran Elementary",
+        "expected_status": "Reside"
+      },
+      {
+        "display_name": "Cochrane Elementary",
         "expected_status": "Reside"
       },
       {
@@ -5335,6 +5343,10 @@
       },
       {
         "display_name": "Western Middle School for the Arts",
+        "expected_status": "Magnet/Choice Program"
+      },
+    {
+        "display_name": "Westport Middle",
         "expected_status": "Magnet/Choice Program"
       }
     ],
