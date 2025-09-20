@@ -248,7 +248,6 @@ def get_address_independent_schools_info():
         "universal_magnet_traditional_school",
         "universal_magnet_traditional_program",
         "the_academies_of_louisville",
-        "choice_zone",
         "districtwide_pathways" # This is now our flag for universal pathways
     ]
     
