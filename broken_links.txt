@@ -1,0 +1,64 @@
+--- Starting School URL Verification Script ---
+🔎 Found 304 URLs to check. Starting verification...
+Progress: 1/304Progress: 2/304Progress: 3/304Progress: 4/304Progress: 5/304Progress: 6/304Progress: 7/304Progress: 8/304Progress: 9/304Progress: 10/304Progress: 11/304Progress: 12/304Progress: 13/304Progress: 14/304Progress: 15/304Progress: 16/304Progress: 17/304Progress: 18/304Progress: 19/304Progress: 20/304Progress: 21/304Progress: 22/304Progress: 23/304Progress: 24/304Progress: 25/304Progress: 26/304Progress: 27/304Progress: 28/304Progress: 29/304Progress: 30/304Progress: 31/304Progress: 32/304Progress: 33/304Progress: 34/304Progress: 35/304Progress: 36/304Progress: 37/304Progress: 38/304Progress: 39/304Progress: 40/304Progress: 41/304Progress: 42/304Progress: 43/304Progress: 44/304Progress: 45/304Progress: 46/304Progress: 47/304Progress: 48/304Progress: 49/304Progress: 50/304Progress: 51/304Progress: 52/304Progress: 53/304Progress: 54/304Progress: 55/304Progress: 56/304Progress: 57/304Progress: 58/304Progress: 59/304Progress: 60/304Progress: 61/304Progress: 62/304Progress: 63/304Progress: 64/304Progress: 65/304Progress: 66/304Progress: 67/304Progress: 68/304Progress: 69/304Progress: 70/304Progress: 71/304Progress: 72/304Progress: 73/304Progress: 74/304Progress: 75/304Progress: 76/304Progress: 77/304Progress: 78/304Progress: 79/304Progress: 80/304Progress: 81/304Progress: 82/304Progress: 83/304Progress: 84/304Progress: 85/304Progress: 86/304Progress: 87/304Progress: 88/304Progress: 89/304Progress: 90/304Progress: 91/304Progress: 92/304Progress: 93/304Progress: 94/304Progress: 95/304Progress: 96/304Progress: 97/304Progress: 98/304Progress: 99/304Progress: 100/304Progress: 101/304Progress: 102/304Progress: 103/304Progress: 104/304Progress: 105/304Progress: 106/304Progress: 107/304Progress: 108/304Progress: 109/304Progress: 110/304Progress: 111/304Progress: 112/304Progress: 113/304Progress: 114/304Progress: 115/304Progress: 116/304Progress: 117/304Progress: 118/304Progress: 119/304Progress: 120/304Progress: 121/304Progress: 122/304Progress: 123/304Progress: 124/304Progress: 125/304Progress: 126/304Progress: 127/304Progress: 128/304Progress: 129/304Progress: 130/304Progress: 131/304Progress: 132/304Progress: 133/304Progress: 134/304Progress: 135/304Progress: 136/304Progress: 137/304Progress: 138/304Progress: 139/304Progress: 140/304Progress: 141/304Progress: 142/304Progress: 143/304Progress: 144/304Progress: 145/304Progress: 146/304Progress: 147/304Progress: 148/304Progress: 149/304Progress: 150/304Progress: 151/304Progress: 152/304Progress: 153/304Progress: 154/304Progress: 155/304Progress: 156/304Progress: 157/304Progress: 158/304Progress: 159/304Progress: 160/304Progress: 161/304Progress: 162/304Progress: 163/304Progress: 164/304Progress: 165/304Progress: 166/304Progress: 167/304Progress: 168/304Progress: 169/304Progress: 170/304Progress: 171/304Progress: 172/304Progress: 173/304Progress: 174/304Progress: 175/304Progress: 176/304Progress: 177/304Progress: 178/304Progress: 179/304Progress: 180/304Progress: 181/304Progress: 182/304Progress: 183/304Progress: 184/304Progress: 185/304Progress: 186/304Progress: 187/304Progress: 188/304Progress: 189/304Progress: 190/304Progress: 191/304Progress: 192/304Progress: 193/304Progress: 194/304Progress: 195/304Progress: 196/304Progress: 197/304Progress: 198/304Progress: 199/304Progress: 200/304Progress: 201/304Progress: 202/304Progress: 203/304Progress: 204/304Progress: 205/304Progress: 206/304Progress: 207/304Progress: 208/304Progress: 209/304Progress: 210/304Progress: 211/304Progress: 212/304Progress: 213/304Progress: 214/304Progress: 215/304Progress: 216/304Progress: 217/304Progress: 218/304Progress: 219/304Progress: 220/304Progress: 221/304Progress: 222/304Progress: 223/304Progress: 224/304Progress: 225/304Progress: 226/304Progress: 227/304Progress: 228/304Progress: 229/304Progress: 230/304Progress: 231/304Progress: 232/304Progress: 233/304Progress: 234/304Progress: 235/304Progress: 236/304Progress: 237/304Progress: 238/304Progress: 239/304Progress: 240/304Progress: 241/304Progress: 242/304Progress: 243/304Progress: 244/304Progress: 245/304Progress: 246/304Progress: 247/304Progress: 248/304Progress: 249/304Progress: 250/304Progress: 251/304Progress: 252/304Progress: 253/304Progress: 254/304Progress: 255/304Progress: 256/304Progress: 257/304Progress: 258/304Progress: 259/304Progress: 260/304Progress: 261/304Progress: 262/304Progress: 263/304Progress: 264/304Progress: 265/304Progress: 266/304Progress: 267/304Progress: 268/304Progress: 269/304Progress: 270/304Progress: 271/304Progress: 272/304Progress: 273/304Progress: 274/304Progress: 275/304Progress: 276/304Progress: 277/304Progress: 278/304Progress: 279/304Progress: 280/304Progress: 281/304Progress: 282/304Progress: 283/304Progress: 284/304Progress: 285/304Progress: 286/304Progress: 287/304Progress: 288/304Progress: 289/304Progress: 290/304Progress: 291/304Progress: 292/304Progress: 293/304Progress: 294/304Progress: 295/304Progress: 296/304Progress: 297/304Progress: 298/304Progress: 299/304Progress: 300/304Progress: 301/304Progress: 302/304Progress: 303/304Progress: 304/304
+
+--- ✅ Verification Complete ---
+
+--- Summary ---
+Total URLs Checked: 304
+  - ✅ Good URLs: 253
+  - ❌ Broken URLs: 51
+
+--- 🚨 Broken Links (Copy and Paste the CSV data below) ---
+School Name,Broken URL
+"Alex R. Kennedy Elementary","https://schools.jefferson.kyschools.us/Elementary/Alex-Kennedy/"
+"Atherton High","https://schools.jefferson.kyschools.us/high/atherton/"
+"Auburndale Elementary","https://auburndale.jcps-ky.com"
+"Barret Traditional Middle","barretmiddle.com"
+"Binet School","Non-A1 School"
+"Binet School","Non-A1 School"
+"Binet School","Non-A1 School"
+"Brandeis Elementary","https://schools.jefferson.kyschools.us/Elementary/brandeis/"
+"Churchill Park School","Non-A1 School"
+"Churchill Park School","Non-A1 School"
+"Churchill Park School","Non-A1 School"
+"Churchill Park School","Non-A1 School"
+"Cochrane Elementary","https://schools.jefferson.kyschools.us/Elementary/Cochrane/"
+"Dr. William H. Perry Elementary School","https://williamperry.jcps-ky.com/"
+"Engelhard Elementary","https://schools.jefferson.kyschools.us/Elementary/Engelhard/"
+"Farmer Elementary","https://farmer.jcps-ky.com/"
+"Field Elementary","https://schools.jefferson.kyschools.us/Elementary/Field/index.html"
+"Frayser Elementary","https://schools.jefferson.kyschools.us/Elementary/Frayser/"
+"Georgia Chaffee Teenage Parent Program (TAPP)","Non-A1 School"
+"Georgia Chaffee Teenage Parent Program (TAPP)","Non-A1 School"
+"Georgia Chaffee Teenage Parent Program (TAPP)","Non-A1 School"
+"Grace M. James Academy of Excellence","Non-A1 School"
+"Grace M. James Academy of Excellence","Non-A1 School"
+"Grace M. James Academy of Excellence","Non-A1 School"
+"Greenwood Elementary","https://schools.jefferson.kyschools.us/schools/profiles/greenwood"
+"Liberty High","A5 Status"
+"Liberty High","A5 Status"
+"Liberty High","A5 Status"
+"Marion C. Moore School","https://moore.jcps-ky.com/HOME"
+"Marion C. Moore School","https://moore.jcps-ky.com/HOME"
+"Marion C. Moore School","https://moore.jcps-ky.com/HOME"
+"Maupin Elementary","http://maupin.jcps-ky.com/"
+"Norton Commons Elementary","www.jefferson.kyschools.us/o/nortoncommons"
+"Okolona Elementary","https://schools.jefferson.kyschools.us/Elementary/Okolona/"
+"Pleasure Ridge Park High","ridgetalk.com"
+"Ramsey Middle","https://ramsey.jcps-ky.com/"
+"Seneca High","https://seneca.jcps-ky.com/"
+"Stonestreet Elementary","website pending"
+"The Phoenix School of Discovery","http://thephoenixschool.org"
+"The Phoenix School of Discovery","http://thephoenixschool.org"
+"The Phoenix School of Discovery","http://thephoenixschool.org"
+"Tully Elementary","https://schools.jefferson.kyschools.us/Elementary/Tully/index.html"
+"Waller-Williams Environmental","Non-A1 School"
+"Waller-Williams Environmental","Non-A1 School"
+"Waller-Williams Environmental","Non-A1 School"
+"Waller-Williams Environmental","Non-A1 School"
+"Western High","https://www.jcpswesternhighschool.com/"
+"Western Middle School for the Arts","westernmiddlearts.com"
+"Westport Middle","westportmiddle.com"
+"Wilt Elementary","www.wiltwildcats.com"
+"duPont Manual High","www.dupontmanual.com"
