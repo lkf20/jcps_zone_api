@@ -14,6 +14,7 @@ import pprint
 import time
 from flask_cors import CORS
 import googlemaps
+import sys
 
 
 # --- Configuration & Data Loading ---
@@ -38,6 +39,30 @@ try:
     print(f"✅ Successfully loaded satellite zone data.")
 except Exception as e:
     print(f"⚠️ Warning: Could not load satellite_zones.json. Satellite feature will be disabled. Error: {e}")
+
+# --- Load Choice Zone Options Data ---
+CHOICE_ZONE_OPTIONS_PATH = os.path.join(DATA_DIR, 'choice_zone_options.json')
+choice_zone_data = {}
+try:
+    with open(CHOICE_ZONE_OPTIONS_PATH, 'r') as f:
+        choice_zone_data = json.load(f)
+    print(f"✅ Successfully loaded choice zone options data.")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load {os.path.basename(CHOICE_ZONE_OPTIONS_PATH)}. This feature will be disabled. Error: {e}")
+
+
+
+# <<< START: ADDED CODE >>>
+# --- Load Zone-Specific Magnet Data ---
+ZONE_MAGNETS_PATH = os.path.join(DATA_DIR, 'zone_specific_magnets.json')
+zone_specific_magnets_data = {}
+try:
+    with open(ZONE_MAGNETS_PATH, 'r') as f:
+        zone_specific_magnets_data = json.load(f)
+    print(f"✅ Successfully loaded zone-specific magnet data.")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load {os.path.basename(ZONE_MAGNETS_PATH)}. This feature will be disabled. Error: {e}")
+# <<< END: ADDED CODE >>>
 
 # Shapefile paths
 # ... (keep shapefile paths as before) ...
@@ -219,26 +244,32 @@ def get_address_independent_schools_info():
     This provides the data needed for the main logic to make a final decision.
     """
     schools_info = []
-    # This list includes ALL flags we might need to check
+    # Add our new flag and ensure the new programs column is selected
     flag_columns = [
         "universal_magnet_traditional_school",
         "universal_magnet_traditional_program",
-        "universal_academies_or_other",
-        "the_academies_of_louisville"
+        "the_academies_of_louisville",
+        "districtwide_pathways" # This is now our flag for universal pathways
     ]
-    # We also need the network column to check for a match
-    all_needed_cols = ["school_code_adjusted", "display_name", "school_level", "network"] + flag_columns
+    
+    # <<< START: MODIFIED CODE >>>
+    all_needed_cols = [
+        "school_code_adjusted", "display_name", "school_level", "network",
+        "districtwide_pathways_programs" # Make sure we fetch the new programs
+    ] + flag_columns
+    # <<< END: MODIFIED CODE >>>
+
     select_cols_str = ", ".join(f'"{col}"' for col in sorted(list(set(all_needed_cols))))
 
     conn = get_db_connection()
     if conn:
         try:
             cursor = conn.cursor()
-            where_conditions = ' OR '.join([f'"{col}" = ?' for col in flag_columns])
+            # This logic now checks if any of the flag columns are set to 'Yes'
+            where_conditions = ' OR '.join([f'"{col}" = "Yes"' for col in flag_columns])
             sql = f"SELECT {select_cols_str} FROM {DB_SCHOOLS_TABLE} WHERE {where_conditions}"
-            params = tuple(['Yes'] * len(flag_columns))
-
-            cursor.execute(sql, params)
+            
+            cursor.execute(sql)
             results = cursor.fetchall()
             schools_info = [dict(row) for row in results]
             
@@ -261,7 +292,6 @@ def get_school_details_by_scas(school_codes_adjusted):
     if conn:
         try:
             cursor = conn.cursor()
-            # Define ALL columns potentially needed by ANY endpoint/formatter
             select_columns_list = [
                  "address", "african_american_percent", "all_grades_with_preschool_membership",
                     "asian_percent", "attendance_rate", "behavior_events_drugs", "choice_zone", "city",
@@ -283,9 +313,11 @@ def get_school_details_by_scas(school_codes_adjusted):
                     "two_or_more_races_percent", "universal_academies_or_other",
                     "universal_magnet_traditional_program", "universal_magnet_traditional_school",
                     "white_percent", "zipcode",
-                # Add any other columns from your DB here
+                # <<< START: ADDED CODE >>>
+                "districtwide_pathways", 
+                "districtwide_pathways_programs"
+                # <<< END: ADDED CODE >>>
             ]
-            # Ensure no duplicates (e.g., if added manually and also in list)
             unique_select_columns = sorted(list(set(select_columns_list)))
             select_columns_str = ", ".join(f'"{col}"' for col in unique_select_columns)
 
@@ -301,7 +333,6 @@ def get_school_details_by_scas(school_codes_adjusted):
         except sqlite3.Error as e: print(f"Error querying details for SCAs {unique_scas}: {e}")
         finally: conn.close()
     return details_map
-
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
@@ -370,13 +401,16 @@ def geocode_address(address):
 
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds all zones, adds satellite/choice schools, fetches details, and returns structured data."""
-    if lat is None or lon is None: print("Error: Invalid user coords."); return None
+    if lat is None or lon is None: print("Error: Invalid user coords."); return None, False
     point = Point(lon, lat)
     matches = gdf[gdf.geometry.contains(point)]
     
-    # --- 1. IDENTIFY USER'S RESIDE HIGH SCHOOL ZONE AND NETWORK ---
     user_reside_high_school_zone_name = None
     user_network = None
+    is_in_choice_zone = any(row.get("zone_type") == "Choice" for _, row in matches.iterrows())
+    
+    if is_in_choice_zone: print("  [API DEBUG] User location IS within the Choice Zone.")
+
     for _, row in matches.iterrows():
         if row.get("zone_type") == "High":
             hs_gis_key = str(row.get("High", "")).strip().upper()
@@ -390,7 +424,6 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                         print(f"  📌 User's Reside High School Zone: '{user_reside_high_school_zone_name}' | Network: '{user_network}'")
                 break 
 
-    # --- 2. GATHER ALL ELIGIBLE SCHOOLS ---
     final_schools_map = defaultdict(dict)
     def add_school(sca, zone_type, status):
         if sca:
@@ -400,63 +433,52 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
                 final_schools_map[sca]['zone_type'] = zone_type
                 final_schools_map[sca]['status'] = status
 
-    # A. Add ALL GIS-based schools (This is the restored, working logic)
-    
+    # GIS-based schools
     for _, row in matches.iterrows():
-        zone_type = row.get("zone_type"); gis_key = None; info = None;
-        level_hint = None
-        current_status = "Reside"
-
+        zone_type = row.get("zone_type"); gis_key = None; info = None; level_hint = None; current_status = "Reside"
         if "High" in zone_type: level_hint = "High School"
         elif "Middle" in zone_type: level_hint = "Middle School"
-        
         if zone_type == "Elementary":
             for sca in get_elementary_feeder_scas(str(row.get("High", "")).strip().upper()): add_school(sca, 'Elementary', 'Reside')
             continue
-        elif zone_type in ["High", "Middle"]:
-            gis_key = str(row.get(zone_type, "")).strip().upper()
-        else: # Handle all magnet/choice/traditional zones
+        elif zone_type in ["High", "Middle"]: gis_key = str(row.get(zone_type, "")).strip().upper()
+        else: 
             current_status = "Magnet/Choice Program"
-            if zone_type == "MST Magnet Middle":
-                gis_key = str(row.get("MST", "")).strip().upper()
-                zone_type = "Traditional/Magnet Middle"
-            elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]:
-                gis_key = str(row.get("Traditiona", "")).strip().upper()
-            elif zone_type == "Choice":
-                gis_key = str(row.get("Name", "")).strip().upper()
-        
+            if zone_type == "MST Magnet Middle": gis_key = str(row.get("MST", "")).strip().upper(); zone_type = "Traditional/Magnet Middle"
+            elif zone_type in ["Traditional/Magnet High", "Traditional/Magnet Middle", "Traditional/Magnet Elementary"]: gis_key = str(row.get("Traditiona", "")).strip().upper()
+            elif zone_type == "Choice": continue
         if gis_key:
             info = get_info_from_gis(gis_key, school_level_hint=level_hint)
             if info and info.get('sca'): add_school(info['sca'], zone_type, current_status)
 
-    # B. Add Satellite schools
+    # JSON-based schools
     if user_reside_high_school_zone_name and user_reside_high_school_zone_name in satellite_data:
-        
-        for school_info in satellite_data[user_reside_high_school_zone_name]:
-            sca = school_info.get('school_code_adjusted')
-            add_school(sca, "Traditional/Magnet Elementary", "Satellite School")
+        for school_info in satellite_data[user_reside_high_school_zone_name]: add_school(school_info.get('school_code_adjusted'), "Traditional/Magnet Elementary", "Satellite School")
+    if user_reside_high_school_zone_name and user_reside_high_school_zone_name in zone_specific_magnets_data:
+        for school_info in zone_specific_magnets_data[user_reside_high_school_zone_name]: add_school(school_info.get('school_code_adjusted'), "Traditional/Magnet Elementary", "Magnet/Choice Program")
+    if is_in_choice_zone and user_reside_high_school_zone_name in choice_zone_data:
+        for school_info in choice_zone_data[user_reside_high_school_zone_name].get("Elementary", []): add_school(school_info.get('school_code_adjusted'), "Elementary", "Reside")
+        for school_info in choice_zone_data[user_reside_high_school_zone_name].get("Middle", []): add_school(school_info.get('school_code_adjusted'), "Middle", "Reside")
 
-    # C. Add universal choice & academy schools
-    
+    # Database-flag based schools
     address_independent_schools = get_address_independent_schools_info()
     for school_info in address_independent_schools:
         sca = school_info.get('school_code_adjusted')
         school_lvl = school_info.get('school_level')
         status = None
-        is_magnet = school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes'
+        is_districtwide_pathway = school_info.get('districtwide_pathways') == 'Yes'
+        is_universal_magnet = school_info.get('universal_magnet_traditional_school') == 'Yes' or school_info.get('universal_magnet_traditional_program') == 'Yes' or school_info.get('choice_zone') == 'Yes'
         is_academy_choice = school_info.get('the_academies_of_louisville') == 'Yes' and school_info.get('network') == user_network
-
-        if is_magnet: status = "Magnet/Choice Program"
+        if is_districtwide_pathway: status = "Magnet/Choice Program"
         elif is_academy_choice: status = "Academies of Louisville"
-        
+        elif is_universal_magnet: status = "Magnet/Choice Program"
         if status:
             zone_type = {"Elementary School": "Traditional/Magnet Elementary", "Middle School": "Traditional/Magnet Middle", "High School": "Traditional/Magnet High"}.get(school_lvl)
             if zone_type: add_school(sca, zone_type, status)
     
-    # --- 3. FETCH DETAILS AND BUILD FINAL OUTPUT ---
+    # Final assembly
     identified_scas = list(final_schools_map.keys())
     school_details_lookup = get_school_details_by_scas(identified_scas)
-    
     schools_by_zone_type = defaultdict(list)
     for sca, info in final_schools_map.items():
         details = school_details_lookup.get(sca)
@@ -464,13 +486,28 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             details['display_status'] = info['status']
             details['distance_mi'] = round(geodesic((lat, lon), (details['latitude'], details['longitude'])).miles, 1) if details.get('latitude') else None
             
+            # <<< START: MODIFIED CODE >>>
+            # Add explicit program type and program list to the final school object
+            details['display_program_type'] = None
+            details['display_programs'] = None
+            if details['display_status'] == 'Magnet/Choice Program':
+                if details.get('districtwide_pathways') == 'Yes' and details.get('districtwide_pathways_programs'):
+                    details['display_program_type'] = 'Districtwide Pathway'
+                    details['display_programs'] = details['districtwide_pathways_programs']
+                elif details.get('magnet_programs'):
+                    details['display_program_type'] = 'Magnet'
+                    details['display_programs'] = details['magnet_programs']
+            elif details['display_status'] == 'Academies of Louisville' or (details['display_status'] == 'Reside' and details.get('the_academies_of_louisville_programs')):
+                details['display_program_type'] = 'Academies of Louisville'
+                details['display_programs'] = details.get('the_academies_of_louisville_programs')
+            # <<< END: MODIFIED CODE >>>
+
             final_zone_type = info['zone_type']
             if info['status'] == 'Reside':
                 school_lvl = details.get('school_level')
                 if school_lvl == "Elementary School": final_zone_type = "Elementary"
                 elif school_lvl == "Middle School": final_zone_type = "Middle"
                 elif school_lvl == "High School": final_zone_type = "High"
-
             schools_by_zone_type[final_zone_type].append(details)
 
     output_structure = {"results_by_zone": []}
@@ -480,26 +517,20 @@ def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False)
             schools = schools_by_zone_type[zone_type]
             schools.sort(key=lambda x: (x.get('distance_mi') is None, x.get('distance_mi', float('inf'))))
             output_structure["results_by_zone"].append({"zone_type": zone_type, "schools": schools})
-
-    return output_structure
+    return output_structure, is_in_choice_zone
 
 # Helper to process request and call core logic
 def handle_school_request(sort_key=None, sort_desc=False):
-    try: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ADD TOP-LEVEL TRY
+    try:
         start_time = time.time()
         data = request.get_json()
         if not data:
-            print("❌ API Error: Request body missing.")
-            # This error is fine as is, client expects JSON error here
             return jsonify({"error": "Request body must be JSON"}), 400
         address = data.get("address", "").strip()
         if not address:
-            print("❌ API Error: Address missing.")
-            # This error is fine as is
             return jsonify({"error": "Address string is required"}), 400
         print(f"\n--- Request {request.path} --- Received Address: '{address}'")
 
-        # --- Geocode Address FIRST ---
         lat, lon, geocode_error_type = geocode_address(address)
         user_facing_error_message = None
 
@@ -515,29 +546,29 @@ def handle_school_request(sort_key=None, sort_desc=False):
             status_code = 503 if geocode_error_type == 'service_error' else 400
             return jsonify({"error": user_facing_error_message}), status_code
 
-
-
-        # It's possible find_school_zones_and_details could raise an error too
-        structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
+        # <<< START: MODIFIED CODE >>>
+        # Unpack the tuple returned by the main logic function
+        structured_results, is_in_choice_zone = find_school_zones_and_details(lat, lon, all_zones_gdf, sort_key=sort_key, sort_desc=sort_desc)
         
-        
-        response_data = {"query_address": address, "query_lat": lat, "query_lon": lon, **(structured_results or {"results_by_zone": []})}
+        # Add the new flag to the response data
+        response_data = {
+            "query_address": address, 
+            "query_lat": lat, 
+            "query_lon": lon, 
+            "is_in_choice_zone": is_in_choice_zone, # <-- NEW FLAG
+            **(structured_results or {"results_by_zone": []})
+        }
+        # <<< END: MODIFIED CODE >>>
         
         end_time = time.time()
         print(f"--- Request {request.path} completed in {end_time - start_time:.2f} seconds ---")
         return jsonify(response_data), 200
 
-
-
-    except Exception as e: # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CATCH ALL OTHER UNEXPECTED ERRORS
-        # Log the full error for server-side debugging
+    except Exception as e:
         print(f"❌❌❌ UNHANDLED EXCEPTION in /school-details-by-address endpoint: {e}")
         import traceback
-        traceback.print_exc() # This will print the full stack trace to your server logs
-
-        # Return a generic JSON error to the client
+        traceback.print_exc() 
         return jsonify({"error": "An unexpected server error occurred. Please try again later."}), 500
-
 
 
 # --- Flask Routes ---
@@ -594,12 +625,61 @@ def school_parent_satisfaction():
     # Ensure this key matches the one selected/available
     return handle_school_request(sort_key='parent_satisfaction', sort_desc=True)
 
+@app.route("/school-details-by-coords", methods=["POST"])
+def school_details_by_coords():
+    """Endpoint for testing that bypasses geocoding."""
+    start_time = time.time()
+    data = request.get_json()
+    if not data or 'lat' not in data or 'lon' not in data:
+        return jsonify({"error": "lat and lon are required"}), 400
+    lat, lon = data['lat'], data['lon']
+    print(f"\n--- Request /school-details-by-coords --- Coords: ({lat}, {lon})")
+    # For testing, the address string is just for human-readable context
+    address_str = data.get("address", f"Coord lookup: {lat}, {lon}")
+    response_data = handle_school_request(lat, lon, address_str, data.get('sort_key'), data.get('sort_desc'))
+    print(f"--- Request completed in {time.time() - start_time:.2f} seconds ---")
+    return jsonify(response_data)
+
+@app.route("/generate-test-case-by-coords", methods=["POST"])
+def generate_test_case_by_coords():
+    """Test case generator that uses coordinates directly."""
+    data = request.get_json()
+    lat, lon, zone_name, address = data.get('lat'), data.get('lon'), data.get('zone_name'), data.get('address')
+    if not all([lat, lon, zone_name, address]):
+        return jsonify({"error": "lat, lon, zone_name, and address are required"}), 400
+    
+    structured_results, _ = find_school_zones_and_details(lat, lon, all_zones_gdf)
+    
+    expected_schools = {"Elementary": [], "Middle": [], "High": []}
+    safe_results = structured_results or {}
+    for zone in safe_results.get("results_by_zone", []):
+        level = None
+        if "Elementary" in zone.get("zone_type", ""): level = "Elementary"
+        elif "Middle" in zone.get("zone_type", ""): level = "Middle"
+        elif "High" in zone.get("zone_type", ""): level = "High"
+        if level:
+            for school in zone.get("schools", []):
+                expected_schools[level].append({
+                    "display_name": school.get("display_name"),
+                    "expected_status": school.get("display_status")
+                })
+    for level in expected_schools:
+        expected_schools[level].sort(key=lambda x: x['display_name'])
+    
+    test_case_output = {
+        "zone_name": zone_name,
+        "address": address, # Keep address for context
+        "lat": lat,         # Add lat
+        "lon": lon,         # Add lon
+        "expected_schools": expected_schools
+    }
+    return jsonify(test_case_output)
 
 @app.route("/generate-test-case", methods=["POST"])
 def generate_test_case():
     """
     A temporary helper endpoint to generate JSON for the test_cases.json file.
-    It takes an address and a zone name, and prints the formatted test case.
+    It takes an address and a zone name, and returns the formatted test case.
     """
     data = request.get_json()
     address = data.get("address")
@@ -608,32 +688,28 @@ def generate_test_case():
     if not address or not zone_name:
         return jsonify({"error": "Address and zone_name are required"}), 400
 
-    print(f"\n--- GENERATING TEST CASE for Zone: {zone_name} ---")
-    
     # --- This reuses your existing core logic ---
     lat, lon, _ = geocode_address(address)
     if lat is None:
+        # Return an error object that the runner script can check
         return jsonify({"error": f"Could not geocode address: {address}"}), 400
     
-    structured_results = find_school_zones_and_details(lat, lon, all_zones_gdf)
-    # --- End of reusing logic ---
-
-    # --- This is the new logic to format the output ---
+    structured_results, _ = find_school_zones_and_details(lat, lon, all_zones_gdf)
+    
+    # --- Format the output ---
     expected_schools = {
         "Elementary": [],
         "Middle": [],
         "High": []
     }
 
-    for zone in structured_results.get("results_by_zone", []):
+    safe_results = structured_results or {}
+    for zone in safe_results.get("results_by_zone", []):
         zone_type = zone.get("zone_type")
         level = None
-        if "Elementary" in zone_type:
-            level = "Elementary"
-        elif "Middle" in zone_type:
-            level = "Middle"
-        elif "High" in zone_type:
-            level = "High"
+        if "Elementary" in zone_type: level = "Elementary"
+        elif "Middle" in zone_type: level = "Middle"
+        elif "High" in zone_type: level = "High"
         
         if level:
             for school in zone.get("schools", []):
@@ -642,7 +718,6 @@ def generate_test_case():
                     "expected_status": school.get("display_status")
                 })
 
-    # Sort the lists for consistency
     for level in expected_schools:
         expected_schools[level].sort(key=lambda x: x['display_name'])
 
@@ -652,11 +727,10 @@ def generate_test_case():
         "expected_schools": expected_schools
     }
 
-    # Pretty-print the JSON to the terminal
-    print(json.dumps(test_case_output, indent=2))
-    print("--- COPY THE JSON OBJECT ABOVE AND PASTE IT INTO test_cases.json ---")
-    
-    return jsonify({"message": f"Test case for {zone_name} printed to API console."}), 200
+    # <<< START: MODIFIED CODE >>>
+    # Instead of printing, return the JSON object directly
+    return jsonify(test_case_output), 200
+    # <<< END: MODIFIED CODE >>> 
 
 # --- Run App ---
 if __name__ == "__main__":
