@@ -397,6 +397,7 @@ def geocode_address(address):
         address_cache[address] = (None, None, 'service_error')
         return None, None, 'service_error'
 
+
 def find_school_zones_and_details(lat, lon, gdf, sort_key=None, sort_desc=False):
     """Finds all zones, adds satellite/choice schools, fetches details, and returns structured data."""
     if lat is None or lon is None: print("Error: Invalid user coords."); return None, False
