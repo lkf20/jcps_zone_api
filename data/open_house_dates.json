@@ -1,0 +1,2065 @@
+{
+  "275175": {
+    "phone": "(502) 485-6950",
+    "notes": "Tours are 11:00 AM-2:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275185": {
+    "phone": "(502) 485-8203",
+    "notes": "Tours are 9:40-11:00 AM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275127": {
+    "phone": "(502) 485-8204",
+    "notes": "Tours are 8:00-9:00 AM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275044": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-05T10:30:00",
+          "end": "2025-11-05T11:30:00"
+        },
+        {
+          "start": "2025-11-11T17:30:00",
+          "end": "2025-11-11T18:30:00"
+        },
+        {
+          "start": "2025-11-12T10:30:00",
+          "end": "2025-11-12T11:30:00"
+        },
+        {
+          "start": "2025-11-19T10:30:00",
+          "end": "2025-11-19T11:30:00"
+        }
+      ]
+    }
+  },
+  "275055": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-16T10:30:00",
+          "end": "2025-10-16T11:30:00"
+        },
+        {
+          "start": "2025-10-16T13:30:00",
+          "end": "2025-10-16T14:30:00"
+        },
+        {
+          "start": "2025-10-23T10:30:00",
+          "end": "2025-10-23T11:30:00"
+        },
+        {
+          "start": "2025-10-23T13:30:00",
+          "end": "2025-10-23T14:30:00"
+        },
+        {
+          "start": "2025-10-30T10:30:00",
+          "end": "2025-10-30T11:30:00"
+        },
+        {
+          "start": "2025-10-30T13:30:00",
+          "end": "2025-10-30T14:30:00"
+        },
+        {
+          "start": "2025-11-06T10:30:00",
+          "end": "2025-11-06T11:30:00"
+        },
+        {
+          "start": "2025-11-06T13:30:00",
+          "end": "2025-11-06T14:30:00"
+        },
+        {
+          "start": "2025-11-13T10:30:00",
+          "end": "2025-11-13T11:30:00"
+        },
+        {
+          "start": "2025-11-13T13:30:00",
+          "end": "2025-11-13T14:30:00"
+        },
+        {
+          "start": "2025-11-20T10:30:00",
+          "end": "2025-11-20T11:30:00"
+        },
+        {
+          "start": "2025-11-20T13:30:00",
+          "end": "2025-11-20T14:30:00"
+        },
+        {
+          "start": "2025-12-04T10:30:00",
+          "end": "2025-12-04T11:30:00"
+        },
+        {
+          "start": "2025-12-04T13:30:00",
+          "end": "2025-12-04T14:30:00"
+        },
+        {
+          "start": "2025-12-11T10:30:00",
+          "end": "2025-12-11T11:30:00"
+        },
+        {
+          "start": "2025-12-11T13:30:00",
+          "end": "2025-12-11T14:30:00"
+        }
+      ]
+    }
+  },
+  "275149": {
+    "phone": "(502) 485-8210",
+    "notes": "Tours are 7:30-9:30 AM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275225": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-03T14:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275091": {
+    "phone": "(502) 485-8212",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275094": {
+    "phone": "(502) 485-8213",
+    "notes": "Tours are 11:00 AM-2:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275260": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-29T10:00:00",
+          "end": "2025-10-29T11:00:00"
+        },
+        {
+          "start": "2025-10-29T12:00:00",
+          "end": "2025-10-29T13:00:00"
+        },
+        {
+          "start": "2025-11-05T10:00:00",
+          "end": "2025-11-05T11:00:00"
+        },
+        {
+          "start": "2025-11-05T12:00:00",
+          "end": "2025-11-05T13:00:00"
+        },
+        {
+          "start": "2025-11-12T10:00:00",
+          "end": "2025-11-12T11:00:00"
+        },
+        {
+          "start": "2025-11-12T12:00:00",
+          "end": "2025-11-12T13:00:00"
+        },
+        {
+          "start": "2025-11-19T10:00:00",
+          "end": "2025-11-19T11:00:00"
+        },
+        {
+          "start": "2025-11-19T12:00:00",
+          "end": "2025-11-19T13:00:00"
+        },
+        {
+          "start": "2025-12-03T10:00:00",
+          "end": "2025-12-03T11:00:00"
+        },
+        {
+          "start": "2025-12-03T12:00:00",
+          "end": "2025-12-03T13:00:00"
+        },
+        {
+          "start": "2025-12-10T10:00:00",
+          "end": "2025-12-10T11:00:00"
+        },
+        {
+          "start": "2025-12-10T12:00:00",
+          "end": "2025-12-10T13:00:00"
+        },
+        {
+          "start": "2025-12-17T10:00:00",
+          "end": "2025-12-17T11:00:00"
+        },
+        {
+          "start": "2025-12-17T12:00:00",
+          "end": "2025-12-17T13:00:00"
+        }
+      ]
+    }
+  },
+  "275038": {
+    "phone": "(502) 485-8215",
+    "notes": "Tours are 10:00 AM-3:00 PM and 4:45-5:15 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275243": {
+    "phone": "(502) 485-8221",
+    "notes": "Tours are 10:30 AM-2:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275004": {
+    "phone": "(502)485-8222",
+    "notes": "Tours are 8:00 AM - 1:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275005": {
+    "phone": "(502) 485-8223",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275680": {
+    "phone": "(502) 485-8225",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275102": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-08T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-10-15T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-10-22T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-10-29T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275046": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-29T10:00:00",
+          "end": "2025-10-29T11:00:00"
+        },
+        {
+          "start": "2025-11-05T10:00:00",
+          "end": "2025-11-05T11:00:00"
+        },
+        {
+          "start": "2025-11-12T10:00:00",
+          "end": "2025-11-12T11:00:00"
+        }
+      ]
+    }
+  },
+  "275323": {
+    "phone": "(502) 485-8230",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275083": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-04T14:45:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275660": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-15T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-10-22T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-10-29T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-05T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-12T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-19T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-26T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-03T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-10T10:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-17T10:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275060": {
+    "phone": "(502) 485-8234",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275092": {
+    "phone": "(502) 485-8236",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275082": {
+    "phone": "(502) 485-8238",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275156": {
+    "phone": "(502) 485-8240",
+    "notes": "Tours are  9/9, 10/10, 11/6, 12/5",
+    "registration_link": null,
+    "events": {}
+  },
+  "275131": {
+    "phone": "(502) 485-8244",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275010": {
+    "phone": "(502) 485-8247",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275212": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-28T10:15:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-13T10:15:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275011": {
+    "phone": "(502) 485-8250",
+    "notes": "Call to schedule alternate day",
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-13T10:15:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275250": {
+    "phone": "(502) 485-8252",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275270": {
+    "phone": "(502) 485-8253",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275290": {
+    "phone": "(502) 485-8255",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275061": {
+    "phone": "(502) 485-8258",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275013": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-29T10:00:00",
+          "end": "2025-10-29T11:00:00"
+        },
+        {
+          "start": "2025-11-06T13:00:00",
+          "end": "2025-11-06T14:00:00"
+        },
+        {
+          "start": "2025-11-10T10:00:00",
+          "end": "2025-11-10T11:00:00"
+        },
+        {
+          "start": "2025-12-02T17:00:00",
+          "end": "2025-12-02T18:00:00"
+        }
+      ]
+    }
+  },
+  "275014": {
+    "phone": "(502) 485-8260",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275115": {
+    "phone": "(502) 485-8261",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275121": {
+    "phone": "(502) 485-8262",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275048": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-06T17:00:00",
+          "end": "2025-11-06T18:00:00"
+        },
+        {
+          "start": "2025-11-11T09:30:00",
+          "end": "2025-11-11T10:30:00"
+        },
+        {
+          "start": "2025-12-04T09:30:00",
+          "end": "2025-12-04T10:30:00"
+        },
+        {
+          "start": "2025-12-09T17:00:00",
+          "end": "2025-12-09T18:00:00"
+        }
+      ]
+    }
+  },
+  "275300": {
+    "phone": "(502) 485-8264",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275095": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-03T11:30:00",
+          "end": "2025-11-03T13:00:00"
+        }
+      ]
+    }
+  },
+  "275076": {
+    "phone": "(502) 485-8268",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "2751651": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-07T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-11T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-05T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-17T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275325": {
+    "phone": "(502) 485-8271",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275166": {
+    "phone": "(502) 485-8274",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275106": {
+    "phone": "(502) 485-8278",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275720": {
+    "phone": "(502) 485-8280",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275059": {
+    "phone": "(502) 485-8283",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275079": {
+    "phone": "(502) 485-8284",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275432": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-06T17:00:00",
+          "end": "2025-11-06T18:30:00"
+        }
+      ]
+    }
+  },
+  "275134": {
+    "phone": "(502) 485-8286",
+    "notes": "Tours are 8/15-12/20",
+    "registration_link": null,
+    "events": {}
+  },
+  "275145": {
+    "phone": "(502) 485-8289",
+    "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
+    "events": {}
+  },
+  "275126": {
+    "phone": "(502) 485-8290",
+    "notes": "Tours are October-April",
+    "registration_link": null,
+    "events": {}
+  },
+  "275520": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-27T18:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T18:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275146": {
+    "phone": "(502) 485-8293",
+    "notes": "Tours are 10/28, 10/29, 117, 11/14, and 12/5",
+    "registration_link": null,
+    "events": {}
+  },
+  "275107": {
+    "phone": "(502) 485-8295",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275480": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-19T10:30:00",
+          "end": "2025-11-19T11:00:00"
+        }
+      ]
+    }
+  },
+  "275440": {
+    "phone": "(502) 485-8297",
+    "notes": "Tours are 10:30-11:30 AM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275022": {
+    "phone": "(502) 485-8298",
+    "notes": "Tours are 10:30 AM-3:30 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275024": {
+    "phone": "(502) 485-8300",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-28T10:30:00",
+          "end": "2025-10-28T11:30:00"
+        }
+      ]
+    }
+  },
+  "275147": {
+    "phone": "(502) 485-8301",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275099": {
+    "phone": "(502) 485-8303",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275371": {
+    "phone": "(502) 485-8367",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-28T10:45:00",
+          "end": "2025-10-28T11:45:00"
+        },
+        {
+          "start": "2025-10-28T15:00:00",
+          "end": "2025-10-28T16:00:00"
+        },
+        {
+          "start": "2025-10-30T08:00:00",
+          "end": "2025-10-30T09:00:00"
+        },
+        {
+          "start": "2025-10-30T17:00:00",
+          "end": "2025-10-30T18:00:00"
+        }
+      ]
+    }
+  },
+  "275096": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-30T08:30:00",
+          "end": "2025-10-30T10:00:00"
+        },
+        {
+          "start": "2025-11-05T08:30:00",
+          "end": "2025-11-05T10:00:00"
+        }
+      ]
+    }
+  },
+  "275027": {
+    "phone": "(502) 485-8309",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275182": {
+    "phone": "(502) 485-8348",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275500": {
+    "phone": "(502) 485-8313",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275128": {
+    "phone": "(502) 485-8315",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275081": {
+    "phone": "(502) 485-8317",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275560": {
+    "phone": "(502) 485-8320",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275086": {
+    "phone": "(502) 485-8322",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275063": {
+    "phone": "(502) 485-8217",
+    "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
+    "events": {}
+  },
+  "275580": {
+    "phone": "(502) 485-8324",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275097": {
+    "phone": "(502) 485-8325",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275610": {
+    "phone": "(502) 485-8327",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275103": {
+    "phone": "(502) 485-8328",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275087": {
+    "phone": "(502) 485-8329",
+    "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
+    "events": {}
+  },
+  "275064": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-10T08:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T08:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-04T08:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275071": {
+    "phone": "(502) 485-8333",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275211": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this Link](https://www.signupgenius.com/go/10C0C48A8AE2FA6F5C43-50739498-stopher#/)",
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-09-18T10:00:00",
+          "end": "2025-09-18T11:00:00"
+        },
+        {
+          "start": "2025-10-14T10:00:00",
+          "end": "2025-10-14T11:00:00"
+        },
+        {
+          "start": "2025-10-16T10:00:00",
+          "end": "2025-10-16T11:00:00"
+        },
+        {
+          "start": "2025-11-18T10:00:00",
+          "end": "2025-11-18T11:00:00"
+        },
+        {
+          "start": "2025-12-09T10:00:00",
+          "end": "2025-12-09T11:00:00"
+        },
+        {
+          "start": "2025-12-16T10:00:00",
+          "end": "2025-12-16T11:00:00"
+        }
+      ]
+    }
+  },
+  "275104": {
+    "phone": "(502) 485-8337",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275016": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-11T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-13T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-02T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-04T09:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275072": {
+    "phone": "(502) 485-8342",
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-11T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275116": {
+    "phone": "(502) 485-8343",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275109": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-30T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-14T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-12T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-09T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-17T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275067": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-30T08:30:00",
+          "end": "2025-10-30T09:30:00"
+        },
+        {
+          "start": "2025-11-12T08:30:00",
+          "end": "2025-11-12T09:30:00"
+        },
+        {
+          "start": "2025-11-24T08:30:00",
+          "end": "2025-11-24T09:30:00"
+        }
+      ]
+    }
+  },
+  "275066": {
+    "phone": "(502) 485-8351",
+    "notes": "Tours are 8:00 AM-1:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275117": {
+    "phone": "(502) 485-8353",
+    "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
+    "events": {}
+  },
+  "275374": {
+    "phone": "(502) 485-8246",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275078": {
+    "phone": "(502) 485-8336",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275040": {
+    "phone": "(502) 485-8207",
+    "notes": null,
+    "registration_link": "[Register via this link](https://docs.google.com/forms/d/e/1FAIpQLSfsIRIo159SIiPXIZKk2FKIBUCwXfCInLE3IbM5DAvbJhe0tA/viewform)",
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-18T17:30:00",
+          "end": "2025-11-18T19:30:00"
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-12-03T08:00:00",
+          "end": "2025-12-03T09:00:00"
+        },
+        {
+          "start": "2025-12-03T09:30:00",
+          "end": "2025-12-03T10:30:00"
+        },
+        {
+          "start": "2025-12-10T08:00:00",
+          "end": "2025-12-10T09:00:00"
+        },
+        {
+          "start": "2025-12-10T09:30:00",
+          "end": "2025-12-10T10:30:00"
+        }
+      ]
+    }
+  },
+  "275167": {
+    "phone": "(502) 485-8224",
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-13T18:00:00",
+          "end": "2025-11-13T19:00:00"
+        }
+      ]
+    }
+  },
+  "275164": {
+    "phone": "(502) 485-8233",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275119": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-05T17:30:00",
+          "end": "2025-11-05T19:30:00"
+        }
+      ]
+    }
+  },
+  "2751911": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-20T09:00:00",
+          "end": "2025-10-20T10:00:00"
+        },
+        {
+          "start": "2025-10-29T09:00:00",
+          "end": "2025-10-29T10:00:00"
+        },
+        {
+          "start": "2025-11-05T18:00:00",
+          "end": "2025-11-05T19:00:00"
+        },
+        {
+          "start": "2025-11-12T09:00:00",
+          "end": "2025-11-12T10:00:00"
+        },
+        {
+          "start": "2025-11-19T09:00:00",
+          "end": "2025-11-19T10:00:00"
+        }
+      ]
+    }
+  },
+  "275255": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-06T17:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-06T17:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-06T18:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-06T18:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-06T19:00:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-11-13T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-20T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-02T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-04T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-09T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-11T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2026-02-05T07:45:00",
+          "end": null
+        },
+        {
+          "start": "2026-03-12T07:45:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275049": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/70A0448A9AF23A7FE3-farnsley2#/)",
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-30T18:00:00",
+          "end": "2025-10-30T19:30:00"
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-11-04T08:45:00",
+          "end": "2025-11-04T09:30:00"
+        },
+        {
+          "start": "2025-11-06T08:45:00",
+          "end": "2025-11-06T09:30:00"
+        },
+        {
+          "start": "2025-11-11T08:45:00",
+          "end": "2025-11-11T09:30:00"
+        },
+        {
+          "start": "2025-11-13T08:45:00",
+          "end": "2025-11-13T09:30:00"
+        },
+        {
+          "start": "2025-11-18T08:45:00",
+          "end": "2025-11-18T09:30:00"
+        },
+        {
+          "start": "2025-11-20T08:45:00",
+          "end": "2025-11-20T09:30:00"
+        },
+        {
+          "start": "2025-11-25T08:45:00",
+          "end": "2025-11-25T09:30:00"
+        }
+      ]
+    }
+  },
+  "2758001": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/409044CAAAD2DABFC1-57215177-2526#/)",
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-04T18:30:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-22T13:00:00",
+          "end": "2025-10-22T14:00:00"
+        },
+        {
+          "start": "2025-11-19T13:00:00",
+          "end": "2025-11-19T14:00:00"
+        },
+        {
+          "start": "2025-12-03T13:00:00",
+          "end": "2025-12-03T14:00:00"
+        },
+        {
+          "start": "2025-12-10T13:00:00",
+          "end": "2025-12-10T14:00:00"
+        },
+        {
+          "start": "2025-12-17T13:00:00",
+          "end": "2025-12-17T14:00:00"
+        },
+        {
+          "start": "2026-01-21T13:00:00",
+          "end": "2026-01-21T14:00:00"
+        },
+        {
+          "start": "2026-02-18T13:00:00",
+          "end": "2026-02-18T14:00:00"
+        }
+      ]
+    }
+  },
+  "275320": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-13T17:30:00",
+          "end": "2025-11-13T19:30:00"
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-28T09:00:00",
+          "end": "2025-10-28T10:00:00"
+        },
+        {
+          "start": "2025-11-05T09:00:00",
+          "end": "2025-11-05T10:00:00"
+        },
+        {
+          "start": "2025-11-11T09:00:00",
+          "end": "2025-11-11T10:00:00"
+        }
+      ]
+    }
+  },
+  "275406": {
+    "phone": "(502) 485-8187",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "27516511": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-07T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-11T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-05T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-17T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275396": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-17T18:00:00",
+          "end": "2025-11-17T19:30:00"
+        }
+      ]
+    }
+  },
+  "275470": {
+    "phone": null,
+    "notes": "Call to confirm time",
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-30T09:00:00",
+          "end": "2025-10-30T10:00:00"
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-11-06T09:00:00",
+          "end": "2025-11-06T10:00:00"
+        },
+        {
+          "start": "2025-11-13T09:00:00",
+          "end": "2025-11-13T10:00:00"
+        },
+        {
+          "start": "2025-11-20T09:00:00",
+          "end": "2025-11-20T10:00:00"
+        },
+        {
+          "start": "2025-12-04T09:00:00",
+          "end": "2025-12-04T10:00:00"
+        }
+      ]
+    }
+  },
+  "275162": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-30T17:30:00",
+          "end": "2025-10-30T19:00:00"
+        }
+      ]
+    }
+  },
+  "275163": {
+    "phone": "(502) 485-8287",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275133": {
+    "phone": "(502) 485-8288",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275340": {
+    "phone": "(502) 485-8299",
+    "notes": "Tours are M-F from 9:00-10:30 AM",
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-05T17:30:00",
+          "end": "2025-11-05T19:30:00"
+        }
+      ]
+    }
+  },
+  "275041": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-13T17:30:00",
+          "end": "2025-11-13T19:00:00"
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-31T09:00:00",
+          "end": "2025-10-31T10:00:00"
+        },
+        {
+          "start": "2025-11-07T09:00:00",
+          "end": "2025-11-07T10:00:00"
+        },
+        {
+          "start": "2025-11-14T09:00:00",
+          "end": "2025-11-14T10:00:00"
+        },
+        {
+          "start": "2025-11-21T09:00:00",
+          "end": "2025-11-21T10:00:00"
+        },
+        {
+          "start": "2025-12-05T09:00:00",
+          "end": "2025-12-05T10:00:00"
+        },
+        {
+          "start": "2025-12-12T09:00:00",
+          "end": "2025-12-12T10:00:00"
+        },
+        {
+          "start": "2025-12-19T09:00:00",
+          "end": "2025-12-19T10:00:00"
+        }
+      ]
+    }
+  },
+  "275186": {
+    "phone": "(502) 398-3125",
+    "notes": "Tours are 8:00 AM-2:00 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275435": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-06T18:00:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-11-12T09:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-14T09:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T09:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275620": {
+    "phone": "(502) 485-8331",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275730": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/30E0C49A4A72AA7F94-58512953-olmsted)",
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-10-28T09:05:00",
+          "end": "2025-10-28T09:45:00"
+        },
+        {
+          "start": "2025-11-18T09:05:00",
+          "end": "2025-11-18T09:45:00"
+        },
+        {
+          "start": "2025-12-03T09:05:00",
+          "end": "2025-12-03T09:45:00"
+        },
+        {
+          "start": "2025-12-09T09:05:00",
+          "end": "2025-12-09T09:45:00"
+        }
+      ]
+    }
+  },
+  "2752011": {
+    "phone": "(502) 212-4547",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275219": {
+    "phone": "(502) 485-8391",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-04T17:30:00",
+          "end": "2025-11-04T19:00:00"
+        }
+      ]
+    }
+  },
+  "275144": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-10T17:30:00",
+          "end": "2025-11-10T19:00:00"
+        }
+      ]
+    }
+  },
+  "275090": {
+    "phone": "(502) 485-8273",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275710": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-29T19:00:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-11-12T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-17T12:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-19T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-24T12:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-03T09:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-08T12:00:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-10T09:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275077": {
+    "phone": null,
+    "notes": "Tours on select Tuesdays/Thursdays at 9:00 AM. See Westport Website for School Tour Sign Up",
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-06T17:30:00",
+          "end": "2025-11-06T19:00:00"
+        }
+      ]
+    }
+  },
+  "275018": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-30T18:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275105": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.canva.com/design/DAFtBzkcmog/irRehTkoWOzNstAWePMElw/view?utm_content=DAFtBzkcmog&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h546e2a921c)",
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-06T18:30:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-09-22T16:00:00",
+          "end": "2025-09-22T16:30:00"
+        },
+        {
+          "start": "2025-10-16T16:00:00",
+          "end": "2025-10-16T16:30:00"
+        },
+        {
+          "start": "2025-10-27T16:00:00",
+          "end": "2025-10-27T16:30:00"
+        },
+        {
+          "start": "2025-11-04T16:00:00",
+          "end": "2025-11-04T16:30:00"
+        },
+        {
+          "start": "2025-11-20T16:00:00",
+          "end": "2025-11-20T16:30:00"
+        },
+        {
+          "start": "2025-12-04T16:00:00",
+          "end": "2025-12-04T16:30:00"
+        },
+        {
+          "start": "2025-09-25T09:00:00",
+          "end": "2025-09-25T11:00:00"
+        },
+        {
+          "start": "2025-10-07T09:00:00",
+          "end": "2025-10-07T11:00:00"
+        },
+        {
+          "start": "2025-10-09T09:00:00",
+          "end": "2025-10-09T11:00:00"
+        },
+        {
+          "start": "2025-10-14T09:00:00",
+          "end": "2025-10-14T11:00:00"
+        },
+        {
+          "start": "2025-10-16T09:00:00",
+          "end": "2025-10-16T11:00:00"
+        },
+        {
+          "start": "2025-10-23T09:00:00",
+          "end": "2025-10-23T11:00:00"
+        },
+        {
+          "start": "2025-10-28T09:00:00",
+          "end": "2025-10-28T11:00:00"
+        },
+        {
+          "start": "2025-10-30T09:00:00",
+          "end": "2025-10-30T11:00:00"
+        },
+        {
+          "start": "2025-11-06T09:00:00",
+          "end": "2025-11-06T11:00:00"
+        },
+        {
+          "start": "2025-11-11T09:00:00",
+          "end": "2025-11-11T11:00:00"
+        },
+        {
+          "start": "2025-11-13T09:00:00",
+          "end": "2025-11-13T11:00:00"
+        },
+        {
+          "start": "2025-11-18T09:00:00",
+          "end": "2025-11-18T11:00:00"
+        },
+        {
+          "start": "2025-11-20T09:00:00",
+          "end": "2025-11-20T11:00:00"
+        }
+      ]
+    }
+  },
+  "2751652": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-07T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-11T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-18T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-05T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-17T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275045": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-11T17:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275179": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-06T18:00:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-29T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-12T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-11-19T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-03T08:30:00",
+          "end": null
+        },
+        {
+          "start": "2025-12-10T08:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275100": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-03T13:00:00",
+          "end": "2025-11-03T15:00:00"
+        }
+      ]
+    }
+  },
+  "2752002": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-28T18:00:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-09T13:00:00",
+          "end": "2025-10-09T15:00:00"
+        },
+        {
+          "start": "2025-10-16T13:00:00",
+          "end": "2025-10-16T15:00:00"
+        },
+        {
+          "start": "2025-10-23T13:00:00",
+          "end": "2025-10-23T15:00:00"
+        },
+        {
+          "start": "2025-10-30T13:00:00",
+          "end": "2025-10-30T15:00:00"
+        },
+        {
+          "start": "2025-11-06T13:00:00",
+          "end": "2025-11-06T15:00:00"
+        },
+        {
+          "start": "2025-11-13T13:00:00",
+          "end": "2025-11-13T15:00:00"
+        }
+      ]
+    }
+  },
+  "275007": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-04T18:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275012": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-12-09T18:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "275057": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/10C094BAAAE2DABFCCF8-58169344-fairdale#/)",
+    "events": {
+      "School Tour": [
+        {
+          "start": "2025-11-11T09:00:00",
+          "end": "2025-11-11T12:00:00"
+        },
+        {
+          "start": "2025-11-13T09:00:00",
+          "end": "2025-11-13T12:00:00"
+        }
+      ]
+    }
+  },
+  "275335": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-13T17:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "2758002": {
+    "phone": null,
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/409044CAAAD2DABFC1-57215177-2526#/)",
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-04T18:30:00",
+          "end": null
+        }
+      ],
+      "School Tour": [
+        {
+          "start": "2025-10-22T13:00:00",
+          "end": "2025-10-22T14:00:00"
+        },
+        {
+          "start": "2025-11-19T13:00:00",
+          "end": "2025-11-19T14:00:00"
+        },
+        {
+          "start": "2025-12-03T13:00:00",
+          "end": "2025-12-03T14:00:00"
+        },
+        {
+          "start": "2025-12-10T13:00:00",
+          "end": "2025-12-10T14:00:00"
+        },
+        {
+          "start": "2025-12-17T13:00:00",
+          "end": "2025-12-17T14:00:00"
+        },
+        {
+          "start": "2026-01-21T13:00:00",
+          "end": "2026-01-21T14:00:00"
+        },
+        {
+          "start": "2026-02-18T13:00:00",
+          "end": "2026-02-18T14:00:00"
+        }
+      ]
+    }
+  },
+  "275065": {
+    "phone": "(502) 485-8275",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275047": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-13T18:00:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "2751552": {
+    "phone": "(502) 485-8304",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "2752012": {
+    "phone": "(502) 212-4547",
+    "notes": null,
+    "registration_link": null,
+    "events": {}
+  },
+  "275075": {
+    "phone": "(502) 485-8311",
+    "notes": "Tours are 9-11 AM and 1-3 PM",
+    "registration_link": null,
+    "events": {}
+  },
+  "275073": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-12-01T18:30:00",
+          "end": null
+        }
+      ]
+    }
+  },
+  "2755902": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-03T13:00:00",
+          "end": "2025-11-03T16:00:00"
+        }
+      ]
+    }
+  },
+  "275031": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-30T18:00:00",
+          "end": "2025-10-30T19:00:00"
+        }
+      ]
+    }
+  },
+  "275033": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-03T13:00:00",
+          "end": "2025-11-03T15:00:00"
+        },
+        {
+          "start": "2025-11-04T09:00:00",
+          "end": "2025-11-04T11:00:00"
+        }
+      ]
+    }
+  },
+  "275051": {
+    "phone": null,
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-10-29T18:00:00",
+          "end": "2025-10-29T19:30:00"
+        }
+      ]
+    }
+  },
+  "275084": {
+    "phone": "(502) 485-8344",
+    "notes": null,
+    "registration_link": null,
+    "events": {
+      "Open House": [
+        {
+          "start": "2025-11-05T18:30:00",
+          "end": "2025-11-05T20:00:00"
+        }
+      ]
+    }
+  }
+}
