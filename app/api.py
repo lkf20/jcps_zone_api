@@ -72,6 +72,7 @@ except Exception as e:
     print(f"⚠️ Warning: Could not load {os.path.basename(OPEN_HOUSE_PATH)}. This feature will be disabled. Error: {e}")
 
 # Shapefile paths
+# ... (keep shapefile paths as before) ...
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
 high_path = os.path.join(DATA_DIR, "High", "Resides_HS_Boundaries.shp")
 middle_path = os.path.join(DATA_DIR, "Middle", "Resides_MS_Boundaries.shp")
