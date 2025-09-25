@@ -2,21 +2,25 @@
   "275175": {
     "phone": "(502) 485-6950",
     "notes": "Tours are 11:00 AM-2:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275185": {
     "phone": "(502) 485-8203",
     "notes": "Tours are 9:40-11:00 AM",
+    "registration_link": null,
     "events": {}
   },
   "275127": {
     "phone": "(502) 485-8204",
     "notes": "Tours are 8:00-9:00 AM",
+    "registration_link": null,
     "events": {}
   },
   "275044": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -41,6 +45,7 @@
   "275055": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -113,11 +118,13 @@
   "275149": {
     "phone": "(502) 485-8210",
     "notes": "Tours are 7:30-9:30 AM",
+    "registration_link": null,
     "events": {}
   },
   "275225": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -130,16 +137,19 @@
   "275091": {
     "phone": "(502) 485-8212",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275094": {
     "phone": "(502) 485-8213",
     "notes": "Tours are 11:00 AM-2:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275260": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -204,31 +214,37 @@
   "275038": {
     "phone": "(502) 485-8215",
     "notes": "Tours are 10:00 AM-3:00 PM and 4:45-5:15 PM",
+    "registration_link": null,
     "events": {}
   },
   "275243": {
     "phone": "(502) 485-8221",
     "notes": "Tours are 10:30 AM-2:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275004": {
     "phone": "(502)485-8222",
     "notes": "Tours are 8:00 AM - 1:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275005": {
     "phone": "(502) 485-8223",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275680": {
     "phone": "(502) 485-8225",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275102": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -252,7 +268,8 @@
   },
   "275046": {
     "phone": null,
-    "notes": "15 minutes",
+    "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -273,11 +290,13 @@
   "275323": {
     "phone": "(502) 485-8230",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275083": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -290,6 +309,7 @@
   "275660": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -338,36 +358,43 @@
   "275060": {
     "phone": "(502) 485-8234",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275092": {
     "phone": "(502) 485-8236",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275082": {
     "phone": "(502) 485-8238",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275156": {
     "phone": "(502) 485-8240",
-    "notes": "Tours are  9/9,10/10,11/6,12/5",
+    "notes": "Tours are  9/9, 10/10, 11/6, 12/5",
+    "registration_link": null,
     "events": {}
   },
   "275131": {
     "phone": "(502) 485-8244",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275010": {
     "phone": "(502) 485-8247",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275212": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -383,7 +410,8 @@
   },
   "275011": {
     "phone": "(502) 485-8250",
-    "notes": "Or call to schedule",
+    "notes": "Call to schedule alternate day",
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -396,26 +424,31 @@
   "275250": {
     "phone": "(502) 485-8252",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275270": {
     "phone": "(502) 485-8253",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275290": {
     "phone": "(502) 485-8255",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275061": {
     "phone": "(502) 485-8258",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275013": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -440,21 +473,25 @@
   "275014": {
     "phone": "(502) 485-8260",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275115": {
     "phone": "(502) 485-8261",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275121": {
     "phone": "(502) 485-8262",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275048": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -479,11 +516,13 @@
   "275300": {
     "phone": "(502) 485-8264",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275095": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -496,11 +535,13 @@
   "275076": {
     "phone": "(502) 485-8268",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "2751651": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -529,36 +570,43 @@
   "275325": {
     "phone": "(502) 485-8271",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275166": {
     "phone": "(502) 485-8274",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275106": {
     "phone": "(502) 485-8278",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275720": {
     "phone": "(502) 485-8280",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275059": {
     "phone": "(502) 485-8283",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275079": {
     "phone": "(502) 485-8284",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275432": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -571,21 +619,25 @@
   "275134": {
     "phone": "(502) 485-8286",
     "notes": "Tours are 8/15-12/20",
+    "registration_link": null,
     "events": {}
   },
   "275145": {
     "phone": "(502) 485-8289",
     "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
     "events": {}
   },
   "275126": {
     "phone": "(502) 485-8290",
     "notes": "Tours are October-April",
+    "registration_link": null,
     "events": {}
   },
   "275520": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -602,16 +654,19 @@
   "275146": {
     "phone": "(502) 485-8293",
     "notes": "Tours are 10/28, 10/29, 117, 11/14, and 12/5",
+    "registration_link": null,
     "events": {}
   },
   "275107": {
     "phone": "(502) 485-8295",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275480": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -624,16 +679,19 @@
   "275440": {
     "phone": "(502) 485-8297",
     "notes": "Tours are 10:30-11:30 AM",
+    "registration_link": null,
     "events": {}
   },
   "275022": {
     "phone": "(502) 485-8298",
     "notes": "Tours are 10:30 AM-3:30 PM",
+    "registration_link": null,
     "events": {}
   },
   "275024": {
     "phone": "(502) 485-8300",
-    "notes": "Or Call to Schedule",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -646,16 +704,19 @@
   "275147": {
     "phone": "(502) 485-8301",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275099": {
     "phone": "(502) 485-8303",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275371": {
     "phone": "(502) 485-8367",
-    "notes": "Or Call to Schedule",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -680,6 +741,7 @@
   "275096": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -696,71 +758,85 @@
   "275027": {
     "phone": "(502) 485-8309",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275182": {
     "phone": "(502) 485-8348",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275500": {
     "phone": "(502) 485-8313",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275128": {
     "phone": "(502) 485-8315",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275081": {
     "phone": "(502) 485-8317",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275560": {
     "phone": "(502) 485-8320",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275086": {
     "phone": "(502) 485-8322",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275063": {
     "phone": "(502) 485-8217",
     "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
     "events": {}
   },
   "275580": {
     "phone": "(502) 485-8324",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275097": {
     "phone": "(502) 485-8325",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275610": {
     "phone": "(502) 485-8327",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275103": {
     "phone": "(502) 485-8328",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275087": {
     "phone": "(502) 485-8329",
     "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
     "events": {}
   },
   "275064": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -781,11 +857,13 @@
   "275071": {
     "phone": "(502) 485-8333",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275211": {
     "phone": null,
-    "notes": "Register Via this Link",
+    "notes": null,
+    "registration_link": "[Register via this Link](https://www.signupgenius.com/go/10C0C48A8AE2FA6F5C43-50739498-stopher#/)",
     "events": {
       "School Tour": [
         {
@@ -818,11 +896,13 @@
   "275104": {
     "phone": "(502) 485-8337",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275016": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -850,7 +930,8 @@
   },
   "275072": {
     "phone": "(502) 485-8342",
-    "notes": "Or Call to Schedule",
+    "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -863,11 +944,13 @@
   "275116": {
     "phone": "(502) 485-8343",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275109": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -896,6 +979,7 @@
   "275067": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -916,26 +1000,31 @@
   "275066": {
     "phone": "(502) 485-8351",
     "notes": "Tours are 8:00 AM-1:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275117": {
     "phone": "(502) 485-8353",
     "notes": "Tours are 10/27-12/12",
+    "registration_link": null,
     "events": {}
   },
   "275374": {
     "phone": "(502) 485-8246",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275078": {
     "phone": "(502) 485-8336",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275040": {
     "phone": "(502) 485-8207",
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://docs.google.com/forms/d/e/1FAIpQLSfsIRIo159SIiPXIZKk2FKIBUCwXfCInLE3IbM5DAvbJhe0tA/viewform)",
     "events": {
       "Open House": [
         {
@@ -965,7 +1054,8 @@
   },
   "275167": {
     "phone": "(502) 485-8224",
-    "notes": "Or Call to Schedule a Visit",
+    "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -978,11 +1068,13 @@
   "275164": {
     "phone": "(502) 485-8233",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275119": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -995,6 +1087,7 @@
   "2751911": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1023,6 +1116,7 @@
   "275255": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1088,7 +1182,8 @@
   },
   "275049": {
     "phone": null,
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/70A0448A9AF23A7FE3-farnsley2#/)",
     "events": {
       "Open House": [
         {
@@ -1130,7 +1225,8 @@
   },
   "2758001": {
     "phone": null,
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/409044CAAAD2DABFC1-57215177-2526#/)",
     "events": {
       "Open House": [
         {
@@ -1173,6 +1269,7 @@
   "275320": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1199,11 +1296,13 @@
   "275406": {
     "phone": "(502) 485-8187",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "27516511": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1232,6 +1331,7 @@
   "275396": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1244,6 +1344,7 @@
   "275470": {
     "phone": null,
     "notes": "Call to confirm time",
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1274,6 +1375,7 @@
   "275162": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1286,16 +1388,19 @@
   "275163": {
     "phone": "(502) 485-8287",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275133": {
     "phone": "(502) 485-8288",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275340": {
     "phone": "(502) 485-8299",
     "notes": "Tours are M-F from 9:00-10:30 AM",
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1308,6 +1413,7 @@
   "275041": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1350,11 +1456,13 @@
   "275186": {
     "phone": "(502) 398-3125",
     "notes": "Tours are 8:00 AM-2:00 PM",
+    "registration_link": null,
     "events": {}
   },
   "275435": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1381,11 +1489,13 @@
   "275620": {
     "phone": "(502) 485-8331",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275730": {
     "phone": null,
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/30E0C49A4A72AA7F94-58512953-olmsted)",
     "events": {
       "School Tour": [
         {
@@ -1410,11 +1520,13 @@
   "2752011": {
     "phone": "(502) 212-4547",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275219": {
     "phone": "(502) 485-8391",
-    "notes": "Or Call to Schedule a Visit",
+    "notes": "Or call to schedule alternate day",
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1427,6 +1539,7 @@
   "275144": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1439,11 +1552,13 @@
   "275090": {
     "phone": "(502) 485-8273",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275710": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1486,6 +1601,7 @@
   "275077": {
     "phone": null,
     "notes": "Tours on select Tuesdays/Thursdays at 9:00 AM. See Westport Website for School Tour Sign Up",
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1498,6 +1614,7 @@
   "275018": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1509,7 +1626,8 @@
   },
   "275105": {
     "phone": null,
-    "notes": "Shadow Visit. More information and sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.canva.com/design/DAFtBzkcmog/irRehTkoWOzNstAWePMElw/view?utm_content=DAFtBzkcmog&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h546e2a921c)",
     "events": {
       "Open House": [
         {
@@ -1600,6 +1718,7 @@
   "2751652": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "School Tour": [
         {
@@ -1628,6 +1747,7 @@
   "275045": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1640,6 +1760,7 @@
   "275179": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1674,6 +1795,7 @@
   "275100": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1686,6 +1808,7 @@
   "2752002": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1724,6 +1847,7 @@
   "275007": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1736,6 +1860,7 @@
   "275012": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1747,7 +1872,8 @@
   },
   "275057": {
     "phone": null,
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/10C094BAAAE2DABFCCF8-58169344-fairdale#/)",
     "events": {
       "School Tour": [
         {
@@ -1764,6 +1890,7 @@
   "275335": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1775,7 +1902,8 @@
   },
   "2758002": {
     "phone": null,
-    "notes": "Submit form to sign up",
+    "notes": null,
+    "registration_link": "[Register via this link](https://www.signupgenius.com/go/409044CAAAD2DABFC1-57215177-2526#/)",
     "events": {
       "Open House": [
         {
@@ -1818,11 +1946,13 @@
   "275065": {
     "phone": "(502) 485-8275",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275047": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1835,21 +1965,25 @@
   "2751552": {
     "phone": "(502) 485-8304",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "2752012": {
     "phone": "(502) 212-4547",
     "notes": null,
+    "registration_link": null,
     "events": {}
   },
   "275075": {
     "phone": "(502) 485-8311",
     "notes": "Tours are 9-11 AM and 1-3 PM",
+    "registration_link": null,
     "events": {}
   },
   "275073": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1862,6 +1996,7 @@
   "2755902": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1874,6 +2009,7 @@
   "275031": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1886,6 +2022,7 @@
   "275033": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1902,6 +2039,7 @@
   "275051": {
     "phone": null,
     "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {
@@ -1913,7 +2051,8 @@
   },
   "275084": {
     "phone": "(502) 485-8344",
-    "notes": "Or Call to Schedule a Visit",
+    "notes": null,
+    "registration_link": null,
     "events": {
       "Open House": [
         {

@@ -6,14 +6,10 @@ import os
 from collections import defaultdict
 
 # --- Configuration ---
-CSV_SOURCE_FILE = os.path.join('data', 'open_house_dates.csv') # Corrected filename
+CSV_SOURCE_FILE = os.path.join('data', 'open_house_dates.csv')
 JSON_OUTPUT_FILE = os.path.join('data', 'open_house_dates.json')
 
 def process_and_generate_json():
-    """
-    Reads the cleaned open house CSV, processes the data, and generates
-    the final open_house_dates.json file structured for the front-end.
-    """
     print("--- Starting Open House JSON Generation ---")
 
     if not os.path.exists(CSV_SOURCE_FILE):
@@ -28,14 +24,16 @@ def process_and_generate_json():
         print(f"❌ ERROR: Could not read or process the CSV file. Error: {e}")
         return
 
-    # Using defaultdict to easily build the nested structure
     schools_data = defaultdict(lambda: {
         "phone": None,
         "notes": None,
+        # <<< START: ADDED CODE >>>
+        "registration_link": None,
+        # <<< END: ADDED CODE >>>
         "events": {
             "Open House": [],
             "School Tour": [],
-            "Other": [] # Fallback for any other event types
+            "Other": []
         }
     })
 
@@ -43,17 +41,18 @@ def process_and_generate_json():
         sca = row.get('School Code Adjusted')
         if not sca or pd.isna(sca):
             continue
-
         sca = str(sca).strip()
 
-        # Store phone and notes for each school
+        # <<< START: MODIFIED CODE >>>
         if pd.notna(row.get('Phone')):
             schools_data[sca]['phone'] = str(row['Phone']).strip()
-        
         if pd.notna(row.get('Notes')):
             schools_data[sca]['notes'] = str(row['Notes']).strip()
+        # This will capture the new registration link column
+        if pd.notna(row.get('Registration link')):
+            schools_data[sca]['registration_link'] = str(row['Registration link']).strip()
+        # <<< END: MODIFIED CODE >>>
 
-        # If there's a valid start time, create a calendar event object
         if pd.notna(row.get('Start Time')):
             try:
                 start_time = pd.to_datetime(row['Start Time']).isoformat()
@@ -64,20 +63,16 @@ def process_and_generate_json():
                     "end": end_time,
                 }
                 
-                # Categorize the event by its type
                 event_type = str(row.get('Type', 'Other')).strip()
                 if event_type in schools_data[sca]['events']:
                     schools_data[sca]['events'][event_type].append(event)
                 else:
                     schools_data[sca]['events']['Other'].append(event)
-
             except Exception as e:
-                print(f"⚠️ WARNING: Could not parse date for SCA {sca} on row {_.index}. Skipping event. Error: {e}")
+                print(f"⚠️ WARNING: Could not parse date for SCA {sca}. Skipping event. Error: {e}")
 
-    # Clean up empty event type lists
     for sca in schools_data:
         schools_data[sca]['events'] = {k: v for k, v in schools_data[sca]['events'].items() if v}
-
 
     try:
         with open(JSON_OUTPUT_FILE, 'w') as f:
