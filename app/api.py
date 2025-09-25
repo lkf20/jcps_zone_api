@@ -51,8 +51,6 @@ except Exception as e:
     print(f"⚠️ Warning: Could not load {os.path.basename(CHOICE_ZONE_OPTIONS_PATH)}. This feature will be disabled. Error: {e}")
 
 
-
-# <<< START: ADDED CODE >>>
 # --- Load Zone-Specific Magnet Data ---
 ZONE_MAGNETS_PATH = os.path.join(DATA_DIR, 'zone_specific_magnets.json')
 zone_specific_magnets_data = {}
@@ -62,7 +60,16 @@ try:
     print(f"✅ Successfully loaded zone-specific magnet data.")
 except Exception as e:
     print(f"⚠️ Warning: Could not load {os.path.basename(ZONE_MAGNETS_PATH)}. This feature will be disabled. Error: {e}")
-# <<< END: ADDED CODE >>>
+
+# --- Load Open House Data ---
+OPEN_HOUSE_PATH = os.path.join(DATA_DIR, 'open_house_dates.json')
+open_house_data = {}
+try:
+    with open(OPEN_HOUSE_PATH, 'r') as f:
+        open_house_data = json.load(f)
+    print(f"✅ Successfully loaded open house data.")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load {os.path.basename(OPEN_HOUSE_PATH)}. This feature will be disabled. Error: {e}")
 
 # Shapefile paths
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
@@ -328,7 +335,13 @@ def get_school_details_by_scas(school_codes_adjusted):
             for row in results:
                 school_dict = dict(row)
                 sca = school_dict.get('school_code_adjusted')
-                if sca in unique_scas: details_map[sca] = school_dict
+                if sca in unique_scas: 
+                    # Nest the entire open house object under a single key
+                    if sca in open_house_data:
+                        school_dict['open_house_data'] = open_house_data[sca]
+                    else:
+                        school_dict['open_house_data'] = None
+                    details_map[sca] = school_dict
         except sqlite3.Error as e: print(f"Error querying details for SCAs {unique_scas}: {e}")
         finally: conn.close()
     return details_map
