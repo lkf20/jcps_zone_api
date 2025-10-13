@@ -1,0 +1,44 @@
+[
+  {
+    "school_code_adjusted": "275175",
+    "display_name": "Alex R. Kennedy Elementary",
+    "expected_values": {
+      "overall_indicator_rating_color": "Orange",
+      "membership": 365,
+      "all_grades_with_preschool_membership": 405,
+      "economically_disadvantaged_percent": 66.4,
+      "white_percent": 35.3,
+      "african_american_percent": 26.6,
+      "reading_all_proficient_distinguished": 39,
+      "reading_econ_disadv_proficient_distinguished": 26,
+      "math_all_proficient_distinguished": 32,
+      "math_econ_disadv_proficient_distinguished": 17,
+      "gifted_talented_percent": 18.4,
+      "teacher_avg_years_experience": 18.63,
+      "parent_satisfaction": 87.7,
+      "start_time": "9:40 a.m.",
+      "end_time": "4:20 p.m."
+    }
+  },
+  {
+    "school_code_adjusted": "275105",
+    "display_name": "Ballard High",
+    "expected_values": {
+      "overall_indicator_rating_color": "Yellow",
+      "membership": 2054,
+      "all_grades_with_preschool_membership": 2054,
+      "economically_disadvantaged_percent": 37.7,
+      "white_percent": 51.9,
+      "african_american_percent": 25.4,
+      "reading_all_proficient_distinguished": 54,
+      "reading_econ_disadv_proficient_distinguished": 28,
+      "math_all_proficient_distinguished": 49,
+      "math_econ_disadv_proficient_distinguished": 25,
+      "gifted_talented_percent": 21.4,
+      "teacher_avg_years_experience": 14.78,
+      "parent_satisfaction": 69.6,
+      "start_time": "8:40 a.m.",
+      "end_time": "3:20 p.m."
+    }
+  }
+]
