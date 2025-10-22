@@ -3038,7 +3038,7 @@
         "expected_status": "Magnet/Choice Program"
       },
       {
-        "display_name": "Meyzeek Middle",
+        "display_name": "Newburg Middle",
         "expected_status": "Magnet/Choice Program"
       },
       {
@@ -3219,6 +3219,10 @@
       },
       {
         "display_name": "Jefferson County Traditional Middle",
+        "expected_status": "Magnet/Choice Program"
+      },
+      {
+        "display_name": "Newburg Middle",
         "expected_status": "Magnet/Choice Program"
       },
       {

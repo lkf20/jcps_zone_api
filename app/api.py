@@ -15,6 +15,10 @@ import time
 from flask_cors import CORS
 import googlemaps
 import sys
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 # --- Configuration & Data Loading ---
@@ -75,7 +79,7 @@ except Exception as e:
 # ... (keep shapefile paths as before) ...
 choice_path = os.path.join(DATA_DIR, "ChoiceZone", "ChoiceZone.shp")
 high_path = os.path.join(DATA_DIR, "High", "Resides_HS_Boundaries.shp")
-middle_path = os.path.join(DATA_DIR, "Middle", "Resides_MS_Boundaries.shp")
+middle_path = os.path.join(DATA_DIR, "Middle", "MiddleResides2025_6.shp")
 elementary_path = os.path.join(DATA_DIR, "Elementary", "Resides_ES_Clusters_Boundaries.shp")
 traditional_middle_path = os.path.join(DATA_DIR, "TraditionalMiddle", "Traditional_MS_Bnds.shp")
 traditional_high_path = os.path.join(DATA_DIR, "TraditionalHigh", "Traditional_HS_Bnds.shp")
