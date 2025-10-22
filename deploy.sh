@@ -39,3 +39,4 @@ gcloud run deploy jcpscompare \
 
 echo "✅ Deployment complete!"
 echo "🌐 Your API should be available at: https://jcpscompare-615331482467.us-central1.run.app"
+

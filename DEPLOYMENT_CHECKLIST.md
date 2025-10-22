@@ -66,3 +66,4 @@ If deployment fails:
 # Rollback to previous version
 gcloud run services update-traffic jcpscompare --to-revisions=LATEST=0
 ```
+
