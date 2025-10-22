@@ -88,6 +88,10 @@ def download_file(url):
         print(f" -> ERROR downloading {url}: {e}")
         return None
 
+# Initialize global variables
+school_membership_mapping = {}
+total_membership_mapping = {}
+
 def build_school_level_mapping(df_membership):
     global school_level_mapping
     school_level_mapping = {}
@@ -134,7 +138,7 @@ def process_and_load_data(file_path):
 
         if file_key == 'ovw_student_membership':
             print(" -> Transforming: Calculating Membership columns.")
-            global school_membership_mapping
+            global school_membership_mapping, total_membership_mapping
             grade_cols_for_sum = [col for sublist in INDIVIDUAL_GRADE_COLUMNS.values() for col in sublist]
             for col in grade_cols_for_sum:
                  if col in df_jcps.columns: df_jcps.loc[:, col] = pd.to_numeric(df_jcps[col], errors='coerce').fillna(0)
@@ -142,8 +146,13 @@ def process_and_load_data(file_path):
             prek_12_cols = [col for col in grade_cols_for_sum if col in df_jcps.columns]
             df_jcps['Membership'] = df_jcps[k_12_cols].sum(axis=1)
             df_jcps['Membership - All Grades With Preschool'] = df_jcps[prek_12_cols].sum(axis=1)
+            # Create total school membership mapping using only "All Students" demographic
+            all_students_df = df_jcps[df_jcps['Demographic'] == 'All Students'].copy()
+            total_membership_mapping = all_students_df.set_index(SCHOOL_CODE_COLUMN_NAME)['Membership'].to_dict()
             school_membership_mapping = df_jcps.set_index(SCHOOL_CODE_COLUMN_NAME)['Membership'].to_dict()
             print(" -> Created school membership mapping for other files.")
+            if '275105' in total_membership_mapping:
+                print(f"DEBUG: Total membership for 275105 (All Students): {total_membership_mapping['275105']}")
 
         elif file_key == 'ovw_economically_disadvantaged':
             print(" -> Transforming: Calculating Percent Economically Disadvantaged.")
@@ -335,7 +344,9 @@ def process_and_load_data(file_path):
             df_jcps = df_jcps[df_jcps['Demographic'] == 'All Students'].copy()
             df_jcps.loc[:, 'All Grades'] = pd.to_numeric(df_jcps['All Grades'], errors='coerce').fillna(0)
             def calculate_gifted_percent(row):
-                membership = school_membership_mapping.get(str(row[SCHOOL_CODE_COLUMN_NAME]), 0)
+                membership = total_membership_mapping.get(str(row[SCHOOL_CODE_COLUMN_NAME]), 0)
+                if str(row[SCHOOL_CODE_COLUMN_NAME]) == '275105':
+                    print(f"DEBUG: Ballard High - Gifted count: {row['All Grades']}, Membership: {membership}")
                 return round((row['All Grades'] / membership) * 100, 2) if membership > 0 else 0.0
             df_jcps['Percent Gifted and Talented'] = df_jcps.apply(calculate_gifted_percent, axis=1)
             df_jcps = df_jcps.drop(columns=['Demographic', 'All Grades'])
