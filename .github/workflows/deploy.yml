@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production  # Add this line for environment secrets
     
     steps:
     - name: Checkout code
