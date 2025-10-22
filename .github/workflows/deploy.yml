@@ -31,4 +31,4 @@ jobs:
           --region us-central1 \
           --allow-unauthenticated \
           --set-env-vars GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
-          --build-service-account=615331482467-compute@developer.gserviceaccount.com
+          --build-service-account=projects/ordinal-gear-461317-n0/serviceAccounts/615331482467-compute@developer.gserviceaccount.com
