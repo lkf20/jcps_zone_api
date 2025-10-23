@@ -356,7 +356,13 @@ def get_school_details_by_scas(school_codes_adjusted):
 app = Flask(__name__)
 print(f"[{time.time() - app_start_time:.2f}s] Flask app initialized. Gunicorn should take over now.")
 
-CORS(app, origins=['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://192.168.1.66:5173', 'http://192.168.1.66:5174', 'http://192.168.1.66:5175', 'http://192.168.1.67:5173', 'http://192.168.1.67:5174', 'http://192.168.1.67:5175', 'http://MacBookPro.attlocal.net:5173', 'http://MacBookPro.attlocal.net:5174', 'http://MacBookPro.attlocal.net:5175'])
+CORS(app, origins=[
+    'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 
+    'http://192.168.1.66:5173', 'http://192.168.1.66:5174', 'http://192.168.1.66:5175', 
+    'http://192.168.1.67:5173', 'http://192.168.1.67:5174', 'http://192.168.1.67:5175', 
+    'http://MacBookPro.attlocal.net:5173', 'http://MacBookPro.attlocal.net:5174', 'http://MacBookPro.attlocal.net:5175',
+    'https://www.explorejcps.com', 'https://explorejcps.com'
+])
 
 # --- NEW: Google Maps Client Initialization ---
 # It's best practice to get the key from an environment variable
