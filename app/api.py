@@ -3,6 +3,7 @@ import os
 import json
 import time
 import sqlite3
+import traceback
 from collections import defaultdict
 
 from flask import Flask, request, jsonify
@@ -355,7 +356,7 @@ def get_school_details_by_scas(school_codes_adjusted):
 app = Flask(__name__)
 print(f"[{time.time() - app_start_time:.2f}s] Flask app initialized. Gunicorn should take over now.")
 
-CORS(app) # Make sure this is here and applies to the whole app
+CORS(app, origins=['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://192.168.1.66:5173', 'http://192.168.1.66:5174', 'http://192.168.1.66:5175', 'http://192.168.1.67:5173', 'http://192.168.1.67:5174', 'http://192.168.1.67:5175', 'http://MacBookPro.attlocal.net:5173', 'http://MacBookPro.attlocal.net:5174', 'http://MacBookPro.attlocal.net:5175'])
 
 # --- NEW: Google Maps Client Initialization ---
 # It's best practice to get the key from an environment variable
@@ -592,6 +593,30 @@ def handle_school_request(sort_key=None, sort_desc=False):
 @app.route("/test")
 def test():
     return "🚀 Flask API (Single Endpoint Style - Structure) is working!"
+
+@app.route('/test-mobile', methods=['POST'])
+def test_mobile():
+    """Simple test endpoint for mobile debugging"""
+    try:
+        data = request.get_json()
+        address = data.get('address', 'No address provided')
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Mobile test successful',
+            'received_address': address,
+            'timestamp': time.time(),
+            'test_data': {
+                'school_count': 3,
+                'sample_schools': [
+                    {'name': 'Test Elementary', 'rating': 8},
+                    {'name': 'Test Middle', 'rating': 7},
+                    {'name': 'Test High', 'rating': 9}
+                ]
+            }
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # --- PRIMARY ENDPOINT ---
 @app.route("/school-details-by-address", methods=["POST"])
